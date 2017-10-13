@@ -1,0 +1,18 @@
+# Target labels
+ Main
+ opencv_highgui
+ AccuracyTest
+# Source files and their labels
+/home/local/ADS/oakley/projects/walle/OpenCV/modules/highgui/test/test_gui.cpp
+ Main
+ opencv_highgui
+ AccuracyTest
+/home/local/ADS/oakley/projects/walle/OpenCV/modules/highgui/test/test_main.cpp
+ Main
+ opencv_highgui
+ AccuracyTest
+/home/local/ADS/oakley/projects/walle/OpenCV/modules/highgui/test/test_precomp.hpp
+ Main
+ opencv_highgui
+ AccuracyTest
+/home/local/ADS/oakley/projects/walle/OpenCV/build/modules/highgui/opencv_test_highgui_automoc.cpp

@@ -1,0 +1,315 @@
+Build output check failed:
+    Regex: 'command line option .* is valid for .* but not for C\+\+'
+    Output line: 'cc1plus: warning: command line option ‘-Wmissing-prototypes’ is valid for C/ObjC but not for C++'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations  -Wmissing-prototypes'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b2c08/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b2c08.dir/build.make CMakeFiles/cmTC_b2c08.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_b2c08.dir/src.cxx.o
+/usr/bin/c++     -O3 -DNDEBUG   -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -o CMakeFiles/cmTC_b2c08.dir/src.cxx.o -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: warning: command line option ‘-Wmissing-prototypes’ is valid for C/ObjC but not for C++
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+Linking CXX executable cmTC_b2c08
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b2c08.dir/link.txt --verbose=1
+/usr/bin/c++     -O3 -DNDEBUG    CMakeFiles/cmTC_b2c08.dir/src.cxx.o  -o cmTC_b2c08 -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command line option .* is valid for .* but not for C\+\+'
+    Output line: 'cc1plus: warning: command line option ‘-Wstrict-prototypes’ is valid for C/ObjC but not for C++'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations  -Wstrict-prototypes'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_049b1/fast"
+/usr/bin/make -f CMakeFiles/cmTC_049b1.dir/build.make CMakeFiles/cmTC_049b1.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_049b1.dir/src.cxx.o
+/usr/bin/c++     -O3 -DNDEBUG   -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wstrict-prototypes -o CMakeFiles/cmTC_049b1.dir/src.cxx.o -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: warning: command line option ‘-Wstrict-prototypes’ is valid for C/ObjC but not for C++
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+Linking CXX executable cmTC_049b1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_049b1.dir/link.txt --verbose=1
+/usr/bin/c++     -O3 -DNDEBUG    CMakeFiles/cmTC_049b1.dir/src.cxx.o  -o cmTC_049b1 -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command line option ‘-Wsign-promo’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow  -Wsign-promo'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a9967/fast"
+/usr/bin/make -f CMakeFiles/cmTC_a9967.dir/build.make CMakeFiles/cmTC_a9967.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a9967.dir/src.c.o
+/usr/bin/cc    -O3 -DNDEBUG   -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -o CMakeFiles/cmTC_a9967.dir/src.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command line option ‘-Wsign-promo’ is valid for C++/ObjC++ but not for C
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+Linking C executable cmTC_a9967
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a9967.dir/link.txt --verbose=1
+/usr/bin/cc    -O3 -DNDEBUG    CMakeFiles/cmTC_a9967.dir/src.c.o  -o cmTC_a9967 -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command line option ‘-Wno-delete-non-virtual-dtor’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing  -Wno-delete-non-virtual-dtor'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9c4ae/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9c4ae.dir/build.make CMakeFiles/cmTC_9c4ae.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9c4ae.dir/src.c.o
+/usr/bin/cc    -O3 -DNDEBUG   -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-delete-non-virtual-dtor -o CMakeFiles/cmTC_9c4ae.dir/src.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command line option ‘-Wno-delete-non-virtual-dtor’ is valid for C++/ObjC++ but not for C
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+Linking C executable cmTC_9c4ae
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9c4ae.dir/link.txt --verbose=1
+/usr/bin/cc    -O3 -DNDEBUG    CMakeFiles/cmTC_9c4ae.dir/src.c.o  -o cmTC_9c4ae -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: warning: unrecognized command line option ‘-Wno-unnamed-type-template-args’'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor  -Wno-unnamed-type-template-args'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_66ffe/fast"
+/usr/bin/make -f CMakeFiles/cmTC_66ffe.dir/build.make CMakeFiles/cmTC_66ffe.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_66ffe.dir/src.cxx.o
+/usr/bin/c++     -O3 -DNDEBUG   -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor -Wno-unnamed-type-template-args -o CMakeFiles/cmTC_66ffe.dir/src.cxx.o -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+cc1plus: warning: unrecognized command line option ‘-Wno-unnamed-type-template-args’
+Linking CXX executable cmTC_66ffe
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_66ffe.dir/link.txt --verbose=1
+/usr/bin/c++     -O3 -DNDEBUG    CMakeFiles/cmTC_66ffe.dir/src.cxx.o  -o cmTC_66ffe -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1: warning: unrecognized command line option ‘-Wno-unnamed-type-template-args’'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing  -Wno-unnamed-type-template-args'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d824f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_d824f.dir/build.make CMakeFiles/cmTC_d824f.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d824f.dir/src.c.o
+/usr/bin/cc    -O3 -DNDEBUG   -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-unnamed-type-template-args -o CMakeFiles/cmTC_d824f.dir/src.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+cc1: warning: unrecognized command line option ‘-Wno-unnamed-type-template-args’
+Linking C executable cmTC_d824f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d824f.dir/link.txt --verbose=1
+/usr/bin/cc    -O3 -DNDEBUG    CMakeFiles/cmTC_d824f.dir/src.c.o  -o cmTC_d824f -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command line option ‘-fvisibility-inlines-hidden’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden  -fvisibility-inlines-hidden'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fb830/fast"
+/usr/bin/make -f CMakeFiles/cmTC_fb830.dir/build.make CMakeFiles/cmTC_fb830.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fb830.dir/src.c.o
+/usr/bin/cc    -O3 -DNDEBUG   -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden -o CMakeFiles/cmTC_fb830.dir/src.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command line option ‘-fvisibility-inlines-hidden’ is valid for C++/ObjC++ but not for C
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.c:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+Linking C executable cmTC_fb830
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fb830.dir/link.txt --verbose=1
+/usr/bin/cc    -O3 -DNDEBUG    CMakeFiles/cmTC_fb830.dir/src.c.o  -o cmTC_fb830 -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Determining if the system is big endian passed with the following output:
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_0f3a1/fast"
+/usr/bin/make -f CMakeFiles/cmTC_0f3a1.dir/build.make CMakeFiles/cmTC_0f3a1.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0f3a1.dir/TestEndianess.c.o
+/usr/bin/cc    -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden  -O3 -DNDEBUG   -o CMakeFiles/cmTC_0f3a1.dir/TestEndianess.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/TestEndianess.c
+Linking C executable cmTC_0f3a1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0f3a1.dir/link.txt --verbose=1
+/usr/bin/cc     -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden  -O3 -DNDEBUG    CMakeFiles/cmTC_0f3a1.dir/TestEndianess.c.o  -o cmTC_0f3a1 -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+TestEndianess.c:
+/* A 16 bit integer is required. */
+typedef unsigned short cmakeint16;
+
+/* On a little endian machine, these 16bit ints will give "THIS IS LITTLE ENDIAN."
+   On a big endian machine the characters will be exchanged pairwise. */
+const cmakeint16 info_little[] =  {0x4854, 0x5349, 0x4920, 0x2053, 0x494c, 0x5454, 0x454c, 0x4520, 0x444e, 0x4149, 0x2e4e, 0x0000};
+
+/* on a big endian machine, these 16bit ints will give "THIS IS BIG ENDIAN."
+   On a little endian machine the characters will be exchanged pairwise. */
+const cmakeint16 info_big[] =     {0x5448, 0x4953, 0x2049, 0x5320, 0x4249, 0x4720, 0x454e, 0x4449, 0x414e, 0x2e2e, 0x0000};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_little[argc];
+  require += info_big[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining if the include file /home/local/ADS/oakley/anaconda2/include/libpng/png.h exists failed with the following output:
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_dcb59/fast"
+/usr/bin/make -f CMakeFiles/cmTC_dcb59.dir/build.make CMakeFiles/cmTC_dcb59.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_dcb59.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden  -O3 -DNDEBUG   -o CMakeFiles/cmTC_dcb59.dir/CheckIncludeFile.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:65: fatal error: /home/local/ADS/oakley/anaconda2/include/libpng/png.h: No such file or directory
+compilation terminated.
+CMakeFiles/cmTC_dcb59.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_dcb59.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_dcb59.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_dcb59/fast' failed
+make: *** [cmTC_dcb59/fast] Error 2
+
+
+Determining if the include file linux/videodev.h exists failed with the following output:
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1d39f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_1d39f.dir/build.make CMakeFiles/cmTC_1d39f.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1d39f.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden  -O3 -DNDEBUG   -o CMakeFiles/cmTC_1d39f.dir/CheckIncludeFile.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:28: fatal error: linux/videodev.h: No such file or directory
+compilation terminated.
+CMakeFiles/cmTC_1d39f.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_1d39f.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_1d39f.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_1d39f/fast' failed
+make: *** [cmTC_1d39f/fast] Error 2
+
+
+Determining if the include file sys/videoio.h exists failed with the following output:
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_aec45/fast"
+/usr/bin/make -f CMakeFiles/cmTC_aec45.dir/build.make CMakeFiles/cmTC_aec45.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_aec45.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wno-narrowing -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden  -O3 -DNDEBUG   -o CMakeFiles/cmTC_aec45.dir/CheckIncludeFile.c.o   -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:25: fatal error: sys/videoio.h: No such file or directory
+compilation terminated.
+CMakeFiles/cmTC_aec45.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_aec45.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_aec45.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_aec45/fast' failed
+make: *** [cmTC_aec45/fast] Error 2
+
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: warning: unrecognized command line option ‘-Wno-unused-const-variable’'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-unused-const-variable'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_db31d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_db31d.dir/build.make CMakeFiles/cmTC_db31d.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_db31d.dir/src.cxx.o
+/usr/bin/c++     -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections  -fvisibility-inlines-hidden  -O3 -DNDEBUG   -Wno-unused-const-variable -o CMakeFiles/cmTC_db31d.dir/src.cxx.o -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+cc1plus: warning: unrecognized command line option ‘-Wno-unused-const-variable’
+Linking CXX executable cmTC_db31d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_db31d.dir/link.txt --verbose=1
+/usr/bin/c++      -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections  -fvisibility-inlines-hidden  -O3 -DNDEBUG    CMakeFiles/cmTC_db31d.dir/src.cxx.o  -o cmTC_db31d -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: warning: unrecognized command line option ‘-Wno-unused-private-field’'
+Compilation failed:
+    source file: '/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-unused-private-field'
+===== BUILD LOG =====
+Change Dir: /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_225f9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_225f9.dir/build.make CMakeFiles/cmTC_225f9.dir/build
+make[1]: Entering directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_225f9.dir/src.cxx.o
+/usr/bin/c++     -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden -Wno-unused-function -Wno-overloaded-virtual  -O3 -DNDEBUG   -Wno-unused-private-field -o CMakeFiles/cmTC_225f9.dir/src.cxx.o -c /home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx
+/home/local/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp/src.cxx:1:0: warning: ignoring #pragma   [-Wunknown-pragmas]
+ #pragma
+ ^
+cc1plus: warning: unrecognized command line option ‘-Wno-unused-private-field’
+Linking CXX executable cmTC_225f9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_225f9.dir/link.txt --verbose=1
+/usr/bin/c++      -fsigned-char -W -Wall -Werror=return-type -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor -Wno-comment -fdiagnostics-show-option -Wno-long-long -pthread -fomit-frame-pointer -msse -msse2 -mno-avx -msse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden -Wno-unused-function -Wno-overloaded-virtual  -O3 -DNDEBUG    CMakeFiles/cmTC_225f9.dir/src.cxx.o  -o cmTC_225f9 -rdynamic 
+make[1]: Leaving directory '/home/likewise-open/ADS/oakley/projects/walle/OpenCV/build/CMakeFiles/CMakeTmp'
+
+===== END =====
+
