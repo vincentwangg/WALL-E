@@ -5,7 +5,7 @@ import cv2
 def get_gradient_diff(l_gradient, r_gradient, offset):
   gradient_len = len(l_gradient)
   diff = abs(l_gradient - np.roll(r_gradient, offset))[max(0, offset):min(gradient_len, gradient_len + offset)]
-  diff /= len(diff)
+  diff /= float(len(diff))
   return np.sum(diff)
 
 def get_optimal_offset(l_gradient, r_gradient, max_offset):
@@ -46,7 +46,7 @@ def main():
     exit()
   print 'left feed gradient calculating...'
   l_gradient = calculate_gradient(sys.argv[1], 0, 25240)
-  print 'right feed gradient calculating...'
+  print '\nright feed gradient calculating...'
   r_gradient = calculate_gradient(sys.argv[2], 0, 25240)
   opt = get_optimal_offset(l_gradient, r_gradient, 200)
   print '\nOptimal right feed offset:', opt 
