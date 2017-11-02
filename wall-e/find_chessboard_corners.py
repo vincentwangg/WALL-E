@@ -1,3 +1,6 @@
+import cv2
+import numpy as np
+
 # Create (x,y,z) object points for all intersections on checkerboard grid
 objp = np.zeros((5 * 7, 3), np.float32)
 objp[:, :2] = np.mgrid[0:7, 0:5].T.reshape(-1, 2)
@@ -15,25 +18,26 @@ imgpoints = []
 # succ, img = l.read()
 # cv2.imwrite('image.jpg',img)
 img = cv2.imread('image.jpg')
-cv2.imshow('checker board.jpg',img)
+# cv2.imshow('checker board.jpg',img)
 # cv2.waitKey(0)
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 
-ret, corners = cv2.findChessboardCorners(gray,(5,4))
+ret, corners = cv2.findChessboardCorners(img,(5,4))
 print ret,corners
 
 # If found, add object points to objpoints array, and add image points (after refining them) to imgpoints array
 if ret == True:
     print 'ret is true'
     objpoints.append(objp)
-    cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)  # refine image points
+    # cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)  # refine image points
     imgpoints.append(corners)
 
     # Draw and display the corners
-    cv2.drawChessboardCorners(img, (9, 7), corners, ret)
+    cv2.drawChessboardCorners(img, (5, 4), corners, ret)
     cv2.imshow('Image with Corner Points', img)
     cv2.waitKey(0)
+
 print 'yo'
 cv2.destroyAllWindows()
 '''
