@@ -13,18 +13,23 @@ imgpoints = []
 # images = glob.glob('/home/trinityrael/EGD_video_analysis/Right/Right_calibration_photos/*.jpg')
 
 # for file in images:
-# l = cv2.VideoCapture("../Left.ASF")
-# l.set(1, 700)
-# succ, img = l.read()
+r = cv2.VideoCapture("../Right.ASF")
+r.set(1, 710)
+succ, img_r = r.read()
+
 # cv2.imwrite('image.jpg',img)
-img = cv2.imread('image.jpg')
-# cv2.imshow('checker board.jpg',img)
+cv2.flip(img_r,-1,img_r)
+img_l = cv2.imread('image.jpg')
+cv2.imshow('left',img_l)
+cv2.imshow('right',img_r)
+
 # cv2.waitKey(0)
-# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 
-ret, corners = cv2.findChessboardCorners(img,(5,4))
-print ret,corners
+
+ret, corners = cv2.findChessboardCorners(img_l,(5,4))
+ret_r, corners_r = cv2.findChessboardCorners(img_r,(5,4)) # 7,5 works
+print ret_r
 
 # If found, add object points to objpoints array, and add image points (after refining them) to imgpoints array
 if ret == True:
@@ -34,17 +39,19 @@ if ret == True:
     imgpoints.append(corners)
 
     # Draw and display the corners
-    cv2.drawChessboardCorners(img, (5, 4), corners, ret)
-    cv2.imshow('Image with Corner Points', img)
+    cv2.drawChessboardCorners(img_l, (5, 4), corners, ret)
+    cv2.drawChessboardCorners(img_r, (5, 4), corners, ret)
+    cv2.drawChessboardCorners(img_l, (5, 4), corners_r, ret_r)
+    cv2.drawChessboardCorners(img_r, (5, 4), corners_r, ret_r)
+    cv2.imshow('Image with Corner Points_l', img_l)
+    cv2.imshow('Image with Corner Points_r', img_r)
     cv2.waitKey(0)
 
-print 'yo'
 cv2.destroyAllWindows()
+
+ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img_l.shape[::-1], None, None)
+
 '''
-frames = glob.glob('/home/trinityrael/EGD_video_analysis/Right/EGD_upsidedown(frames_ffmpeg)')
-
-ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
-
 for file in frames:
     img = cv2.imread(file)
     h, w = gray.shape[:2]  # changed image to gray b/c image got error
@@ -61,4 +68,5 @@ for file in frames:
     os.chdir('Undistorted_frames')
     cv2.imwrite('Undistortionresult.png',dst)
     cv2.imshow('Undistorted Image',dst)
+
 '''
