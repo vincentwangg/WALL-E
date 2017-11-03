@@ -56,7 +56,7 @@ if ret and ret_r:
     cv2.drawChessboardCorners(img_r, (5, 4), corners_r, ret_r)
     cv2.imshow('Image with Corner Points_l', img_l)
     cv2.imshow('Image with Corner Points_r', img_r)
-    cv2.waitKey(0)
+    # cv2.waitKey(0)
 
 
 # ret_r, mtx_r, dist_r, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints_r, img_r.shape[::-1], None, None)
@@ -66,27 +66,43 @@ if ret and ret_r:
 # dst_l = []
 # dst_r = []
 
+# im not sure if putting none for the params is ok
 ret, mtx_l, dst_l, mtx_r, dst_r, R, T, E, F = cv2.stereoCalibrate(objpoints,imgpoints_l, imgpoints_r,
                                                                   None, None, None, None, img_r.shape[::-1])
-# im not sure if putting none for the params is ok
 
 
-h, w = img_l.shape[:2]  # changed image to gray b/c image got error
+print 'shape',img_l.shape
+h, w = img_l.shape  # changed image to gray b/c image got error
 
-mtx_l, roi_l = cv2.getOptimalNewCameraMatrix(mtx_l, dst_l, (w, h), 1, (w, h))
-mtx_r, roi_r = cv2.getOptimalNewCameraMatrix(mtx_r, dst_l, (w, h), 1, (w, h))
+mtx_l2, roi_l = cv2.getOptimalNewCameraMatrix(mtx_l, dst_l, (w, h), 1, (w, h))
+mtx_r2, roi_r = cv2.getOptimalNewCameraMatrix(mtx_r, dst_l, (w, h), 1, (w, h))
 
 # undistort, this appears to do nothing
-img_l = cv2.undistort(img_l, mtx_l, dst_l, None, mtx_l)
-img_r = cv2.undistort(img_r, mtx_r, dst_r, None, mtx_r)
-cv2.imshow('left und',img_l)
-cv2.imshow('right und', img_r)
-cv2.waitKey(0)
+
 
 # stereo rectify
 # TODO: Figure out how to use this return values
-R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(mtx_l, dst_l, mtx_r, dst_r, img_r.shape[::-1], R, T)
+R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(mtx_l, dst_l, mtx_r, dst_r,
+                                                                  img_r.shape[::-1], R, T)
 
+new_shape = (1280//2,960//2)
+map_l = cv2.initUndistortRectifyMap(mtx_l,dst_l, R1, P1, new_shape, cv2.CV_32F)
+map_r = cv2.initUndistortRectifyMap(mtx_r,dst_r, R2, P2, new_shape, cv2.CV_32F)
+
+img_l = cv2.remap(img_l,map_l[0],map_l[1],cv2.INTER_LANCZOS4)
+img_r = cv2.remap(img_r,map_r[0],map_r[1],cv2.INTER_LANCZOS4)
+
+cv2.imshow('left und',img_l)
+cv2.imshow('right und', img_r)
+cv2.waitKey(0)
+#
+# for line in range(0, img_l.shape / 20)):
+#     left_img_remap[line * 20, :] = (0, 0, 255)
+#     right_img_remap[line * 20, :] = (0, 0, 255)
+#
+# cv2.imshow('winname', np.hstack(img_l, img_r))
+# cv2.waitKey(0)
+# exit(0)
 
 # crop the image
 # print roi_l, roi_r
