@@ -58,12 +58,12 @@ if ret and ret_r:
 
 
     # Draw and display the corners
-    cv2.drawChessboardCorners(img_l, (5, 4), corners_l, ret)
-    cv2.drawChessboardCorners(img_r, (5, 4), corners_l, ret)
-    cv2.drawChessboardCorners(img_l, (5, 4), corners_r, ret_r)
-    cv2.drawChessboardCorners(img_r, (5, 4), corners_r, ret_r)
-    cv2.imshow('Image with Corner Points_l', img_l)
-    cv2.imshow('Image with Corner Points_r', img_r)
+    # cv2.drawChessboardCorners(img_l, (5, 4), corners_l, ret)
+    # cv2.drawChessboardCorners(img_r, (5, 4), corners_l, ret)
+    # cv2.drawChessboardCorners(img_l, (5, 4), corners_r, ret_r)
+    # cv2.drawChessboardCorners(img_r, (5, 4), corners_r, ret_r)
+    # cv2.imshow('Image with Corner Points_l', img_l)
+    # cv2.imshow('Image with Corner Points_r', img_r)
     # cv2.waitKey(0)
 
 
@@ -107,6 +107,11 @@ map_r = cv2.initUndistortRectifyMap(mtx_r,dst_r, R2, P2, img_r.shape[::-1], cv2.
 
 img_l = cv2.remap(img_l,map_l[0],map_l[1],cv2.INTER_LANCZOS4)
 img_r = cv2.remap(img_r,map_r[0],map_r[1],cv2.INTER_LANCZOS4)
+
+for line in range(0, int(img_l.shape[0] / 20)):
+    img_l[line * 20, :] = 255
+    img_r[line * 20, :] = 255
+
 
 cv2.imshow('stereo rectified_l',img_l)
 cv2.imshow('stereo rectified_r', img_r)
