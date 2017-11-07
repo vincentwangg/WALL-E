@@ -20,6 +20,7 @@ imgpoints_r = []
 # Tuning these parameters does not appear to effect the end result
 criteria = (cv2.TERM_CRITERIA_COUNT + cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.0001)
 
+# deinterlace video with ffmpeg first
 
 # get right image from video
 r = cv2.VideoCapture("../Right.ASF")
@@ -67,19 +68,11 @@ if ret and ret_r:
     # cv2.waitKey(0)
 
 
-# ret_r, mtx_r, dist_r, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints_r, img_r.shape[::-1], None, None)
-# ret_l, mtx_l, dist_l, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints_l, img_l.shape[::-1], None, None)
-# mtx_l = []
-# mtx_r = []
-# dst_l = []
-# dst_r = []
-
-# im not sure if putting none for the params is ok
-# stereoCalibrate first???
-# pprint.pprint(imgpoints_r)
 
 retval, mtx_l, dst_l, rvecs_l, tvecs_l = cv2.calibrateCamera(objpoints,imgpoints_l,img_l.shape[::-1],None,None)
 retval, mtx_r, dst_r, rvecs_r, tvecs_r = cv2.calibrateCamera(objpoints,imgpoints_r,img_r.shape[::-1],None,None)
+
+print rvecs_l,rvecs_r
 
 
 
@@ -90,8 +83,8 @@ ret, mtx_l, dst_l, mtx_r, dst_r, R, T, E, F = cv2.stereoCalibrate(objpoints,imgp
 
 h, w = img_l.shape
 
-mtx_l2, roi_l = cv2.getOptimalNewCameraMatrix(mtx_l, dst_l, (w, h), 1, (w, h))
-mtx_r2, roi_r = cv2.getOptimalNewCameraMatrix(mtx_r, dst_l, (w, h), 1, (w, h))
+# mtx_lN, roi_l = cv2.getOptimalNewCameraMatrix(mtx_l, dst_l, (w, h), 1, (w, h))
+# mtx_rN, roi_r = cv2.getOptimalNewCameraMatrix(mtx_r, dst_l, (w, h), 1, (w, h))
 
 # undistort, this appears to do nothing
 
@@ -99,14 +92,15 @@ mtx_r2, roi_r = cv2.getOptimalNewCameraMatrix(mtx_r, dst_l, (w, h), 1, (w, h))
 # stereo rectify
 # TODO: Figure out how to use this return values
 R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(mtx_l, dst_l, mtx_r, dst_r,
-                                                                  img_r.shape[::-1], R, T)
+                                                                  img_r.shape[::-1], R, T, alpha=0.90)
 
 # new_shape = (1280//2,960//2)
 map_l = cv2.initUndistortRectifyMap(mtx_l,dst_l, R1, P1, img_r.shape[::-1], cv2.CV_32F)
 map_r = cv2.initUndistortRectifyMap(mtx_r,dst_r, R2, P2, img_r.shape[::-1], cv2.CV_32F)
 
-img_l = cv2.remap(img_l,map_l[0],map_l[1],cv2.INTER_LANCZOS4)
-img_r = cv2.remap(img_r,map_r[0],map_r[1],cv2.INTER_LANCZOS4)
+
+img_l = cv2.remap(img_l,map_l[0],map_l[1],cv2.INTER_LANCZOS4,dst= dst_l)
+img_r = cv2.remap(img_r,map_r[0],map_r[1],cv2.INTER_LANCZOS4,dst= dst_r)
 
 for line in range(0, int(img_l.shape[0] / 20)):
     img_l[line * 20, :] = 255
@@ -115,22 +109,6 @@ for line in range(0, int(img_l.shape[0] / 20)):
 
 cv2.imshow('stereo rectified_l',img_l)
 cv2.imshow('stereo rectified_r', img_r)
-cv2.waitKey(0)
-#
-# for line in range(0, img_l.shape / 20)):
-#     left_img_remap[line * 20, :] = (0, 0, 255)
-#     right_img_remap[line * 20, :] = (0, 0, 255)
-#
-# cv2.imshow('winname', np.hstack(img_l, img_r))
-# cv2.waitKey(0)
-# exit(0)
 
-# crop the image
-# print roi_l, roi_r
-# x,y,w,h = roi
-# dst = dst[y:y+h, x:x+w]
-#
-# os.chdir('Undistorted_frames')
-# cv2.imwrite('Undistortionresult.png',dst)
-# cv2.imshow('Undistorted Image',dst)
-#
+
+cv2.waitKey(0)
