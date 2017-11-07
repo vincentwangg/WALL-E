@@ -78,7 +78,9 @@ print rvecs_l,rvecs_r
 
 ret, mtx_l, dst_l, mtx_r, dst_r, R, T, E, F = cv2.stereoCalibrate(objpoints,imgpoints_l,imgpoints_r,
                                                                   mtx_l, dst_l, mtx_r, dst_r, img_r.shape[::-1],
-                                                                  flags=cv2.CALIB_FIX_PRINCIPAL_POINT)
+                                                                  flags=cv2.CALIB_FIX_PRINCIPAL_POINT +
+                                                                        cv2.CALIB_SAME_FOCAL_LENGTH +
+                                                                        cv2.CALIB_ZERO_TANGENT_DIST)
 
 
 h, w = img_l.shape
@@ -109,8 +111,6 @@ for line in range(0, int(img_l.shape[0] / 20)):
 
 cv2.imshow('stereo rectified_l',img_l)
 cv2.imshow('stereo rectified_r', img_r)
-cv2.imwrite('CALIB_FIX_PRINCIPAL_POINT_R.jpg',img_r)
-cv2.imwrite('CALIB_FIX_PRINCIPAL_POINT_L.jpg',img_l)
 
 
 cv2.waitKey(0)
