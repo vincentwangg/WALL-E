@@ -72,15 +72,12 @@ if ret and ret_r:
 retval, mtx_l, dst_l, rvecs_l, tvecs_l = cv2.calibrateCamera(objpoints,imgpoints_l,img_l.shape[::-1],None,None)
 retval, mtx_r, dst_r, rvecs_r, tvecs_r = cv2.calibrateCamera(objpoints,imgpoints_r,img_r.shape[::-1],None,None)
 
-print rvecs_l,rvecs_r
 
 
 
 ret, mtx_l, dst_l, mtx_r, dst_r, R, T, E, F = cv2.stereoCalibrate(objpoints,imgpoints_l,imgpoints_r,
                                                                   mtx_l, dst_l, mtx_r, dst_r, img_r.shape[::-1],
-                                                                  flags=cv2.CALIB_FIX_PRINCIPAL_POINT +
-                                                                        cv2.CALIB_SAME_FOCAL_LENGTH +
-                                                                        cv2.CALIB_ZERO_TANGENT_DIST)
+                                                                  flags=cv2.CALIB_FIX_PRINCIPAL_POINT)
 
 
 h, w = img_l.shape
@@ -92,7 +89,6 @@ h, w = img_l.shape
 
 
 # stereo rectify
-# TODO: Figure out how to use this return values
 R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(mtx_l, dst_l, mtx_r, dst_r,
                                                                   img_r.shape[::-1], R, T, alpha=0.90)
 
@@ -101,8 +97,8 @@ map_l = cv2.initUndistortRectifyMap(mtx_l,dst_l, R1, P1, img_r.shape[::-1], cv2.
 map_r = cv2.initUndistortRectifyMap(mtx_r,dst_r, R2, P2, img_r.shape[::-1], cv2.CV_32F)
 
 
-img_l = cv2.remap(img_l,map_l[0],map_l[1],cv2.INTER_LANCZOS4,dst= dst_l)
-img_r = cv2.remap(img_r,map_r[0],map_r[1],cv2.INTER_LANCZOS4,dst= dst_r)
+img_l = cv2.remap(img_l,map_l[0],map_l[1],cv2.INTER_LANCZOS4)
+img_r = cv2.remap(img_r,map_r[0],map_r[1],cv2.INTER_LANCZOS4)
 
 for line in range(0, int(img_l.shape[0] / 20)):
     img_l[line * 20, :] = 255
