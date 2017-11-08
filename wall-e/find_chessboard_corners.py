@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
 
-# This is helpful: 'help(cv2.stereoRectify)' this will give you info on whatever function you want
+# Run help(cv2.functionYouWantToKnowMoreAbout) to find documentation on that function
 
-# deinterlace video with ffmpeg first
+# todo: deinterlace video with ffmpeg first
 
 # get right image from video
 vc_obj_right = cv2.VideoCapture("../Right.ASF")
