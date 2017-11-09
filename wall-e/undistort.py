@@ -9,7 +9,7 @@ DIM=(640, 480)
 K=np.array([[505.3019653100971, 0.0, 367.1536189100808], [0.0, 463.0239595310009, 262.27198974329553], [0.0, 0.0, 1.0]])
 D=np.array([[-0.10747340220009194], [-0.23322478481242945], [0.956438056950602], [-1.647891946278236]])
 
-def undistort(img_path):
+def undistort(img_path=None):
     vc_obj_right = cv2.VideoCapture("../Left.ASF")
     vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, 740)
     vc_obj_right_success, img = vc_obj_right.read()
@@ -23,5 +23,6 @@ def undistort(img_path):
 
 
 if __name__ == '__main__':
-    for p in sys.argv[1:]:
-        undistort(p)
+    undistort()
+    # for p in sys.argv[1:]:
+    #     undistort(p)
