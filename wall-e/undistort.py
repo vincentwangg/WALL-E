@@ -10,7 +10,7 @@ K=np.array([[505.3019653100971, 0.0, 367.1536189100808], [0.0, 463.0239595310009
 D=np.array([[-0.10747340220009194], [-0.23322478481242945], [0.956438056950602], [-1.647891946278236]])
 
 def undistort(img_path):
-    vc_obj_right = cv2.VideoCapture("../Right.ASF")
+    vc_obj_right = cv2.VideoCapture("../Left.ASF")
     vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, 740)
     vc_obj_right_success, img = vc_obj_right.read()
     cv2.imshow("original", img)
