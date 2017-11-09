@@ -3,10 +3,8 @@ import cv2
 
 assert cv2.__version__[0] == '3', 'The fisheye module requires opencv version >= 3.0.0'
 import numpy as np
-import os
-import glob
 
-CHECKERBOARD = (6, 9)
+CHECKERBOARD = (6, 8)
 subpix_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.1)
 calibration_flags = cv2.fisheye.CALIB_RECOMPUTE_EXTRINSIC + cv2.fisheye.CALIB_CHECK_COND + cv2.fisheye.CALIB_FIX_SKEW
 objp = np.zeros((1, CHECKERBOARD[0] * CHECKERBOARD[1], 3), np.float32)
@@ -14,9 +12,13 @@ objp[0, :, :2] = np.mgrid[0:CHECKERBOARD[0], 0:CHECKERBOARD[1]].T.reshape(-1, 2)
 _img_shape = None
 objpoints = []  # 3d point in real world space
 imgpoints = []  # 2d points in image plane.
-images = glob.glob('image.jpg')
-for fname in images:
-    img = cv2.imread(fname)
+
+vc_obj_right = cv2.VideoCapture("../Left.ASF")
+successes = 0
+for i in range(731, 900):
+    print(i)
+    vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, i)
+    vc_obj_right_success, img = vc_obj_right.read()
     if _img_shape == None:
         _img_shape = img.shape[:2]
     else:
@@ -30,9 +32,12 @@ for fname in images:
         objpoints.append(objp)
         cv2.cornerSubPix(gray, corners, (3, 3), (-1, -1), subpix_criteria)
         imgpoints.append(corners)
-        print("Success")
+        successes += 1
+        print("Success: " + str(successes))
+        if successes == 135:
+            break
     else:
-        print("Fail")
+        print("Fail. Current successes: " + str(successes))
 N_OK = len(objpoints)
 K = np.zeros((3, 3))
 D = np.zeros((4, 1))
@@ -54,3 +59,5 @@ print("Found " + str(N_OK) + " valid images for calibration")
 print("DIM=" + str(_img_shape[::-1]))
 print("K=np.array(" + str(K.tolist()) + ")")
 print("D=np.array(" + str(D.tolist()) + ")")
+
+cv2.waitKey()
