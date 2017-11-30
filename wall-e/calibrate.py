@@ -15,8 +15,8 @@ _img_shape = None
 objpoints = []  # 3d point in real world space
 imgpoints = []  # 2d points in image plane.
 
-vc_obj_left = cv2.VideoCapture("../Left.ASF")
-vc_obj_right = cv2.VideoCapture("../Right.ASF")
+vc_obj_left = cv2.VideoCapture("../Left.mkv")
+vc_obj_right = cv2.VideoCapture("../Right.mkv")
 
 
 def run_through_video(vid_capture_obj, begin_idx, end_idx_exc):

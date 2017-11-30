@@ -118,12 +118,12 @@ def convert_to_gray(img):
 def main():
     frame_num = 740
 
-    vc_obj_left = cv2.VideoCapture("../Left.ASF")
+    vc_obj_left = cv2.VideoCapture("../Left.mkv")
     vc_obj_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
     vc_obj_left_success, img_left = vc_obj_left.read()
     convert_to_gray(img_left)
 
-    vc_obj_right = cv2.VideoCapture("../Right.ASF")
+    vc_obj_right = cv2.VideoCapture("../Right.mkv")
     vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
     vc_obj_right_success, img_right = vc_obj_right.read()
     cv2.flip(img_right, -1, img_right)
