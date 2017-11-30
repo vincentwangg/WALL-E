@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 import sys
 
-# You should replace these 3 lines with the output in calibration step
+# You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
 DIM=(640, 480)
 K=np.array([[526.756924435422, 0.0, 330.221556181272], [0.0, 478.43311043812145, 249.44524334088075], [0.0, 0.0, 1.0]])
