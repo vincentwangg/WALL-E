@@ -3,17 +3,27 @@
 import numpy as np
 import cv2
 import sys
+import pprint
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
-DIM=(640, 480)
+DIM=(640, 478) # deinterlaced video is now 640 X 478
 K=np.array([[526.756924435422, 0.0, 330.221556181272], [0.0, 478.43311043812145, 249.44524334088075], [0.0, 0.0, 1.0]])
 D=np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568173], [0.43735394851622683]])
+storage_file = open("sr_maps.yml","w+")
+storage_file.close()
+
+def save_to_yml(name, object):
+    fs = cv2.FileStorage("sr_maps.yml",flags=cv2.FILE_STORAGE_APPEND)
+    fs.write(name, object)
+    fs.release()
 
 def undistort(img):
     cv2.imshow("original", img)
     h, w = img.shape[:2]
     map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_16SC2)
+    save_to_yml("undistort_map1", map1)
+    save_to_yml("undistort_map2", map2)
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     cv2.imshow("undistorted", undistorted_img)
     cv2.destroyAllWindows()
@@ -70,7 +80,8 @@ def stereorectify(img_left, img_right):
         img_points_right,
         cam_mtx_l, dist_l, cam_mtx_r, dist_r,
         img_right.shape[::-1],
-        flags=cv2.CALIB_USE_INTRINSIC_GUESS + cv2.CALIB_FIX_INTRINSIC)
+        flags= cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
+        # cv2.CALIB_USE_INTRINSIC_GUESS
 
     # stereo rectify
     R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(cam_mtx_l,
@@ -91,6 +102,11 @@ def stereorectify(img_left, img_right):
                                         R2, P2,
                                         img_right.shape[::-1],
                                         cv2.CV_32F)
+
+    save_to_yml("l_sr_map_0", map_l[0])
+    save_to_yml("l_sr_map_1", map_l[1])
+    save_to_yml("r_sr_map_0", map_r[0])
+    save_to_yml("r_sr_map_1", map_r[1])
 
     img_left = cv2.remap(img_left,
                          map_l[0],
