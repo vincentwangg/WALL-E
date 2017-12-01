@@ -22,9 +22,9 @@ def save_to_yml(name, object, w=0):
 def undistort(img):
     cv2.imshow("original", img)
     h, w = img.shape[:2]
-    map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_16SC2)
-    save_to_yml("undistort_map1", map1, 1)
-    save_to_yml("undistort_map2", map2)
+    map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_32F) # cv2.CV_16SC2
+    save_to_yml("K_undistort", K, 1)
+    save_to_yml("D_undistort", D)
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     cv2.imshow( "undistorted", undistorted_img)
     cv2.destroyAllWindows()
@@ -104,10 +104,15 @@ def stereorectify(img_left, img_right):
                                         img_right.shape[::-1],
                                         cv2.CV_32F)
 
-    save_to_yml("l_sr_map_0", map_l[0])
-    save_to_yml("l_sr_map_1", map_l[1])
-    save_to_yml("r_sr_map_0", map_r[0])
-    save_to_yml("r_sr_map_1", map_r[1])
+    save_to_yml("cam_mtx_l", cam_mtx_l)
+    save_to_yml("dist_l", dist_l)
+    save_to_yml("R1", R1)
+    save_to_yml("P1", P1)
+
+    save_to_yml("cam_mtx_r", cam_mtx_r)
+    save_to_yml("dist_r", dist_r)
+    save_to_yml("R2", R2)
+    save_to_yml("P2", P2)
 
     img_left = cv2.remap(img_left,
                          map_l[0],
