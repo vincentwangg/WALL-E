@@ -11,8 +11,11 @@ K=np.array([[526.756924435422, 0.0, 330.221556181272], [0.0, 478.43311043812145,
 D=np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568173], [0.43735394851622683]])
 
 
-def save_to_yml(name, object):
-    fs = cv2.FileStorage("sr_maps.yml",flags=cv2.FILE_STORAGE_APPEND)
+def save_to_yml(name, object, w=0):
+    if w:
+        fs = cv2.FileStorage("sr_maps.yml", flags=cv2.FILE_STORAGE_WRITE)
+    else:
+        fs = cv2.FileStorage("sr_maps.yml", flags=cv2.FILE_STORAGE_APPEND)
     fs.write(name, object)
     fs.release()
 
@@ -20,10 +23,10 @@ def undistort(img):
     cv2.imshow("original", img)
     h, w = img.shape[:2]
     map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_16SC2)
-    save_to_yml("undistort_map1", map1)
+    save_to_yml("undistort_map1", map1, 1)
     save_to_yml("undistort_map2", map2)
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
-    cv2.imshow("undistorted", undistorted_img)
+    cv2.imshow( "undistorted", undistorted_img)
     cv2.destroyAllWindows()
     return undistorted_img
 

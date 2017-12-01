@@ -19,6 +19,7 @@ def stereo_rectify_videos(left_filename,right_filename):
     sr_left_video = cv2.VideoWriter("stereo_rectified_l.mkv", fourcc, 20.0, (640,478))
     sr_right_video = cv2.VideoWriter("stereo_rectified_r.mkv", fourcc, 20.0, (640,478))
     fs = cv2.FileStorage('sr_maps.yml', cv2.FILE_STORAGE_READ)
+
     l_sr_map_0 = read(fs, "l_sr_map_0")
     l_sr_map_1 = read(fs, "l_sr_map_1")
     r_sr_map_0 = read(fs, "r_sr_map_0")
