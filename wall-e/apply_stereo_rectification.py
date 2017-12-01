@@ -1,43 +1,52 @@
 import cv2
-import os
 import sys
 
+fourcc = cv2.VideoWriter_fourcc(*'FFV1') ## ffmpeg http://www.fourcc.org/codecs.php
+
 def read(fs,name):
-    val = fs.getNode(name).type()
+    val = fs.getNode(name).mat()
     return val
 
-# returns undistorted vc object
-def undistort(vc_obj, map1, map2):
-    return vc_obj
-
 # applies map to vc_obj with remap
-def apply_rectify_maps(vc_obj, l_map, r_map):
-    return vc_obj
+def apply_rectify_maps(image, map_0, map_1):
+    sr_image = cv2.remap(image, map_0, map_1, cv2.INTER_LANCZOS4)
+    return sr_image
 
-# writes the corrected vc_obj to a file
-def write_to_file(vc_obj,filename):
-    return None
+def stereo_rectify_videos(left_filename,right_filename):
+    left_vid = cv2.VideoCapture(left_filename)
+    right_vid = cv2.VideoCapture(right_filename)
 
-def main():
-    fs = cv2.FileStorage("sr_maps.yml")
-    undistort_map1 = read(fs, "undistort_map1")
-    undistort_map2 = read(fs, "undistort_map2")
+    sr_left_video = cv2.VideoWriter("stereo_rectified_l.mkv", fourcc, 20.0, (640,478))
+    sr_right_video = cv2.VideoWriter("stereo_rectified_r.mkv", fourcc, 20.0, (640,478))
+    fs = cv2.FileStorage('sr_maps.yml', cv2.FILE_STORAGE_READ)
     l_sr_map_0 = read(fs, "l_sr_map_0")
     l_sr_map_1 = read(fs, "l_sr_map_1")
     r_sr_map_0 = read(fs, "r_sr_map_0")
     r_sr_map_1 = read(fs, "r_sr_map_1")
+    # sys.exit(0)
 
-    # Reads command line arguments to get the videos
+    # Loop over video footage
+    l_success, l_image = left_vid.read()
+    r_success, r_image = right_vid.read()
 
-    # Turn videos into vc_obj
+    while l_success and r_success:
+        sr_l_image = apply_rectify_maps(l_image, l_sr_map_0, l_sr_map_1) # apply maps
+        sr_r_image = apply_rectify_maps(r_image, r_sr_map_0, r_sr_map_1)
 
-    # Undistort Videos
+        sr_left_video.write(sr_l_image)         # write videos
+        sr_right_video.write(sr_r_image)
 
-    # Apply maps
+        l_success, l_image = left_vid.read()    # read next frame
+        r_success, r_image = right_vid.read()
+    sr_right_video.release()
+    sr_left_video.release()
 
-    # Write the new videos to a file
 
-    return None
+def main():
+    left_filename = str(sys.argv[1])
+    right_filename = str(sys.argv[2])
+    stereo_rectify_videos(left_filename, right_filename)
+
 
 if __name__ == '__main__':
     main()

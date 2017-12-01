@@ -2,16 +2,14 @@
 
 import numpy as np
 import cv2
-import sys
-import pprint
+
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
 DIM=(640, 478) # deinterlaced video is now 640 X 478
 K=np.array([[526.756924435422, 0.0, 330.221556181272], [0.0, 478.43311043812145, 249.44524334088075], [0.0, 0.0, 1.0]])
 D=np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568173], [0.43735394851622683]])
-storage_file = open("sr_maps.yml","w+")
-storage_file.close()
+
 
 def save_to_yml(name, object):
     fs = cv2.FileStorage("sr_maps.yml",flags=cv2.FILE_STORAGE_APPEND)
@@ -35,7 +33,7 @@ def stereorectify(img_left, img_right):
     img_left_corners_success, img_left_corner_coords = cv2.findChessboardCorners(img_left, CHECKERBOARD,
                                                                                  cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
     img_right_corners_success, img_right_corner_coords = cv2.findChessboardCorners(img_right, CHECKERBOARD,
-                                                                                   cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)  # 7,5 works
+                                                                                   cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
 
     print "Detected corners in left image:\t\t" + str(img_right_corners_success)
     print "Detected corners in right image:\t" + str(img_left_corners_success)
