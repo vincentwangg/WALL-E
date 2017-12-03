@@ -43,8 +43,8 @@ def stereo_rectify_videos(left_filename,right_filename):
     left_vid = cv2.VideoCapture(left_filename)
     right_vid = cv2.VideoCapture(right_filename)
 
-    sr_left_video = cv2.VideoWriter("stereo_rectified_l.mkv", fourcc, 20.0, (640,478))
-    sr_right_video = cv2.VideoWriter("stereo_rectified_r.mkv", fourcc, 20.0, (640,478))
+    sr_left_video = cv2.VideoWriter("stereo_rectified_l.mkv", fourcc, 30.0, (640,478))
+    sr_right_video = cv2.VideoWriter("stereo_rectified_r.mkv", fourcc, 30.0, (640,478))
 
     print "generating maps..."
     (l_map,r_map) = generate_maps()
