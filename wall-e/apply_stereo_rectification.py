@@ -3,6 +3,7 @@ import sys
 from stereorectification import undistort
 from yaml_utility import read_from_yml
 
+# Before running this, convert the videos to mkv using handbrake
 # Undistorts and stereo rectifies videos
 
 # Usage: python apply_stereo_rectification.py left.mkv right.mkv

@@ -27,7 +27,7 @@ def undistort_video(video_filename, new_file_ext, frame_cap=0):
 
             if undistorted_video is None:
                 height, width, layers = undistorted_frame.shape
-                fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+                fourcc = cv2.VideoWriter_fourcc(*'FFV1')
                 try:
                     os.remove(new_filename)
                 except OSError:
@@ -36,11 +36,11 @@ def undistort_video(video_filename, new_file_ext, frame_cap=0):
 
             undistorted_video.write(undistorted_frame)
             i = i + 1
-            print str(pos_frame) + " frames"
+            # print str(pos_frame) + " frames"
         else:
             # The next frame is not ready, so we try to read it again
             video.set(cv2.CAP_PROP_POS_FRAMES, pos_frame - 1)
-            print "frame is not ready"
+            # print "frame is not ready"
             # It is better to wait for a while for the next frame to be ready
             cv2.waitKey(1000)
             attempts_to_read_frame = attempts_to_read_frame + 1
