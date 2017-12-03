@@ -1,14 +1,12 @@
 import cv2
 import sys
+from stereorectification import undistort
+from yaml_utility import read_from_yml
 
 # Usage: python apply_stereo_rectification.py left.mkv right.mkv
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1') ## ffmpeg http://www.fourcc.org/codecs.php
 
-
-def read_from_yml(fs,name):
-    val = fs.getNode(name).mat()
-    return val
 
 # applies map to vc_obj with remap
 def apply_rectify_maps(image, map_0, map_1):
@@ -39,16 +37,17 @@ def generate_maps():
                                         cv2.CV_32F)
     return (map_l,map_r)
 
-def stereo_rectify_videos(left_filename,right_filename):
+def undistort_and_stereo_rectify_videos(left_filename,right_filename):
     left_vid = cv2.VideoCapture(left_filename)
     right_vid = cv2.VideoCapture(right_filename)
 
-    sr_left_video = cv2.VideoWriter("stereo_rectified_l.mkv", fourcc, 30.0, (640,478))
-    sr_right_video = cv2.VideoWriter("stereo_rectified_r.mkv", fourcc, 30.0, (640,478))
+    new_filename_l = left_filename[:-4]+"_stereo_rectified.mkv"
+    new_filename_r = right_filename[:-4]+"_stereo_rectified.mkv"
 
-    print "generating maps..."
+    sr_left_video = cv2.VideoWriter(new_filename_l, fourcc, 30.0, (640,478))
+    sr_right_video = cv2.VideoWriter(new_filename_r, fourcc, 30.0, (640,478))
+
     (l_map,r_map) = generate_maps()
-    print "done"
 
     # Loop over video footage
     print "rectifying footage... this could take a while"
@@ -56,8 +55,11 @@ def stereo_rectify_videos(left_filename,right_filename):
     r_success, r_image = right_vid.read()
 
     while l_success and r_success:
-        sr_l_image = apply_rectify_maps(l_image, l_map[0], l_map[1]) # apply maps
-        sr_r_image = apply_rectify_maps(r_image, r_map[0], r_map[1])
+        cv2.flip(r_image, -1, r_image)
+        undistorted_l_image = undistort(l_image)
+        undistorted_r_image = undistort(r_image)
+        sr_l_image = apply_rectify_maps(undistorted_l_image, l_map[0], l_map[1]) # apply maps
+        sr_r_image = apply_rectify_maps(undistorted_r_image, r_map[0], r_map[1])
 
         sr_left_video.write(sr_l_image)         # write videos
         sr_right_video.write(sr_r_image)
@@ -66,13 +68,15 @@ def stereo_rectify_videos(left_filename,right_filename):
         r_success, r_image = right_vid.read()
     sr_right_video.release()
     sr_left_video.release()
-    print "done rectifying! Your videos have the names stereo_rectified_l.mkv and stereo_rectified_r.mkv"
+    print "done rectifying! Your videos have the names",new_filename_l,"and", new_filename_r
 
 
 def main():
+    if len(sys.argv) != 3:
+        sys.exit("Usage: python apply_stereo_rectification.py left.mkv right.mkv")
     left_filename = str(sys.argv[1])
     right_filename = str(sys.argv[2])
-    stereo_rectify_videos(left_filename, right_filename)
+    undistort_and_stereo_rectify_videos(left_filename, right_filename)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,9 @@
 
 import numpy as np
 import cv2
-
+from grayscale_converter import convert_to_gray
+from yaml_utility import save_to_yml
+import sys
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
@@ -11,23 +13,9 @@ K=np.array([[526.756924435422, 0.0, 330.221556181272], [0.0, 478.43311043812145,
 D=np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568173], [0.43735394851622683]])
 
 
-def save_to_yml(name, object, w=0):
-    if w:
-        fs = cv2.FileStorage("sr_maps.yml", flags=cv2.FILE_STORAGE_WRITE)
-    else:
-        fs = cv2.FileStorage("sr_maps.yml", flags=cv2.FILE_STORAGE_APPEND)
-    fs.write(name, object)
-    fs.release()
-
 def undistort(img):
-    cv2.imshow("original", img)
-    h, w = img.shape[:2]
     map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_32F) # cv2.CV_16SC2
-    save_to_yml("K_undistort", K, 1)
-    save_to_yml("D_undistort", D)
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
-    cv2.imshow( "undistorted", undistorted_img)
-    cv2.destroyAllWindows()
     return undistorted_img
 
 
@@ -92,7 +80,6 @@ def stereorectify(img_left, img_right):
                                                                       img_right.shape[::-1],
                                                                       R, T, alpha=0.95)
 
-    # new_shape = (1280//2,960//2)
     map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
                                         dist_l,
                                         R1, P1,
@@ -104,15 +91,15 @@ def stereorectify(img_left, img_right):
                                         img_right.shape[::-1],
                                         cv2.CV_32F)
 
-    save_to_yml("cam_mtx_l", cam_mtx_l)
-    save_to_yml("dist_l", dist_l)
-    save_to_yml("R1", R1)
-    save_to_yml("P1", P1)
+    save_to_yml("sr_maps.yml", "cam_mtx_l", cam_mtx_l, w=1)
+    save_to_yml("sr_maps.yml", "dist_l", dist_l)
+    save_to_yml("sr_maps.yml", "R1", R1)
+    save_to_yml("sr_maps.yml", "P1", P1)
 
-    save_to_yml("cam_mtx_r", cam_mtx_r)
-    save_to_yml("dist_r", dist_r)
-    save_to_yml("R2", R2)
-    save_to_yml("P2", P2)
+    save_to_yml("sr_maps.yml", "cam_mtx_r", cam_mtx_r)
+    save_to_yml("sr_maps.yml", "dist_r", dist_r)
+    save_to_yml("sr_maps.yml", "R2", R2)
+    save_to_yml("sr_maps.yml", "P2", P2)
 
     img_left = cv2.remap(img_left,
                          map_l[0],
@@ -131,10 +118,6 @@ def stereorectify(img_left, img_right):
     print "Showing left image (stereorectified)"
     cv2.imshow('Right Image - Stereorectified', img_right)
     print "Showing right image (stereorectified)"
-
-
-def convert_to_gray(img):
-    return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 
 def main():
