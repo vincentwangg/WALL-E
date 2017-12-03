@@ -32,7 +32,7 @@ def undistort_video(video_filename, new_file_ext, frame_cap=0):
                     os.remove(new_filename)
                 except OSError:
                     pass
-                undistorted_video = cv2.VideoWriter(new_filename, fourcc, 20.0, (width, height))
+                undistorted_video = cv2.VideoWriter(new_filename, fourcc, 30.0, (width, height))
 
             undistorted_video.write(undistorted_frame)
             i = i + 1
