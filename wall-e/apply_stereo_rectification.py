@@ -9,7 +9,7 @@ from yaml_utility import read_from_yml
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1') ## ffmpeg http://www.fourcc.org/codecs.php
 
-INVERT_RIGHT_VIDEO= 1
+INVERT_RIGHT_VIDEO = 1
 
 # applies map to vc_obj with remap
 def apply_rectify_maps(image, map_0, map_1):
