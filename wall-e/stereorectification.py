@@ -122,6 +122,7 @@ def stereorectify(img_left, img_right):
 
 def main():
     frame_num = 860
+    right_video_offset = 13
 
     vc_obj_left = cv2.VideoCapture("../Left.mkv")
     vc_obj_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
@@ -129,7 +130,7 @@ def main():
     convert_to_gray(img_left)
 
     vc_obj_right = cv2.VideoCapture("../Right.mkv")
-    vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num+10)
+    vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num + right_video_offset)
     vc_obj_right_success, img_right = vc_obj_right.read()
     cv2.flip(img_right, -1, img_right)
     convert_to_gray(img_right)
