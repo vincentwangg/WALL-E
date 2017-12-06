@@ -1,5 +1,6 @@
 import numpy as np
 import time
+import math
 import sys
 import cv2
 import matplotlib.pyplot as plt
@@ -20,11 +21,17 @@ def get_optimal_offset(l_gradient, r_gradient, max_offset):
       optimal_offset = offset
   return optimal_offset
 
-def calculate_gradient(file_name):
+def calculate_gradient(file_name, is_left_gradient, fraction):
   feed = cv2.VideoCapture(file_name)
 
   prev_frame = cv2.cvtColor(feed.read()[1], cv2.COLOR_BGR2GRAY)
-  x, prev_frame = cv2.threshold(prev_frame, 150, 255, cv2.THRESH_BINARY)
+  num_pixels = int(math.floor(prev_frame.shape[1] - (prev_frame.shape[1] * fraction)))
+  if (is_left_gradient):
+    prev_frame = prev_frame[:, num_pixels:]
+  else:
+    prev_frame = prev_frame[:, :(prev_frame.shape[1] - num_pixels)]
+  x, prev_frame = cv2.threshold(prev_frame, 110, 255, cv2.THRESH_TOZERO)
+  normal_factor = float(1) / (prev_frame.shape[0] * prev_frame.shape[1])
   num_frames = int(feed.get(cv2.CAP_PROP_FRAME_COUNT))
   idx = 0
   gradient = np.empty(num_frames - 1)
@@ -35,8 +42,15 @@ def calculate_gradient(file_name):
       sys.stdout.write('\r{0}% - [{1}{2}]'.format(prog, '*' * prog, ' ' * (100 - prog)))
       sys.stdout.flush()
       frame = cv2.cvtColor(feed.read()[1], cv2.COLOR_BGR2GRAY)
-      x, frame = cv2.threshold(frame, 150, 255, cv2.THRESH_BINARY)
-      gradient[idx] = np.sum(abs((frame - prev_frame)))
+      if (is_left_gradient):
+        frame = frame[:, num_pixels:]
+      else:
+        frame = frame[:, :(prev_frame.shape[1])]
+      x, frame = cv2.threshold(frame, 150, 255, cv2.THRESH_TOZERO)
+      if (idx == 0):
+        gradient[idx] = normal_factor * np.sum(abs(frame - prev_frame))
+      else:
+        gradient[idx] = (0.9 * gradient[idx - 1]) + (0.1 * normal_factor * np.sum(abs(frame - prev_frame)))
       idx = idx + 1
   feed.release()
   return gradient
@@ -48,19 +62,49 @@ def plot_intensity_curves(l_gradient, r_gradient):
   plt.xlabel('frame number')
   plt.show()
 
+def compare_feeds(l_file_name, r_file_name, l_gradient, offset):
+  frame_no = np.argmax(l_gradient)
+  l_feed = cv2.VideoCapture(l_file_name)
+  l_feed.set(1, frame_no - 2)
+  frame = cv2.cvtColor(l_feed.read()[1], cv2.COLOR_BGR2GRAY)
+  (height, width) = frame.shape
+  l_five_image_seq = np.zeros([height, width * 5 + 8])
+  l_five_image_seq.fill(255)
+  l_five_image_seq[:, 0:width] = frame
+  curr = width + 2
+  for i in range(0, 4):
+    print(i)
+    l_five_image_seq[:, curr:(curr + width)] = cv2.cvtColor(l_feed.read()[1], cv2.COLOR_BGR2GRAY)
+    curr += width + 2
+  cv2.imshow("l_feed", l_five_image_seq);
+
+  r_feed = cv2.VideoCapture(r_file_name)
+  r_feed.set(1, frame_no - 2 + offset)
+  r_five_image_seq = np.zeros([height, width * 5 + 8])
+  r_five_image_seq.fill(255)
+  r_five_image_seq[:, 0:width] = frame
+  curr = width + 2
+  for i in range(0, 4):
+    print(i)
+    r_five_image_seq[:, curr:(curr + width)] = cv2.cvtColor(l_feed.read()[1], cv2.COLOR_BGR2GRAY)
+    curr += width + 2
+  cv2.imshow("r_feed", r_five_image_seq);
+
+
 def main():
   start = time.time()
   if (len(sys.argv) != 3):
     print('Usage: python3 frame_match_intensity.py <left_feed> <right_feed>')
     exit()
   print 'left feed gradient calculating...'
-  l_gradient = calculate_gradient(sys.argv[1])
+  l_gradient = calculate_gradient(sys.argv[1], True, 0.8)
   print '\nright feed gradient calculating...'
-  r_gradient = calculate_gradient(sys.argv[2])
-  plot_intensity_curves(l_gradient, r_gradient)
+  r_gradient = calculate_gradient(sys.argv[2], False, 0.8)
   opt = get_optimal_offset(l_gradient, r_gradient, 200)
   print '\nOptimal right feed offset:', opt
   print 'Time elapsed:', (time.time() - start) / 60, 'minutes'
+  plot_intensity_curves(l_gradient, r_gradient)
+  compare_feeds(sys.argv[1], sys.argv[2], l_gradient, opt)
 
 if __name__ == '__main__':
     main()
