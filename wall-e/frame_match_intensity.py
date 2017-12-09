@@ -5,17 +5,24 @@ import sys
 import cv2
 import matplotlib.pyplot as plt
 
-def get_gradient_diff(l_gradient, r_gradient, offset):
-  gradient_len = len(l_gradient)
+def get_gradient_diff(l_gradient, r_gradient, gradient_len, offset):
   diff = abs(l_gradient - np.roll(r_gradient, offset))[max(0, offset):min(gradient_len, gradient_len + offset)]
   diff /= float(len(diff))
   return np.sum(diff)
 
 def get_optimal_offset(l_gradient, r_gradient, max_offset):
   min_diff = sys.maxint
+  gradient_len = len(l_gradient)
+  if (len(r_gradient) > gradient_len):
+    r_gradient = r_gradient[0:gradient_len]
+  else:
+    l_gradient = l_gradient[0:len(r_gradient)]
+    gradient_len = len(r_gradient)
+  print(len(l_gradient))
+  print(len(r_gradient))
   optimal_offset = 0
   for offset in range(-max_offset, max_offset + 1):
-    curr_diff = get_gradient_diff(l_gradient, r_gradient, offset)
+    curr_diff = get_gradient_diff(l_gradient, r_gradient, gradient_len, offset)
     if curr_diff < min_diff:
       min_diff = curr_diff
       optimal_offset = offset
@@ -50,7 +57,7 @@ def calculate_gradient(file_name, is_left_gradient, fraction):
       if (idx == 0):
         gradient[idx] = normal_factor * np.sum(abs(frame - prev_frame))
       else:
-        gradient[idx] = (0.9 * gradient[idx - 1]) + (0.1 * normal_factor * np.sum(abs(frame - prev_frame)))
+        gradient[idx] = (0.6 * gradient[idx - 1]) + (0.4 * normal_factor * np.sum(abs(frame - prev_frame)))
       idx = idx + 1
   feed.release()
   return gradient
@@ -73,28 +80,28 @@ def compare_feeds(l_file_name, r_file_name, l_gradient, offset):
   l_five_image_seq[:, 0:width] = frame
   curr = width + 2
   for i in range(0, 4):
-    print(i)
     l_five_image_seq[:, curr:(curr + width)] = cv2.cvtColor(l_feed.read()[1], cv2.COLOR_BGR2GRAY)
     curr += width + 2
-  cv2.imshow("l_feed", l_five_image_seq);
+  cv2.imwrite("l_feed_frames.jpg", l_five_image_seq);
 
   r_feed = cv2.VideoCapture(r_file_name)
   r_feed.set(1, frame_no - 2 + offset)
+  frame = cv2.cvtColor(r_feed.read()[1], cv2.COLOR_BGR2GRAY)
+  (height, width) = frame.shape
   r_five_image_seq = np.zeros([height, width * 5 + 8])
   r_five_image_seq.fill(255)
   r_five_image_seq[:, 0:width] = frame
   curr = width + 2
   for i in range(0, 4):
-    print(i)
-    r_five_image_seq[:, curr:(curr + width)] = cv2.cvtColor(l_feed.read()[1], cv2.COLOR_BGR2GRAY)
+    r_five_image_seq[:, curr:(curr + width)] = cv2.cvtColor(r_feed.read()[1], cv2.COLOR_BGR2GRAY)
     curr += width + 2
-  cv2.imshow("r_feed", r_five_image_seq);
+  cv2.imwrite("r_feed_frames.jpg", r_five_image_seq);
 
 
 def main():
   start = time.time()
   if (len(sys.argv) != 3):
-    print('Usage: python3 frame_match_intensity.py <left_feed> <right_feed>')
+    print('Usage: python frame_match_intensity.py <left_feed> <right_feed>')
     exit()
   print 'left feed gradient calculating...'
   l_gradient = calculate_gradient(sys.argv[1], True, 0.8)
