@@ -29,6 +29,9 @@ def stereorectify(img_left, img_right):
     print "Detected corners in left image:\t\t" + str(img_right_corners_success)
     print "Detected corners in right image:\t" + str(img_left_corners_success)
 
+    if not (img_left_corners_success and img_right_corners_success):
+        print "If the following error shows up, then it means it couldn't find corners"
+
     # Tuning these parameters does not appear to effect the end result
     max_iterations = 30
     epsilon = 0.0001
@@ -50,6 +53,9 @@ def stereorectify(img_left, img_right):
         # cornerSubPix refines the corner coordinates. (tuning these params does nothing)
         img_points_left = [cv2.cornerSubPix(img_left, img_left_corner_coords, (11, 11), (-1, -1), criteria)]
         img_points_right = [cv2.cornerSubPix(img_right, img_right_corner_coords, (11, 11), (-1, -1), criteria)]
+
+        cv2.drawChessboardCorners(img_left, CHECKERBOARD, img_left_corner_coords, img_left_corners_success)
+        cv2.drawChessboardCorners(img_right, CHECKERBOARD, img_right_corner_coords, img_right_corners_success)
 
     reprojection_error_left, cam_mtx_l, dist_l, rotation_vec_left, translation_vec_left = cv2.calibrateCamera(
         objpoints,
@@ -120,19 +126,21 @@ def stereorectify(img_left, img_right):
     print "Showing right image (stereorectified)"
 
 
-def main():
-    frame_num = 860
-    right_video_offset = 13
+def main(left_video_filename, right_video_filename):
+    frame_num = 244
+    left_video_offset = 12
+    right_video_offset = 0
 
-    vc_obj_left = cv2.VideoCapture("../Left.mkv")
-    vc_obj_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+    vc_obj_left = cv2.VideoCapture(left_video_filename)
+    vc_obj_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num + left_video_offset)
     vc_obj_left_success, img_left = vc_obj_left.read()
+    # cv2.flip(img_left, -1, img_left)
     convert_to_gray(img_left)
 
-    vc_obj_right = cv2.VideoCapture("../Right.mkv")
+    vc_obj_right = cv2.VideoCapture(right_video_filename)
     vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num + right_video_offset)
     vc_obj_right_success, img_right = vc_obj_right.read()
-    cv2.flip(img_right, -1, img_right)
+    # cv2.flip(img_right, -1, img_right)
     convert_to_gray(img_right)
 
     img_left_undistorted = undistort(img_left)
@@ -148,4 +156,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) == 3:
+        main(sys.argv[1], sys.argv[2])
+    else:
+        print("Incorrect number of arguments. Usage: ./script left_video_filename right_video_filename")

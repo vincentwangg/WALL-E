@@ -43,7 +43,7 @@ def run_through_video(vid_capture_obj, begin_idx, end_idx_exc):
             imgpoints.append(corners)
             successes += 1
             print("Success: " + str(successes))
-            if successes == 135:
+            if successes == 100:
                 break
         else:
             print("Fail. Current successes: " + str(successes))
