@@ -31,6 +31,7 @@ def stereorectify(img_left, img_right):
 
     if not (img_left_corners_success and img_right_corners_success):
         print "If the following error shows up, then it means it couldn't find corners"
+        print "Error message: error: (-215) nimages > 0 in function calibrateCamera"
 
     # Tuning these parameters does not appear to effect the end result
     max_iterations = 30
