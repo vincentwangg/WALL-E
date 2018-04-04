@@ -26,12 +26,11 @@ def stereorectify(img_left, img_right):
     img_right_corners_success, img_right_corner_coords = cv2.findChessboardCorners(img_right, CHECKERBOARD,
                                                                                    cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
 
-    print "Detected corners in left image:\t\t" + str(img_right_corners_success)
-    print "Detected corners in right image:\t" + str(img_left_corners_success)
+    # print "Detected corners in left image:\t\t" + str(img_right_corners_success)
+    # print "Detected corners in right image:\t" + str(img_left_corners_success)
 
     if not (img_left_corners_success and img_right_corners_success):
-        print "If the following error shows up, then it means it couldn't find corners"
-        print "Error message: error: (-215) nimages > 0 in function calibrateCamera"
+        return False
 
     # Tuning these parameters does not appear to effect the end result
     max_iterations = 30
@@ -122,39 +121,63 @@ def stereorectify(img_left, img_right):
         img_right[line * 20, :] = 255
 
     cv2.imshow('Left Image - Stereorectified', img_left)
-    print "Showing left image (stereorectified)"
+    # print "Showing left image (stereorectified)"
     cv2.imshow('Right Image - Stereorectified', img_right)
-    print "Showing right image (stereorectified)"
+    # print "Showing right image (stereorectified)"
+
+    return True
 
 
 def main(left_video_filename, right_video_filename):
-    frame_num = 244
-    left_video_offset = 12
+    # To view the stereo rectification of a single frame, set the start and end frame accordingly (1 frame apart)
+    start_frame = 1
+    end_frame = 2910
+    left_video_offset = 20
     right_video_offset = 0
 
-    vc_obj_left = cv2.VideoCapture(left_video_filename)
-    vc_obj_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num + left_video_offset)
-    vc_obj_left_success, img_left = vc_obj_left.read()
-    # cv2.flip(img_left, -1, img_left)
-    convert_to_gray(img_left)
+    frames = []
+    print("Starting...")
+    for frame_num in range(start_frame, end_frame):
+        if frame_num % 20 == 0 or frame_num == 1:
+            print("frame_num: " + str(frame_num) + "/" + str(end_frame) + ". Progress: " + str(frame_num * 100 / end_frame) + "%")
 
-    vc_obj_right = cv2.VideoCapture(right_video_filename)
-    vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num + right_video_offset)
-    vc_obj_right_success, img_right = vc_obj_right.read()
-    # cv2.flip(img_right, -1, img_right)
-    convert_to_gray(img_right)
+        vc_obj_left = cv2.VideoCapture(left_video_filename)
+        vc_obj_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num + left_video_offset)
+        vc_obj_left_success, img_left = vc_obj_left.read()
+        cv2.flip(img_left, -1, img_left)
+        convert_to_gray(img_left)
 
-    img_left_undistorted = undistort(img_left)
-    img_right_undistorted = undistort(img_right)
+        vc_obj_right = cv2.VideoCapture(right_video_filename)
+        vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num + right_video_offset)
+        vc_obj_right_success, img_right = vc_obj_right.read()
+        cv2.flip(img_left, -1, img_right)
+        convert_to_gray(img_right)
 
-    cv2.imshow('left', img_left)
-    cv2.imshow('right', img_right)
-    cv2.imshow('left undistorted', img_left_undistorted)
-    cv2.imshow('right undistorted', img_right_undistorted)
+        img_left_undistorted = undistort(img_left)
+        img_right_undistorted = undistort(img_right)
 
-    stereorectify(convert_to_gray(img_left_undistorted), convert_to_gray(img_right_undistorted))
-    cv2.waitKey(0)
+        cv2.imshow('left', img_left)
+        cv2.imshow('right', img_right)
+        cv2.imshow('left undistorted', img_left_undistorted)
+        cv2.imshow('right undistorted', img_right_undistorted)
 
+        if stereorectify(convert_to_gray(img_left_undistorted), convert_to_gray(img_right_undistorted)):
+            print("Found frame: " + str(frame_num) + ". Please review the windows and press Y/N to accept/reject frame.")
+            key = cv2.waitKey(0)
+            yes_key_code = 121
+            no_key_code = 110
+
+            if key == no_key_code:
+                print("Frame rejected. Current list of working frames: " + str(frames))
+            elif key == yes_key_code:
+                frames.append(frame_num)
+                print("Frame accepted. Current list of working frames: " + str(frames))
+            else:
+                frames.append(frame_num)
+                print("Unknown key. Accepting frame. Current list of working frames: " + str(frames))
+
+    print("The following frames work: ")
+    print(frames)
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
