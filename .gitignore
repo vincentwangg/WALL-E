@@ -1,1 +1,7 @@
 .idea/
+*.mp4
+*.avi
+*.mkv
+*.ASF
+*~
+.DS_Store
