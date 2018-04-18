@@ -150,7 +150,7 @@ def main(left_video_filename, right_video_filename):
         vc_obj_right = cv2.VideoCapture(right_video_filename)
         vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num + right_video_offset)
         vc_obj_right_success, img_right = vc_obj_right.read()
-        cv2.flip(img_left, -1, img_right)
+        cv2.flip(img_right, -1, img_right)
         convert_to_gray(img_right)
 
         img_left_undistorted = undistort(img_left)
