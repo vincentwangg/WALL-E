@@ -8,21 +8,18 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
     help="path to input image")
 ap.add_argument("-b", "--black", required=True, type=int,
-    help="threshold below which is black")
+    help="threshold below which is black above which is white")
 ap.add_argument("-w", "--white", required=True, type=int,
-    help="threshold above which is white")
+    help="pixels above the threshold will have this value")
 args = vars(ap.parse_args())
 black = args["black"]
 white = args["white"]
-
-print black
-print white
 
 im = cv2.imread(args["image"])
 
 imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
 
-ret,thresh = cv2.threshold(imgray,black,white,0)
+ret,thresh = cv2.threshold(imgray,black,white,cv2.THRESH_BINARY)
 imgray, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 cv2.imshow("imgray",imgray)
 cv2.waitKey(0)
