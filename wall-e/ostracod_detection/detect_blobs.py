@@ -3,7 +3,7 @@ import cv2
 import numpy as np;
 
 # Read image
-im = cv2.imread("Undistortionresult2.png", cv2.IMREAD_GRAYSCALE)
+im = cv2.imread("ostracod.png", cv2.IMREAD_GRAYSCALE)
 #this makes a negative of the image, and does thresholding. Anything below 110 is 0
 retval,imt = cv2.threshold(im, 110, 255, cv2.THRESH_BINARY_INV)
 
