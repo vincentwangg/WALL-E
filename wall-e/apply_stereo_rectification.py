@@ -55,7 +55,7 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
     (l_map,r_map) = generate_maps(yml_filename)
 
     # Loop over video footage
-    print "rectifying footage... this could take a while"
+    print("rectifying footage... this could take a while")
     l_success, l_image = left_vid.read()
     r_success, r_image = right_vid.read()
 
@@ -87,7 +87,7 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
         r_success, r_image = right_vid.read()
     sr_right_video.release()
     sr_left_video.release()
-    print "done rectifying! Your videos have the names",new_filename_l,"and", new_filename_r
+    print("done rectifying! Your videos have the names", new_filename_l, "and", new_filename_r)
 
 
 def main():
