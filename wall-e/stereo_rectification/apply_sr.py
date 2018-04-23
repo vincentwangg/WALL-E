@@ -1,13 +1,11 @@
-import argparse
-import cv2
-from stereo_rectification.stereo_rectification_map_gen import undistort
-from utilities.yaml_utility import read_from_yml
-from utilities.video_frame_loader import VideoFrameLoader
-
 # Before running this, convert the videos to mkv using handbrake
 # Undistorts and stereo rectifies videos
 
-# Usage: python apply_stereo_rectification.py left.mkv right.mkv
+import argparse
+import cv2
+from stereo_rectification.sr_map_gen import undistort
+from utilities.yaml_utility import read_from_yml
+from utilities.video_frame_loader import VideoFrameLoader
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.php
 
@@ -97,9 +95,6 @@ def main():
                                                                          "directory as this script.")
     args = parser.parse_args()
 
-    print(args.left_video)
-    print(args.right_video)
-    print(args.yaml_file)
     undistort_and_stereo_rectify_videos(args.left_video, args.right_video, args.yaml_file)
 
 
