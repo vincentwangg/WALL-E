@@ -6,6 +6,7 @@ import ast
 
 fps_value = 30
 
+
 def main(points_filename):
     delete_all_objects()
     set_fps(fps_value)
@@ -20,7 +21,7 @@ def main(points_filename):
 
 def set_fps(new_fps):
     bpy.context.scene.render.fps = new_fps
-    
+
 
 def get_points_from_file(points_filename):
     # Future iterations file syntax:
@@ -38,7 +39,7 @@ def get_points_from_file(points_filename):
     #   One can see from the points.txt example that as time moves on,
     #   the points move one unit positively in the x direction, then
     #   the y direction.
-    
+
     points_file = open(points_filename, "r")
     if points_file.mode == 'r':
         points_string = points_file.read()
@@ -51,7 +52,7 @@ def plot_points_from_frame(points, frame_num):
     for point in points[frame_num]:
         plot_point(point, frame_num)
 
-        
+
 # Coordinates should be in format [x, y, z]
 def plot_point(coordinate, frame_num):
     bpy.ops.mesh.primitive_ico_sphere_add(size=0.5, location=coordinate)
@@ -59,26 +60,26 @@ def plot_point(coordinate, frame_num):
 
     obj.keyframe_insert('hide', frame=frame_num)
     obj.keyframe_insert('hide_render', frame=frame_num)
-    
+
     # Hide object
     obj.hide = True
     obj.hide_render = True
-    
-    # Hide object in the frames before and after
-    obj.keyframe_insert('hide', frame=frame_num-1)
-    obj.keyframe_insert('hide_render', frame=frame_num-1)
-    obj.keyframe_insert('hide', frame=frame_num+1)
-    obj.keyframe_insert('hide_render', frame=frame_num+1)
 
-    
+    # Hide object in the frames before and after
+    obj.keyframe_insert('hide', frame=frame_num - 1)
+    obj.keyframe_insert('hide_render', frame=frame_num - 1)
+    obj.keyframe_insert('hide', frame=frame_num + 1)
+    obj.keyframe_insert('hide_render', frame=frame_num + 1)
+
+
 def select_all_objects():
     bpy.ops.object.select_all(action='SELECT')
 
-    
+
 def deselect_all_objects():
     bpy.ops.object.select_all(action='DESELECT')
 
-    
+
 def delete_all_objects():
     select_all_objects()
     bpy.ops.object.delete()

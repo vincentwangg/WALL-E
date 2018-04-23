@@ -1,8 +1,8 @@
-import cv2
 import sys
-from stereorectification import undistort
-from video_frame_loader import VideoFrameLoader
-from yaml_utility import read_from_yml
+import cv2
+from stereo_rectification.stereo_rectification_map_gen import undistort
+from utilities.yaml_utility import read_from_yml
+from utilities.video_frame_loader import VideoFrameLoader
 
 # Before running this, convert the videos to mkv using handbrake
 # Undistorts and stereo rectifies videos

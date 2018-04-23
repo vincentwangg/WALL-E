@@ -2,7 +2,7 @@ import os
 
 import cv2
 import sys
-from stereorectification import undistort
+from stereo_rectification.stereo_rectification_map_gen import undistort
 
 
 def undistort_video(video_filename, new_file_ext, frame_cap=0):
@@ -12,7 +12,7 @@ def undistort_video(video_filename, new_file_ext, frame_cap=0):
     while not video.isOpened():
         video = cv2.VideoCapture(video_filename)
         cv2.waitKey(1000)
-        print "Wait for the header"
+        print("Wait for the header")
 
     pos_frame = video.get(cv2.CAP_PROP_POS_FRAMES)
     i = 0

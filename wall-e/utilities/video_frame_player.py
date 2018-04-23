@@ -7,9 +7,9 @@
 #    to which frame is currently being displayed.
 
 import argparse
-import cv2
 import sys
-from video_frame_loader import VideoFrameLoader
+import cv2
+from utilities.video_frame_loader import VideoFrameLoader
 
 
 def play_video(left_video_filename, right_video_filename, left_offset=0, right_offset=0, first_frame=0):

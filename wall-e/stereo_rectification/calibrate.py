@@ -1,8 +1,7 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-333b05afa0b0
-# Use this program to find constants to supply to stereorectification.py
+# Use this program to find constants to supply to stereo_rectification_map_gen.py
 
 import cv2
-
 assert cv2.__version__[0] == '3', 'The fisheye module requires opencv version >= 3.0.0'
 import numpy as np
 

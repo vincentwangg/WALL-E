@@ -1,5 +1,5 @@
 import cv2
-import stereorectification
+import stereo_rectification
 
 
 def get_images(frame_num, offset, left, right):
