@@ -2,9 +2,9 @@
 #
 # How to use:
 # 1) Start the script
-# 2) Arrange the windows that open side by side. Have the left video feed on the left side
-#    and the right video feed on the right.
-# 3) Press any key to advance a frame.
+# 2) Put the windows that pop up into focus.
+# 3) Press any key to advance a frame. Use the title of the windows as a reference
+#    to which frame is currently being displayed.
 
 import argparse
 import cv2
@@ -17,19 +17,29 @@ def play_video(left_video_filename, right_video_filename, left_offset=0, right_o
 
     frame_num = first_frame
     while True:
-        vc_obj_left_success, img_left = frame_loader.get_left_frame(frame_num + left_offset)
-        vc_obj_right_success, img_right = frame_loader.get_right_frame(frame_num + right_offset)
+        left_frame_num = frame_num + left_offset
+        right_frame_num = frame_num + right_offset
+
+        vc_obj_left_success, img_left = frame_loader.get_left_frame(left_frame_num)
+        vc_obj_right_success, img_right = frame_loader.get_right_frame(right_frame_num)
 
         if not vc_obj_left_success or not vc_obj_right_success:
-            print("Video finished.")
+            print("Video has ended.")
             break
 
-        cv2.imshow("Left Feed", img_left)
-        cv2.imshow("Right Feed", img_right)
+        left_image_title = "Left Feed: Frame " + str(left_frame_num)
+        right_image_title = "Right Feed: Frame " + str(right_frame_num)
+
+        cv2.imshow(left_image_title, img_left)
+        cv2.imshow(right_image_title, img_right)
+
+        cv2.moveWindow(left_image_title, 0, 0)
+        cv2.moveWindow(right_image_title, img_left.shape[1], 0)
 
         cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
         frame_num = frame_num + 1
-        print("Frame Num: " + str(frame_num))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
