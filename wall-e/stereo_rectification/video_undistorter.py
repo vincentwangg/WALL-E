@@ -2,7 +2,7 @@ import os
 
 import cv2
 import sys
-from stereo_rectification.stereo_rectification_map_gen import undistort
+from stereo_rectification.sr_map_gen import undistort
 
 
 def undistort_video(video_filename, new_file_ext, frame_cap=0):
