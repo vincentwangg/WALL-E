@@ -9,11 +9,13 @@ import sys
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
-DIM=(640, 478) # deinterlaced video is now 640 X 478
-K=np.array([[526.756924435422, 0.0, 330.221556181272], [0.0, 478.43311043812145, 249.44524334088075], [0.0, 0.0, 1.0]])
-D=np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568173], [0.43735394851622683]])
+DIM = (640, 478)  # deinterlaced video is now 640 X 478
+K = np.array(
+    [[526.756924435422, 0.0, 330.221556181272], [0.0, 478.43311043812145, 249.44524334088075], [0.0, 0.0, 1.0]])
+D = np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568173], [0.43735394851622683]])
 
 map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_32F)
+
 
 def undistort(img):
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
@@ -76,7 +78,7 @@ def stereorectify(img_left, img_right):
         img_points_right,
         cam_mtx_l, dist_l, cam_mtx_r, dist_r,
         img_right.shape[::-1],
-        flags= cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
+        flags=cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
         # cv2.CALIB_USE_INTRINSIC_GUESS
 
     # stereo rectify
@@ -142,7 +144,8 @@ def main(left_video_filename, right_video_filename):
     print("Starting...")
     for frame_num in range(start_frame, end_frame):
         if frame_num % 20 == 0 or frame_num == 1:
-            print("frame_num: " + str(frame_num) + "/" + str(end_frame) + ". Progress: " + str(frame_num * 100 / end_frame) + "%")
+            print("frame_num: " + str(frame_num) + "/" + str(end_frame) + ". Progress: " + str(
+                frame_num * 100 / end_frame) + "%")
 
         vc_obj_left_success, img_left = video_frame_loader.get_left_frame(frame_num + left_video_offset)
         convert_to_gray(img_left)
@@ -159,7 +162,8 @@ def main(left_video_filename, right_video_filename):
         cv2.imshow('right undistorted', img_right_undistorted)
 
         if stereorectify(convert_to_gray(img_left_undistorted), convert_to_gray(img_right_undistorted)):
-            print("Found frame: " + str(frame_num) + ". Please review the windows and press Y/N to accept/reject frame.")
+            print(
+                "Found frame: " + str(frame_num) + ". Please review the windows and press Y/N to accept/reject frame.")
             key = cv2.waitKey(0)
             yes_key_code = 121
             no_key_code = 110
@@ -175,6 +179,7 @@ def main(left_video_filename, right_video_filename):
 
     print("The following frames work: ")
     print(frames)
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
