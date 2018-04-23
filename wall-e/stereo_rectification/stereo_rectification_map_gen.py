@@ -4,8 +4,8 @@ import sys
 
 import cv2
 import numpy as np
-from grayscale_converter import convert_to_gray
-from yaml_utility import save_to_yml
+from stereo_rectification.grayscale_converter import convert_to_gray
+from utilities.yaml_utility import save_to_yml
 
 from utilities.video_frame_loader import VideoFrameLoader
 

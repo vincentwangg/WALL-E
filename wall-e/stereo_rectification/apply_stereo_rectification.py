@@ -1,4 +1,4 @@
-import sys
+import argparse
 import cv2
 from stereo_rectification.stereo_rectification_map_gen import undistort
 from utilities.yaml_utility import read_from_yml
@@ -88,15 +88,19 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
 
 
 def main():
-    num_args = len(sys.argv)
-    if num_args != 3 and num_args != 4:
-        sys.exit("Usage: python apply_stereo_rectification.py left.mkv right.mkv [.yml filename]")
-    left_filename = str(sys.argv[1])
-    right_filename = str(sys.argv[2])
-    yml_filename = "sr_maps.yml"
-    if num_args == 4:
-        yml_filename = str(sys.argv[3])
-    undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filename)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("left_video", help="filename of the left video feed")
+    parser.add_argument("right_video", help="filename of the right video feed")
+    parser.add_argument("-y", "--yaml_file", default="sr_maps.yml", help="filename of the yaml file that contains the "
+                                                                         "stereo rectification maps. default is a "
+                                                                         "file named \"sr_maps.yml\" in the same "
+                                                                         "directory as this script.")
+    args = parser.parse_args()
+
+    print(args.left_video)
+    print(args.right_video)
+    print(args.yaml_file)
+    undistort_and_stereo_rectify_videos(args.left_video, args.right_video, args.yaml_file)
 
 
 if __name__ == '__main__':
