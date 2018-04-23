@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 from grayscale_converter import convert_to_gray
 from yaml_utility import save_to_yml
+from video_frame_loader import VideoFrameLoader
 import sys
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
@@ -135,22 +136,18 @@ def main(left_video_filename, right_video_filename):
     left_video_offset = 20
     right_video_offset = 0
 
+    video_frame_loader = VideoFrameLoader(left_video_filename, right_video_filename)
+
     frames = []
     print("Starting...")
     for frame_num in range(start_frame, end_frame):
         if frame_num % 20 == 0 or frame_num == 1:
             print("frame_num: " + str(frame_num) + "/" + str(end_frame) + ". Progress: " + str(frame_num * 100 / end_frame) + "%")
 
-        vc_obj_left = cv2.VideoCapture(left_video_filename)
-        vc_obj_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num + left_video_offset)
-        vc_obj_left_success, img_left = vc_obj_left.read()
-        cv2.flip(img_left, -1, img_left)
+        vc_obj_left_success, img_left = video_frame_loader.get_left_frame(frame_num + left_video_offset)
         convert_to_gray(img_left)
 
-        vc_obj_right = cv2.VideoCapture(right_video_filename)
-        vc_obj_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num + right_video_offset)
-        vc_obj_right_success, img_right = vc_obj_right.read()
-        cv2.flip(img_right, -1, img_right)
+        vc_obj_right_success, img_right = video_frame_loader.get_right_frame(frame_num + right_video_offset)
         convert_to_gray(img_right)
 
         img_left_undistorted = undistort(img_left)
