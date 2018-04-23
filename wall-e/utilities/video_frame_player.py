@@ -44,8 +44,8 @@ def play_video(left_video_filename, right_video_filename, left_offset=0, right_o
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("left_video")
-    parser.add_argument("right_video")
+    parser.add_argument("left_video", help="filename of the left video feed")
+    parser.add_argument("right_video", help="filename of the right video feed")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-l", "--left_offset", type=int, default=0,
                        help="offset of left video feed. left feed will start the specified amount of frames"
