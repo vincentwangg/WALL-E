@@ -1,7 +1,6 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
 
-import sys
-
+import argparse
 import cv2
 import numpy as np
 from stereo_rectification.grayscale_converter import convert_to_gray
@@ -184,7 +183,9 @@ def main(left_video_filename, right_video_filename):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 3:
-        main(sys.argv[1], sys.argv[2])
-    else:
-        print("Incorrect number of arguments. Usage: ./script left_video_filename right_video_filename")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("left_video", help="filename of the left video feed")
+    parser.add_argument("right_video", help="filename of the right video feed")
+    args = parser.parse_args()
+
+    main(args.left_video, args.right_video)
