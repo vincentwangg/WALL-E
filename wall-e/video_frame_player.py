@@ -41,6 +41,7 @@ def play_video(left_video_filename, right_video_filename, left_offset=0, right_o
 
         frame_num = frame_num + 1
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("left_video")
