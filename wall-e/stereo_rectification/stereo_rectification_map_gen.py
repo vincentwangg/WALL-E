@@ -1,11 +1,13 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
 
-import numpy as np
+import sys
+
 import cv2
+import numpy as np
 from grayscale_converter import convert_to_gray
 from yaml_utility import save_to_yml
-from video_frame_loader import VideoFrameLoader
-import sys
+
+from utilities.video_frame_loader import VideoFrameLoader
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
@@ -22,7 +24,7 @@ def undistort(img):
     return undistorted_img
 
 
-def stereorectify(img_left, img_right):
+def generate_and_save_sr_maps(img_left, img_right):
     # For the 3rd argument, removing those parameters seems to have no effect
     img_left_corners_success, img_left_corner_coords = cv2.findChessboardCorners(img_left, CHECKERBOARD,
                                                                                  cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
@@ -161,7 +163,7 @@ def main(left_video_filename, right_video_filename):
         cv2.imshow('left undistorted', img_left_undistorted)
         cv2.imshow('right undistorted', img_right_undistorted)
 
-        if stereorectify(convert_to_gray(img_left_undistorted), convert_to_gray(img_right_undistorted)):
+        if generate_and_save_sr_maps(convert_to_gray(img_left_undistorted), convert_to_gray(img_right_undistorted)):
             print(
                 "Found frame: " + str(frame_num) + ". Please review the windows and press Y/N to accept/reject frame.")
             key = cv2.waitKey(0)
