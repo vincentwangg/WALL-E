@@ -1,9 +1,9 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
 
 import argparse
-import numpy as np
-
 import cv2
+import numpy as np
+from config.cv2_waitkey_setup import *
 from stereo_rectification.grayscale_converter import convert_to_gray
 from utilities.video_frame_loader import VideoFrameLoader
 from utilities.yaml_utility import save_to_yml
@@ -179,12 +179,10 @@ def main(left_video_filename, right_video_filename):
             print(
                 "Found frame: " + str(frame_num) + ". Please review the windows and press Y/N to accept/reject frame.")
             key = cv2.waitKey(0)
-            yes_key_code = 121
-            no_key_code = 110
 
-            if key == no_key_code:
+            if key == get_keycode_from_key_code_entry(N_KEY):
                 print("Frame rejected. Current list of working frames: " + str(frames))
-            elif key == yes_key_code:
+            elif key == get_keycode_from_key_code_entry(Y_KEY):
                 frames.append(frame_num)
                 print("Frame accepted. Current list of working frames: " + str(frames))
             else:
@@ -201,4 +199,5 @@ if __name__ == '__main__':
     parser.add_argument("right_video", help="filename of the right video feed")
     args = parser.parse_args()
 
+    load_keycodes()
     main(args.left_video, args.right_video)
