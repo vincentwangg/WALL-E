@@ -30,13 +30,19 @@ LEFT_ARROW_KEY = KeyCodeEntry("LEFT_ARROW_KEY", "left arrow key")
 RIGHT_ARROW_KEY = KeyCodeEntry("RIGHT_ARROW_KEY", "right arrow key")
 UP_ARROW_KEY = KeyCodeEntry("UP_ARROW_KEY", "up arrow key")
 DOWN_ARROW_KEY = KeyCodeEntry("DOWN_ARROW_KEY", "down arrow key")
-Y_KEY = KeyCodeEntry("Y_KEY", "\"Y\" key")
+F_KEY = KeyCodeEntry("F_KEY", "\"F\" key")
 N_KEY = KeyCodeEntry("N_KEY", "\"N\" key")
+Q_KEY = KeyCodeEntry("Q_KEY", "\"Q\" key")
+R_KEY = KeyCodeEntry("R_KEY", "\"R\" key")
+S_KEY = KeyCodeEntry("S_KEY", "\"S\" key")
+Y_KEY = KeyCodeEntry("Y_KEY", "\"Y\" key")
 Z_KEY = KeyCodeEntry("Z_KEY", "\"Z\" key")
 SPACE_KEY = KeyCodeEntry("SPACE_KEY", "space bar")
 
 keycode_entries = [
-    LEFT_ARROW_KEY, RIGHT_ARROW_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY, Y_KEY, N_KEY, Z_KEY, SPACE_KEY
+    LEFT_ARROW_KEY, RIGHT_ARROW_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
+    F_KEY, N_KEY, Q_KEY, R_KEY, S_KEY, Y_KEY, Z_KEY,
+    SPACE_KEY
 ]
 keyname_to_KeyCodeEntry = {}
 for entry in keycode_entries:
@@ -52,6 +58,9 @@ def setup():
     print()
     print("A blank window will appear. Please click on the window to bring it into \nfocus while keeping the console "
           "open to see further instructions.")
+    print()
+    print("WARNING: Make sure your CAPS lock is off!!")
+    print("Mixing lowercase and uppercase letters will give\ndifferent key codes and might confuse you later on.")
 
     for entry in keycode_entries:
         print()

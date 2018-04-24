@@ -5,5 +5,5 @@
 *.ASF
 *~
 .DS_Store
-sr_maps.yml
+sr_map.yml
 config.txt
