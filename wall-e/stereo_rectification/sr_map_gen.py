@@ -22,9 +22,9 @@ SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_GENERATED_FILENAME + "\"
                                                                              "renamed. "
 
 
-def find_frame_for_sr(left_video_filename, right_video_filename,
-                      left_offset=0, right_offset=0,
-                      first_frame=0, show_original_frame=False, show_undistorted_frame=False):
+def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
+                                  left_offset=0, right_offset=0,
+                                  first_frame=0, show_original_frame=False, show_undistorted_frame=False):
     print("Welcome to the Stereo Rectification (SR) Map Generator!")
     print()
     print("There will be 2 steps to finding the best frame to use to get the best SR map:")
@@ -409,7 +409,7 @@ if __name__ == '__main__':
         sys.exit("Right offset must be greater than or equal to 0.")
 
     load_keycodes()
-    find_frame_for_sr(args.left_video, args.right_video,
-                      left_offset=args.left_offset, right_offset=args.right_offset,
-                      first_frame=args.first_frame, show_original_frame=args.show_original_frame,
-                      show_undistorted_frame=args.show_undistorted_frame)
+    find_and_generate_best_sr_map(args.left_video, args.right_video,
+                                  left_offset=args.left_offset, right_offset=args.right_offset,
+                                  first_frame=args.first_frame, show_original_frame=args.show_original_frame,
+                                  show_undistorted_frame=args.show_undistorted_frame)
