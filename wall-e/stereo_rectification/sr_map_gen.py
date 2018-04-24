@@ -72,6 +72,13 @@ def generate_and_save_sr_maps(img_left, img_right):
         img_right.shape[::-1],
         None, None)
 
+    # getting optimal camera matrix and setting alpha to 0
+    a = 0
+    cam_mtx_l, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_l, dist_l, img_left.shape[::-1], alpha=a)
+    cam_mtx_r, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_r, dist_r, img_right.shape[::-1], alpha=a)
+
+
+
     # https://docs.opencv.org/3.1.0/d9/d0c/group__calib3d.html#ga246253dcc6de2e0376c599e7d692303a
     img_left_corners_success, cam_mtx_l, dist_l, cam_mtx_r, dist_r, R, T, E, F = cv2.stereoCalibrate(
         objpoints,
@@ -88,7 +95,7 @@ def generate_and_save_sr_maps(img_left, img_right):
                                                                       cam_mtx_r,
                                                                       dist_r,
                                                                       img_right.shape[::-1],
-                                                                      R, T, alpha=0)
+                                                                      R, T, alpha=a)
 
     map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
                                         dist_l,
