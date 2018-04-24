@@ -63,6 +63,8 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
             print("Please review the window and press Y/N")
             print("to accept/reject the frame to generate the SR map.")
             key = cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            cv2.waitKey(1)
 
             if key == get_keycode_from_key_code_entry(Y_KEY):
                 print(SR_MAP_GENERATED_MESSAGE)
@@ -120,6 +122,8 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
             print("Frame currently shown: " + str(frame_num))
             print("Frames marked valid:   " + str(frames))
             key = cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            cv2.waitKey(1)
 
             if key == get_keycode_from_key_code_entry(N_KEY):
                 print("Frame " + str(frame_num) + " rejected.")
@@ -178,6 +182,9 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
             print("Viewing the following frames: " + str(frames) + ". Current frame: " + str(current_frame))
 
             key = cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            cv2.waitKey(1)
+
             if key == get_keycode_from_key_code_entry(LEFT_ARROW_KEY):
                 frame_tracker.prev_frame()
                 break
