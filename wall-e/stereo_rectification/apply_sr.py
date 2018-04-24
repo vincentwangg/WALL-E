@@ -1,5 +1,5 @@
 # Before running this, convert the videos to mkv using handbrake
-# Undistorts and stereo rectifies videos
+# Undistorts and stereo rectifies videos 2:53,
 
 import argparse
 import cv2
@@ -47,8 +47,8 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
     new_filename_l = left_filename[:-4] + "_stereo_rectified.mkv"
     new_filename_r = right_filename[:-4] + "_stereo_rectified.mkv"
 
-    sr_left_video = cv2.VideoWriter(new_filename_l, fourcc, 30.0, (640, 478))
-    sr_right_video = cv2.VideoWriter(new_filename_r, fourcc, 30.0, (640, 478))
+    sr_left_video = cv2.VideoWriter(new_filename_l, fourcc, 30, (640, 478))
+    sr_right_video = cv2.VideoWriter(new_filename_r, fourcc, 30, (640, 478))
 
     (l_map, r_map) = generate_maps(yml_filename)
 
@@ -58,6 +58,9 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
     r_success, r_image = video_frame_loader.get_right_frame(0)
 
     frame = 0
+
+    l_success, l_image = video_frame_loader.get_next_left_frame()
+    r_success, r_image = video_frame_loader.get_next_right_frame()
 
     while l_success and r_success:
         frame = frame + 1
@@ -78,8 +81,8 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
         sr_left_video.write(sr_l_image)  # write videos
         sr_right_video.write(sr_r_image)
 
-        l_success, l_image = video_frame_loader.get_left_frame(frame)
-        r_success, r_image = video_frame_loader.get_right_frame(frame)
+        l_success, l_image = video_frame_loader.get_next_left_frame()
+        r_success, r_image = video_frame_loader.get_next_right_frame()
     sr_right_video.release()
     sr_left_video.release()
     print("Done rectifying! Your videos have the names \"", new_filename_l, "\" and \"", new_filename_r, "\"")

@@ -13,3 +13,9 @@ class VideoFrameLoader:
     def get_right_frame(self, frame_num):
         self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
         return self.vc_right.read()
+
+    def get_next_left_frame(self):
+        return self.vc_left.read()
+
+    def get_next_right_frame(self):
+        return self.vc_right.read()

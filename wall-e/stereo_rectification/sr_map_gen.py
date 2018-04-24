@@ -1,12 +1,12 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
 
 import argparse
-import cv2
 import numpy as np
-from stereo_rectification.grayscale_converter import convert_to_gray
-from utilities.yaml_utility import save_to_yml
 
+import cv2
+from stereo_rectification.grayscale_converter import convert_to_gray
 from utilities.video_frame_loader import VideoFrameLoader
+from utilities.yaml_utility import save_to_yml
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
@@ -88,7 +88,7 @@ def generate_and_save_sr_maps(img_left, img_right):
                                                                       cam_mtx_r,
                                                                       dist_r,
                                                                       img_right.shape[::-1],
-                                                                      R, T, alpha=0.95)
+                                                                      R, T, alpha=0)
 
     map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
                                         dist_l,
@@ -141,6 +141,12 @@ def main(left_video_filename, right_video_filename):
 
     video_frame_loader = VideoFrameLoader(left_video_filename, right_video_filename)
 
+    vc_obj_left_success, img_left = video_frame_loader.get_left_frame(start_frame + left_video_offset)
+    convert_to_gray(img_left)
+
+    vc_obj_right_success, img_right = video_frame_loader.get_right_frame(start_frame + right_video_offset)
+    convert_to_gray(img_right)
+
     frames = []
     print("Starting...")
     for frame_num in range(start_frame, end_frame):
@@ -148,10 +154,10 @@ def main(left_video_filename, right_video_filename):
             print("frame_num: " + str(frame_num) + "/" + str(end_frame) + ". Progress: " + str(
                 frame_num * 100 / end_frame) + "%")
 
-        vc_obj_left_success, img_left = video_frame_loader.get_left_frame(frame_num + left_video_offset)
+        vc_obj_left_success, img_left = video_frame_loader.get_next_left_frame()
         convert_to_gray(img_left)
 
-        vc_obj_right_success, img_right = video_frame_loader.get_right_frame(frame_num + right_video_offset)
+        vc_obj_right_success, img_right = video_frame_loader.get_next_right_frame()
         convert_to_gray(img_right)
 
         img_left_undistorted = undistort(img_left)
