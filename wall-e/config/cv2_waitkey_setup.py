@@ -32,10 +32,11 @@ UP_ARROW_KEY = KeyCodeEntry("UP_ARROW_KEY", "up arrow key")
 DOWN_ARROW_KEY = KeyCodeEntry("DOWN_ARROW_KEY", "down arrow key")
 Y_KEY = KeyCodeEntry("Y_KEY", "\"Y\" key")
 N_KEY = KeyCodeEntry("N_KEY", "\"N\" key")
+Z_KEY = KeyCodeEntry("Z_KEY", "\"Z\" key")
 SPACE_KEY = KeyCodeEntry("SPACE_KEY", "space bar")
 
 keycode_entries = [
-    LEFT_ARROW_KEY, RIGHT_ARROW_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY, Y_KEY, N_KEY, SPACE_KEY
+    LEFT_ARROW_KEY, RIGHT_ARROW_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY, Y_KEY, N_KEY, Z_KEY, SPACE_KEY
 ]
 keyname_to_KeyCodeEntry = {}
 for entry in keycode_entries:
