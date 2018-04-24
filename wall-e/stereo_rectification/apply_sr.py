@@ -3,7 +3,8 @@
 
 import argparse
 import cv2
-from stereo_rectification.sr_map_gen import undistort
+import os
+from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
 from utilities.yaml_utility import read_from_yml
 from utilities.video_frame_loader import VideoFrameLoader
 
@@ -85,17 +86,20 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
         r_success, r_image = video_frame_loader.get_next_right_frame()
     sr_right_video.release()
     sr_left_video.release()
-    print("Done rectifying! Your videos have the names \"", new_filename_l, "\" and \"", new_filename_r, "\"")
+
+    full_filename_l = os.path.abspath(new_filename_l)
+    full_filename_r = os.path.abspath(new_filename_r)
+    print("Done rectifying! Your videos have been placed in the paths \"",
+          full_filename_l, "\" and \"", full_filename_r, "\"")
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("left_video", help="filename of the left video feed")
     parser.add_argument("right_video", help="filename of the right video feed")
-    parser.add_argument("-y", "--yaml_file", default="sr_maps.yml", help="filename of the yaml file that contains the "
-                                                                         "stereo rectification maps. default is a "
-                                                                         "file named \"sr_maps.yml\" in the same "
-                                                                         "directory as this script.")
+    parser.add_argument("-y", "--yaml_file", default=SR_MAP_GENERATED_FILENAME,
+                        help="filename of the yaml file that contains the stereo rectification maps. default is a "
+                             "file named \"" + SR_MAP_GENERATED_FILENAME + "\" in the same directory as this script.")
     args = parser.parse_args()
 
     undistort_and_stereo_rectify_videos(args.left_video, args.right_video, args.yaml_file)
