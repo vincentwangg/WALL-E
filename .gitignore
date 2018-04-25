@@ -8,3 +8,5 @@
 sr_map.yml
 config.txt
 wall-e/blender/points.txt
+__pycache__/
+*.pyc
