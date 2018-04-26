@@ -8,6 +8,7 @@
 #      Right arrow key      : Go forward a frame
 #      Up arrow key         : Go forward 30 frames
 #      Down arrow key       : Go backwards 30 frames
+#      Q key                : Quit the frame player
 
 import argparse
 from config.keycode_setup import *
@@ -47,6 +48,8 @@ def play_video(left_video_filename, right_video_filename, left_offset=0, right_o
 
         if keycode in frame_actions.keys():
             frame_num = frame_num + frame_actions[keycode]
+        elif keycode == get_keycode_from_key_code_entry(Q_KEY):
+            return
 
         if frame_num < 0:
             frame_num = 0
