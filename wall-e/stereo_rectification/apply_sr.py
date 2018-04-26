@@ -7,6 +7,7 @@ import os
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
 from utilities.yaml_utility import read_from_yml
 from utilities.video_frame_loader import VideoFrameLoader
+import time
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.php
 
@@ -42,7 +43,8 @@ def generate_maps(yml_filename):
     return map_l, map_r
 
 
-def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filename):
+def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filename,
+                                        left_offset=0, right_offset=0, show_lines=False):
     video_frame_loader = VideoFrameLoader(left_filename, right_filename)
 
     new_filename_l = left_filename[:-4] + "_stereo_rectified.mkv"
@@ -55,42 +57,42 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
 
     # Loop over video footage
     print("Rectifying footage.... This could take a while.")
-    l_success, l_image = video_frame_loader.get_left_frame(0)
-    r_success, r_image = video_frame_loader.get_right_frame(0)
 
     frame = 0
 
-    l_success, l_image = video_frame_loader.get_next_left_frame()
-    r_success, r_image = video_frame_loader.get_next_right_frame()
+    l_success, l_image = video_frame_loader.get_left_frame(frame + left_offset)
+    r_success, r_image = video_frame_loader.get_right_frame(frame + right_offset)
 
     while l_success and r_success:
-        frame = frame + 1
 
-        if frame % 100 is 0:
-            print("frame: " + str(frame))
+        if frame % 30 is 0:
+            print(str(frame) + " frames rectified. " + str(frame / 30) + " seconds of footage written to file.")
 
         undistorted_l_image = undistort(l_image)
         undistorted_r_image = undistort(r_image)
         sr_l_image = apply_rectify_maps(undistorted_l_image, l_map[0], l_map[1])  # apply maps
         sr_r_image = apply_rectify_maps(undistorted_r_image, r_map[0], r_map[1])
 
-        # Draw white lines in video
-        for line in range(0, int(sr_l_image.shape[0] / 20)):
-            sr_l_image[line * 20, :] = 255
-            sr_r_image[line * 20, :] = 255
+        # Draw white lines to show how results of stereo rectification in video
+        if show_lines:
+            for line in range(0, int(sr_l_image.shape[0] / 20)):
+                sr_l_image[line * 20, :] = 255
+                sr_r_image[line * 20, :] = 255
 
         sr_left_video.write(sr_l_image)  # write videos
         sr_right_video.write(sr_r_image)
 
+        frame = frame + 1
         l_success, l_image = video_frame_loader.get_next_left_frame()
         r_success, r_image = video_frame_loader.get_next_right_frame()
-    sr_right_video.release()
+
     sr_left_video.release()
+    sr_right_video.release()
 
     full_filename_l = os.path.abspath(new_filename_l)
     full_filename_r = os.path.abspath(new_filename_r)
-    print("Done rectifying! Your videos have been placed in the paths \"",
-          full_filename_l, "\" and \"", full_filename_r, "\"")
+    print("Done rectifying! Your videos have been placed in the paths \"" +
+          full_filename_l + "\" and \"" + full_filename_r + "\"")
 
 
 def main():
@@ -100,9 +102,22 @@ def main():
     parser.add_argument("-y", "--yaml_file", default=SR_MAP_GENERATED_FILENAME,
                         help="filename of the yaml file that contains the stereo rectification maps. default is a "
                              "file named \"" + SR_MAP_GENERATED_FILENAME + "\" in the same directory as this script.")
+    parser.add_argument("-w", "--show_lines", type=bool, default=False,
+                        help="True if white lines to help show results of stereo rectification are wanted. False if not")
+
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-l", "--left_offset", type=int, default=0,
+                       help="offset of left video feed. left feed will start the specified amount of frames"
+                            " earlier than normal")
+    group.add_argument("-r", "--right_offset", type=int, default=0,
+                       help="offset of right video feed. right feed will start the "
+                            "specified amount of frames earlier than normal")
+
     args = parser.parse_args()
 
-    undistort_and_stereo_rectify_videos(args.left_video, args.right_video, args.yaml_file)
+    undistort_and_stereo_rectify_videos(args.left_video, args.right_video, args.yaml_file,
+                                        left_offset=args.left_offset, right_offset=args.right_offset,
+                                        show_lines=args.show_lines)
 
 
 if __name__ == '__main__':
