@@ -1,7 +1,7 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
 
 import argparse
-from config.cv2_waitkey_setup import *
+from config.keycode_setup import *
 from stereo_rectification.grayscale_converter import convert_to_gray
 from utilities.video_frame_loader import VideoFrameLoader
 from utilities.yaml_utility import save_to_yml

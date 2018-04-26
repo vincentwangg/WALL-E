@@ -1,4 +1,4 @@
-# This script helps the user set up their keyboard so that OpenCV can read the button presses
+# This script helps the user set up their keyboard so that OpenCV's cv2.waitKey() can read the button presses
 # correctly.
 #
 # To use this in another script, call load_keycodes() from this script before any inputs from cv2.waitKey() are
@@ -112,6 +112,12 @@ def load_keycodes():
         setup()
     with open(CONFIG_PATH) as cfg_file:
         cfg_dictionary = ast.literal_eval(cfg_file.readline())
+
+        if len(cfg_dictionary) != len(keycode_entries):
+            setup()
+            load_keycodes()
+            return
+
         for key in cfg_dictionary:
             keyname_to_KeyCodeEntry[key].keycode = cfg_dictionary[key]
 

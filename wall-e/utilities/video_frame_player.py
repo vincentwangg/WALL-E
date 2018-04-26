@@ -12,10 +12,7 @@
 #      Other keys           : Go forward a frame
 
 import argparse
-import sys
-import cv2
-
-from config.cv2_waitkey_setup import *
+from config.keycode_setup import *
 from utilities.video_frame_loader import VideoFrameLoader
 
 frame_actions = {}

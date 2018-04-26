@@ -1,5 +1,5 @@
 import argparse
-from config.cv2_waitkey_setup import load_keycodes
+from config.keycode_setup import load_keycodes
 from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
 from stereo_rectification.apply_sr import undistort_and_stereo_rectify_videos
 
