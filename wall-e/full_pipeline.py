@@ -52,4 +52,5 @@ if __name__ == '__main__':
     print()
     print("Applying the generated stereo rectification map to " + args.left_video + " and " + args.right_video + ".")
     print()
-    undistort_and_stereo_rectify_videos(args.left_video, args.right_video, SR_MAP_GENERATED_FILENAME)
+    undistort_and_stereo_rectify_videos(args.left_video, args.right_video, SR_MAP_GENERATED_FILENAME,
+                                        left_offset=left_offset, right_offset=right_offset)
