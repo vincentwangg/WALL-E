@@ -8,8 +8,6 @@
 #      Right arrow key      : Go forward a frame
 #      Up arrow key         : Go forward 30 frames
 #      Down arrow key       : Go backwards 30 frames
-#      Z key                : Your classic ctrl-Z
-#      Other keys           : Go forward a frame
 
 import argparse
 from config.keycode_setup import *
@@ -44,24 +42,11 @@ def play_video(left_video_filename, right_video_filename, left_offset=0, right_o
         cv2.moveWindow(right_image_title, img_left.shape[1], 0)
 
         frame_history.append(frame_num)
-        print(frame_history)
         keycode = cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-        if keycode == get_keycode_from_key_code_entry(Z_KEY):
-            print("hey")
-            print(frame_history)
-            if len(frame_history) > 1:
-                frame_history.pop()
-                frame_num = frame_history.pop()
-            else:
-                frame_num = 0
-                frame_history = [0]
-            print(frame_history)
-        elif keycode in frame_actions.keys():
+        if keycode in frame_actions.keys():
             frame_num = frame_num + frame_actions[keycode]
-        else:
-            frame_num = frame_num + 1
 
         if frame_num < 0:
             frame_num = 0
