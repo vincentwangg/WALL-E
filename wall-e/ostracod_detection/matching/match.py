@@ -56,8 +56,8 @@ def get_matching_pairs(ostracod_list1, ostracod_list2): # ostracod_list1 must be
             if dist < min_val:
                 min_index = j
                 min_val = dist
-        ostracod_list1[i].matches.append(min_index)
-        ostracod_list2[min_index].matches.append(i)
+        ostracod_list1[i].matches.append((min_index, min_val))
+        ostracod_list2[min_index].matches.append((i, min_val))
 
 
 def match(left_filename, right_filename):

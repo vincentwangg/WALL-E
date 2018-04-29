@@ -28,7 +28,7 @@ def main():
             color = random_color()
             draw_circle(image_l, o.location, color)
             for m in o.matches:
-                draw_circle(image_r, r_list[m].location, color)
+                draw_circle(image_r, r_list[m[0]].location, color)
     cv2.imshow("left matched", image_l)
     cv2.imshow("right_matched", image_r)
     cv2.waitKey(0)
