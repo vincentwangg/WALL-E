@@ -36,7 +36,7 @@ class Variance:
 def compute_dist(ostracod1, ostracod2, variance):
     b_sq = np.power(ostracod1.brightness - ostracod2.brightness, 2)
     a_sq = np.power(ostracod1.area - ostracod2.area, 2)
-    l_sq = np.power(ostracod1.location[1] - ostracod2.location[1], 2)
+    l_sq = np.power(ostracod1.location[1] - ostracod2.location[1], 4)
     b_normalized = b_sq/variance.brightness
     a_normalized = a_sq/variance.area
     l_normalized = l_sq/variance.location
@@ -52,8 +52,10 @@ def get_matching_pairs(ostracod_list1, ostracod_list2): # ostracod_list1 must be
         min_index = 0
         min_val = compute_dist(ostracod_list1[i], ostracod_list2[0], variance)
         for j in xrange(1, len(ostracod_list2)):
-            if compute_dist(ostracod_list1[i], ostracod_list2[j], variance) < min_val:
-                min_index = i
+            dist = compute_dist(ostracod_list1[i], ostracod_list2[j], variance)
+            if dist < min_val:
+                min_index = j
+                min_val = dist
         ostracod_list1[i].matches.append(min_index)
         ostracod_list2[min_index].matches.append(i)
 
