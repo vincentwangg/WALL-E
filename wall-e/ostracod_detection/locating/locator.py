@@ -33,7 +33,7 @@ def filter_image(image, threshold):
     retval, thresh = cv2.threshold(image, threshold, 255, cv2.THRESH_BINARY)
     return thresh
 
-def get_ostracods(filename):
+def get_ostracods(image):
     # filter image
     # find contours
     # compute area of each contour
@@ -41,7 +41,6 @@ def get_ostracods(filename):
     # compute x, y location of each contour
     # return list of ostracods
     print "Ostracods: "
-    image = cv2.imread(filename)
     if image is None:
         sys.exit("unable to load image")
     imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

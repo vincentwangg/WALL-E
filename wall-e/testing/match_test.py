@@ -1,4 +1,4 @@
-from ostracod_detection.matching.match import match
+import ostracod_detection.matching.match as match
 import random
 import cv2
 
@@ -12,7 +12,7 @@ def random_color():
 
 
 def draw_circle(image, coordinates, color):
-    cv2.circle(image, coordinates, 8, color, thickness=1, lineType=8, shift=0)
+    cv2.circle(image, coordinates, 8, color, thickness=3, lineType=8, shift=0)
 
 
 
@@ -22,7 +22,7 @@ def main():
     right_filename = "../../images/" + str(framenum) + "_ostracod_right.jpg"
     image_l = cv2.imread(left_filename)
     image_r = cv2.imread(right_filename)
-    l_list, r_list = match(left_filename, right_filename)
+    l_list, r_list = match.match(left_filename, right_filename)
     for o in l_list:
         if len(o.matches) > 0:
             color = random_color()

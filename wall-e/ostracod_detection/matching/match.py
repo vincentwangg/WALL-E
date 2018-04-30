@@ -1,5 +1,6 @@
 from ostracod_detection.locating import locator
 import numpy as np
+from cv2 import imread
 
 # given two lists of ostracods with attributes:
     # (x,y) location
@@ -61,8 +62,10 @@ def get_matching_pairs(ostracod_list1, ostracod_list2): # ostracod_list1 must be
 
 
 def match(left_filename, right_filename):
-    ostracod_list_l = locator.get_ostracods(left_filename)
-    ostracod_list_r = locator.get_ostracods(right_filename)
+    image_l = imread(left_filename)
+    image_r = imread(right_filename)
+    ostracod_list_l = locator.get_ostracods(image_l)
+    ostracod_list_r = locator.get_ostracods(image_r)
     if len(ostracod_list_r) < len(ostracod_list_l):
         get_matching_pairs(ostracod_list_r, ostracod_list_l)
     else:
