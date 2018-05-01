@@ -22,13 +22,17 @@ def main():
     right_filename = "../../images/" + str(framenum) + "_ostracod_right.jpg"
     image_l = cv2.imread(left_filename)
     image_r = cv2.imread(right_filename)
-    l_list, r_list = match.match(left_filename, right_filename)
+    l_list, r_list = match.match(image_l, image_r)
     for o in l_list:
+        color = random_color()
+        draw_circle(image_l, o.location, color)
         if len(o.matches) > 0:
-            color = random_color()
-            draw_circle(image_l, o.location, color)
             for m in o.matches:
                 draw_circle(image_r, r_list[m[0]].location, color)
+    # var = match.Variance()
+    # var.set_variance(r_list, l_list)
+    # for o in l_list:
+    #     print match.compute_dist(o, r_list[0], var)
     cv2.imshow("left matched", image_l)
     cv2.imshow("right_matched", image_r)
     cv2.waitKey(0)

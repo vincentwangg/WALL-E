@@ -47,6 +47,7 @@ def get_ostracods(image):
     threshold = filter_image(imgray, 120)
     contours = find_contours(threshold)
     ostracod_list = []
+    x_cor = []
     for c in contours:
         mask = np.zeros(imgray.shape, np.uint8)
         cv2.drawContours(mask, [c], 0, 255, -1)
@@ -54,17 +55,23 @@ def get_ostracods(image):
         area = calculate_area(c)
         location = calculate_location(imgray, mask)
         if area >= 5:
+            x_cor.append(location[0])
             ostracod = Ostracod(location, area, brightness)
             ostracod_list.append(ostracod)
 
-    print "Brightness", "\tArea", "\tLocation"
+    mean_x_cor = np.mean(x_cor)
     for o in ostracod_list:
-        print round(o.brightness, 2), "\t\t", o.area, "\t", o.location
+        o.distance_from_mean = o.location[0] - mean_x_cor
+
+    print "Brightness", "\tArea", "\tLocation", "\tdistance_from_mean"
+    for o in ostracod_list:
+        print round(o.brightness, 2), "\t\t", o.area, "\t", o.location, "\t", o.distance_from_mean
     return ostracod_list
 
 
 def main():
-    get_ostracods('../ostracod.png')
+    image = cv2.imread('../../../images/ostracod.png')
+    get_ostracods(image)
 
 
 if __name__ == '__main__':

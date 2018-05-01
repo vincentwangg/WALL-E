@@ -6,3 +6,4 @@ class Ostracod:
         self.area = area              # area of the contour
         self.brightness = brightness         # 0-255
         self.matches = []           # indexes of another ostracod in a corresponding stereo frame, match value
+        self.distance_from_mean = 0
