@@ -9,6 +9,8 @@ from cv2 import imread
 
 # match up the corresponding ostracods in each list
 
+# TODO: Find a way to handle duplicate matches
+
 
 class Variance:
     def __init__(self):
