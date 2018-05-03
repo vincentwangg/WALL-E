@@ -56,7 +56,8 @@ def get_ostracods(image):
         location = calculate_location(imgray, mask)
         if area >= 5:
             x_cor.append(location[0])
-            ostracod = Ostracod(location, area, brightness)
+            loc_list = [location[0], location[1], 0]
+            ostracod = Ostracod(loc_list, area, brightness)
             ostracod_list.append(ostracod)
 
     mean_x_cor = np.mean(x_cor)

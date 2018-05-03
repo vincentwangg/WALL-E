@@ -13,11 +13,14 @@ from cv2 import imread
 
 
 class Variance:
-    def __init__(self):
+    def __init__(self, ostracod_list1, ostracod_list2):
         self.brightness = None
         self.area = None
         self.location = None
         self.distance_from_mean = None
+        self.length_1 = None
+        self.length_2 = None
+        self.set_variance(ostracod_list1, ostracod_list2)
 
     def build_lists(self, ostracod_list, brightness_list, area_list, location_list, distance_from_mean):
         for o in ostracod_list:
@@ -38,13 +41,16 @@ class Variance:
         self.area = np.var(area, dtype=np.float64)
         self.location = np.var(location, dtype=np.float64)
         self.distance_from_mean = np.var(distance_from_mean, dtype=np.float64)
+        self.length_1 = len(ostracod_list1)
+        self.length_2 = len(ostracod_list2)
 
 
 def compute_dist(ostracod1, ostracod2, variance):
     b_sq = np.power(ostracod1.brightness - ostracod2.brightness, 2)
     a_sq = np.power(ostracod1.area - ostracod2.area, 2)
     l_sq = np.power(ostracod1.location[1] - ostracod2.location[1], 4)
-    d_m_sq = np.power(ostracod1.distance_from_mean - ostracod2.distance_from_mean, 2)
+    d_m_sq = np.power(ostracod1.distance_from_mean - ostracod2.distance_from_mean,
+                      2*1/(1+np.power(variance.length_1 - variance.length_2, 2)))
     b_normalized = b_sq/variance.brightness
     a_normalized = a_sq/variance.area
     l_normalized = l_sq/variance.location
@@ -55,8 +61,7 @@ def compute_dist(ostracod1, ostracod2, variance):
 
 
 def get_matching_pairs(ostracod_list1, ostracod_list2): # ostracod_list1 must be smaller or equal to ostracod_list2
-    variance = Variance()
-    variance.set_variance(ostracod_list1, ostracod_list2)
+    variance = Variance(ostracod_list1, ostracod_list2)
     for i in xrange(len(ostracod_list1)):
         min_index = 0
         min_val = compute_dist(ostracod_list1[i], ostracod_list2[0], variance)

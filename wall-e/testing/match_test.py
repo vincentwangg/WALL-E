@@ -1,4 +1,5 @@
 import ostracod_detection.matching.match as match
+from stereo_rectification.sr_map_gen import undistort
 import random
 import cv2
 
@@ -12,7 +13,8 @@ def random_color():
 
 
 def draw_circle(image, coordinates, color):
-    cv2.circle(image, coordinates, 8, color, thickness=3, lineType=8, shift=0)
+    loc = (coordinates[0], coordinates[1])
+    cv2.circle(image, loc, 8, color, thickness=3, lineType=8, shift=0)
 
 
 
@@ -21,7 +23,9 @@ def main():
     left_filename = "../../images/" + str(framenum) + "_ostracod_left.jpg"
     right_filename = "../../images/" + str(framenum) + "_ostracod_right.jpg"
     image_l = cv2.imread(left_filename)
+    image_l = undistort(image_l)
     image_r = cv2.imread(right_filename)
+    image_r = undistort(image_r)
     l_list, r_list = match.match(image_l, image_r)
     for o in l_list:
         color = random_color()
@@ -29,10 +33,6 @@ def main():
         if len(o.matches) > 0:
             for m in o.matches:
                 draw_circle(image_r, r_list[m[0]].location, color)
-    # var = match.Variance()
-    # var.set_variance(r_list, l_list)
-    # for o in l_list:
-    #     print match.compute_dist(o, r_list[0], var)
     cv2.imshow("left matched", image_l)
     cv2.imshow("right_matched", image_r)
     cv2.waitKey(0)
