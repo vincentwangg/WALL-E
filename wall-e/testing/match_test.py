@@ -28,9 +28,9 @@ def main():
     image_r = undistort(image_r)
     l_list, r_list = match.match(image_l, image_r)
     for o in l_list:
-        color = random_color()
-        draw_circle(image_l, o.location, color)
         if len(o.matches) > 0:
+            color = random_color()
+            draw_circle(image_l, o.location, color)
             for m in o.matches:
                 draw_circle(image_r, r_list[m[0]].location, color)
     cv2.imshow("left matched", image_l)

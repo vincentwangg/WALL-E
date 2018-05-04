@@ -9,7 +9,8 @@ from cv2 import imread
 
 # match up the corresponding ostracods in each list
 
-# TODO: Find a way to handle duplicate matches
+# TODO: Maybe take out distance from the mean as an attribute(need to test)
+# TODO: Maybe add shape as an attribute
 
 
 class Variance:
@@ -59,19 +60,67 @@ def compute_dist(ostracod1, ostracod2, variance):
     dist = np.power(sum, 0.5)
     return dist
 
+# ostracod_list1 must be smaller or equal to ostracod_list2
+# the indexes_lists include indexes that have not been matched yet
 
-def get_matching_pairs(ostracod_list1, ostracod_list2): # ostracod_list1 must be smaller or equal to ostracod_list2
-    variance = Variance(ostracod_list1, ostracod_list2)
-    for i in xrange(len(ostracod_list1)):
-        min_index = 0
-        min_val = compute_dist(ostracod_list1[i], ostracod_list2[0], variance)
-        for j in xrange(1, len(ostracod_list2)):
+def get_pairs_with_duplicates(ostracod_list1, indexes_list1, ostracod_list2, indexes_list2, variance):
+    for i in indexes_list1:
+        min_index = indexes_list2[0]
+        min_val = compute_dist(ostracod_list1[i], ostracod_list2[indexes_list2[0]], variance)
+        for j in indexes_list2:
             dist = compute_dist(ostracod_list1[i], ostracod_list2[j], variance)
             if dist < min_val:
                 min_index = j
                 min_val = dist
         ostracod_list1[i].matches.append((min_index, min_val))
         ostracod_list2[min_index].matches.append((i, min_val))
+
+
+# takes in a list of matches and eliminates all of the values except the best match
+# it returns all of the indexes eliminated, so that they can be rematched
+
+def eliminate_duplicates(matches):
+    min_val = matches[0][1]
+    unmatched_list = []
+    length = len(matches)
+    while length > 1:
+        if matches[1][1] < min_val:
+            min_val = matches[1][1]
+            unmatched = matches.pop(0)
+        else:
+            unmatched = matches.pop(1)
+        unmatched_list.append(unmatched[0])
+        length -= 1
+    return unmatched_list
+
+
+# takes in the indexes that need to be matched in the second list and returns the duplicates no_matches
+# ostracod_list1 will never have more than one match per ostracod because it is the smaller list
+# It simply iterates over ostracod_list2 and removes matches from ostracod_list1 that have been matched incorrectly
+
+def build_new_index_lists(ostracod_list1, ostracod_list2, indexes_list2):
+    no_matches = []
+    duplicates = []
+    for i in indexes_list2:
+        num_matches = len(ostracod_list2[i].matches)
+        if num_matches == 0:
+            no_matches.append(i)
+        elif num_matches > 1:
+            duplicates += eliminate_duplicates(ostracod_list2[i].matches)
+    for i in duplicates:
+        ostracod_list1[i].matches = []
+    return duplicates, no_matches
+
+
+# gets matching pairs while handling duplicates
+
+def get_matching_pairs(ostracod_list1, ostracod_list2): # ostracod_list1 must be smaller or equal to ostracod_list2
+    indexes_list1 = range(len(ostracod_list1))
+    indexes_list2 = range(len(ostracod_list2))
+    variance = Variance(ostracod_list1, ostracod_list2)
+    while len(indexes_list1) > 0:
+        get_pairs_with_duplicates(ostracod_list1, indexes_list1, ostracod_list2, indexes_list2, variance)
+        indexes_list1, indexes_list2 = build_new_index_lists(ostracod_list1, ostracod_list2, indexes_list2)
 
 
 def match(image_l, image_r):
