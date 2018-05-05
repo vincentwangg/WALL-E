@@ -4,16 +4,34 @@ import argparse
 import os
 import ast
 
+import math
+
 fps_value = 30
+rotation_toward_pos_z = (0, math.radians(180), math.radians(270))
 
 
 def main(points_filename):
     delete_all_objects()
     set_fps(fps_value)
+
+    # Plot ostracod points
     points = get_points_from_file(points_filename)
 
     for frame_num in points:
         plot_points_from_frame(points, frame_num)
+
+    # Add camera
+    bpy.ops.object.camera_add(rotation=rotation_toward_pos_z)
+    bpy.context.scene.camera = bpy.context.active_object
+
+    # Add hemi lamp
+    lamp_data = bpy.data.lamps.new(name="Hemi Lamp", type='HEMI')
+    lamp_obj = bpy.data.objects.new(name="Hemi Lamp", object_data=lamp_data)
+    bpy.context.scene.objects.link(lamp_obj)
+    lamp_obj.location = (0, 0, -2)
+    lamp_obj.rotation_euler = rotation_toward_pos_z
+
+    deselect_all_objects()
 
     # Set the current frame back to the beginning
     bpy.context.scene.frame_set(0)
@@ -30,11 +48,11 @@ def get_points_from_file(points_filename):
     #
     #   Example of a points.txt:
     #                           
-    #       Frame 1 points      {1: [[1, 2, 3], [2, 3, 4]],
-    #       Frame 2 points       2: [[2, 2, 3], [3, 3, 4]],
-    #       Frame 3 points       3: [[2, 3, 3], [3, 4, 4]]}
+    #       Frame 1 points      {1: [[[1, 2, 3], 0.2], [[2, 3, 4], 0.4]],
+    #       Frame 2 points       2: [[[2, 2, 3], 0.8], [[3, 3, 4], 0.1]],
+    #       Frame 3 points       3: [[[2, 3, 3], 0.3], [[3, 4, 4], 0.2]]}
     #
-    #       Full string (for ctrl-c): {1: [[1, 2, 3], [2, 3, 4]], 2: [[2, 2, 3], [3, 3, 4]], 3: [[2, 3, 3], [3, 4, 4]]}
+    #       Full string (for ctrl-c): {1: [[[0, 2, 0], 0.2], [[2, 3, 4], 0.4]], 2: [[[2, 2, 3], 0.8], [[3, 3, 4], 0.1]], 3: [[[2, 3, 3], 0.3], [[3, 4, 4], 0.2]]}
     #   
     #   One can see from the points.txt example that as time moves on,
     #   the points move one unit positively in the x direction, then
@@ -49,14 +67,15 @@ def get_points_from_file(points_filename):
 
 
 def plot_points_from_frame(points, frame_num):
-    for point in points[frame_num]:
-        plot_point(point, frame_num)
+    for point, radius in points[frame_num]:
+        plot_point(point, radius, frame_num)
 
 
 # Coordinates should be in format [x, y, z]
-def plot_point(coordinate, frame_num):
-    bpy.ops.mesh.primitive_ico_sphere_add(size=0.5, location=coordinate)
+def plot_point(coordinate, radius, frame_num):
+    bpy.ops.mesh.primitive_uv_sphere_add(size=radius, location=coordinate)
     obj = bpy.context.active_object
+    obj.color = (255, 255, 255, 1)
 
     obj.keyframe_insert('hide', frame=frame_num)
     obj.keyframe_insert('hide_render', frame=frame_num)
