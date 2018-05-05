@@ -1,3 +1,8 @@
+# The script pipeline1.py runs through the following processes:
+#   1) Frame matching
+#   2) Stereo rectification (SR) map generation
+#   3) Applying SR maps to original videos
+
 import argparse
 from config.keycode_setup import load_keycodes
 from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
