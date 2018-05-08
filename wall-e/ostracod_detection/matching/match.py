@@ -18,45 +18,36 @@ class Variance:
         self.brightness = None
         self.area = None
         self.location = None
-        self.distance_from_mean = None
-        self.length_1 = None
-        self.length_2 = None
         self.set_variance(ostracod_list1, ostracod_list2)
 
-    def build_lists(self, ostracod_list, brightness_list, area_list, location_list, distance_from_mean):
+    def build_lists(self, ostracod_list, brightness_list, area_list, location_list):
         for o in ostracod_list:
             brightness_list.append(o.brightness)
             area_list.append(o.area)
             location_list.append(o.location[1])
-            distance_from_mean.append(o.distance_from_mean)
 
 
     def set_variance(self, ostracod_list1, ostracod_list2):
         brightness = []
         area = []
         location = []   # y coordinates only
-        distance_from_mean = []
-        self.build_lists(ostracod_list1, brightness, area, location, distance_from_mean)
-        self.build_lists(ostracod_list2, brightness, area, location, distance_from_mean)
+        self.build_lists(ostracod_list1, brightness, area, location)
+        self.build_lists(ostracod_list2, brightness, area, location)
         self.brightness = np.var(brightness, dtype=np.float64)
         self.area = np.var(area, dtype=np.float64)
         self.location = np.var(location, dtype=np.float64)
-        self.distance_from_mean = np.var(distance_from_mean, dtype=np.float64)
-        self.length_1 = len(ostracod_list1)
-        self.length_2 = len(ostracod_list2)
 
 
 def compute_dist(ostracod1, ostracod2, variance):
     b_sq = np.power(ostracod1.brightness - ostracod2.brightness, 2)
     a_sq = np.power(ostracod1.area - ostracod2.area, 2)
     l_sq = np.power(ostracod1.location[1] - ostracod2.location[1], 4)
-    d_m_sq = np.power(ostracod1.distance_from_mean - ostracod2.distance_from_mean,
-                      2*1/(1+np.power(variance.length_1 - variance.length_2, 2)))
+
     b_normalized = b_sq/variance.brightness
     a_normalized = a_sq/variance.area
     l_normalized = l_sq/variance.location
-    d_m_normalized = d_m_sq/variance.distance_from_mean
-    sum = a_normalized + b_normalized + l_normalized + d_m_normalized
+
+    sum = a_normalized + b_normalized + l_normalized
     dist = np.power(sum, 0.5)
     return dist
 
