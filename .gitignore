@@ -6,7 +6,7 @@
 *~
 .DS_Store
 sr_map.yml
-config.txt
+*.txt
 wall-e/blender/points.txt
 __pycache__/
 *.pyc

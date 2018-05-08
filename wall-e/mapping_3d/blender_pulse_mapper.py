@@ -3,7 +3,6 @@ import sys
 import argparse
 import os
 import ast
-
 import math
 
 fps_value = 30
@@ -18,7 +17,8 @@ def main(points_filename):
     points = get_points_from_file(points_filename)
 
     for frame_num in points:
-        plot_points_from_frame(points, frame_num)
+        for pulse_data in points[frame_num]:
+            plot_pulse(pulse_data, frame_num)
 
     # Add camera
     bpy.ops.object.camera_add(rotation=rotation_toward_pos_z)
@@ -42,38 +42,14 @@ def set_fps(new_fps):
 
 
 def get_points_from_file(points_filename):
-    # Future iterations file syntax:
-    #   Dictionary with a frame number matched to a list of xyz point
-    #   coordinates.
-    #
-    #   Example of a points.txt:
-    #                           
-    #       Frame 1 points      {1: [[[1, 2, 3], 0.2], [[2, 3, 4], 0.4]],
-    #       Frame 2 points       2: [[[2, 2, 3], 0.8], [[3, 3, 4], 0.1]],
-    #       Frame 3 points       3: [[[2, 3, 3], 0.3], [[3, 4, 4], 0.2]]}
-    #
-    #       Full string (for ctrl-c): {1: [[[0, 2, 0], 0.2], [[2, 3, 4], 0.4]], 2: [[[2, 2, 3], 0.8], [[3, 3, 4], 0.1]], 3: [[[2, 3, 3], 0.3], [[3, 4, 4], 0.2]]}
-    #   
-    #   One can see from the points.txt example that as time moves on,
-    #   the points move one unit positively in the x direction, then
-    #   the y direction.
-
-    points_file = open(points_filename, "r")
-    if points_file.mode == 'r':
+    with open(points_filename, 'r') as points_file:
         points_string = points_file.read()
         return ast.literal_eval(points_string)
-    else:
-        sys.exit("File " + points_filename + " couldn't be read.")
-
-
-def plot_points_from_frame(points, frame_num):
-    for point, radius in points[frame_num]:
-        plot_point(point, radius, frame_num)
 
 
 # Coordinates should be in format [x, y, z]
-def plot_point(coordinate, radius, frame_num):
-    bpy.ops.mesh.primitive_uv_sphere_add(size=radius, location=coordinate)
+def plot_pulse(pulse_data, frame_num):
+    bpy.ops.mesh.primitive_uv_sphere_add(size=pulse_data[RADIUS_LABEL], location=pulse_data[XYZ_COORD_LABEL])
     obj = bpy.context.active_object
     obj.color = (255, 255, 255, 1)
 
@@ -110,6 +86,12 @@ if __name__ == '__main__':
         argv = []  # as if no args are passed
     else:
         argv = argv[argv.index("--") + 1:]  # get all args after "--"
+
+    walle_basedir = sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    if walle_basedir not in sys.path:
+        sys.path.append(walle_basedir)
+
+    from mapping_3d.pulse_data import XYZ_COORD_LABEL, RADIUS_LABEL, BRIGHTNESS_LABEL
 
     if len(argv) == 1:
         main(argv[0])
