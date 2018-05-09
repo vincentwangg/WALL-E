@@ -12,8 +12,9 @@ def main():
     left = imread(left_filename)
     right = imread(right_filename)
     fpd = FramePulseData()
+
     ostracod_list_l, ostracod_list_r = match(left, right)
-    camera = Camera(500)
+    camera = Camera(baseline=500, focal_length=5)
     depth_map(ostracod_list_l, ostracod_list_r, framepulsedata=fpd, framenum=0, camera=camera)
     print fpd
 
