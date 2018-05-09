@@ -1,4 +1,5 @@
 from ostracod_detection.locating.locator import Ostracod
+import numpy as np
 
 class Camera:
     def __init__(self, focal_length, baseline):
@@ -6,24 +7,34 @@ class Camera:
         self.baseline = baseline
 
 
-def map(ostracod_list1, ostracod_list2):
-    if len(ostracod_list1) < len(ostracod_list2):
-        combined_ostracods = combine_lists(ostracod_list1, ostracod_list2)
-    else:
-        combined_ostracods = combine_lists(ostracod_list2, ostracod_list1)
-    return combined_ostracods
-
-def combine_lists(ostracod_list1, ostracod_list2):
-    new_list = []
+def depth_map(ostracod_list1, ostracod_list2):
+    blender_list = []
     for o in ostracod_list1:
-        combined_o = combine_ostracod(o, ostracod_list2[o.matches[0][0]])
-        new_list.append(combined_o)
-    return new_list
+        if len(o.matches) > 0:
+            blender_o = generate_blender_ostracod(o, ostracod_list2[o.matches[0][0]])
+            blender_list.append(blender_o)
+    return blender_list
 
-def combine_ostracod(ostracod1, ostracod2):
+
+def generate_blender_ostracod(ostracod1, ostracod2):
     avg_brightness = (ostracod1.brightness + ostracod2.brightness)/2
     avg_area = (ostracod1.area + ostracod2.area)/2
     location = [ostracod1.location[0], ostracod1.location[1]]
-    z = 0
+    z = 0 # to be get_x_Val() or something
     location.append(z)
-    return Ostracod(location, avg_area, avg_brightness)
+    brightness = scale_attribute(avg_brightness, z)
+    area = scale_attribute(avg_area, z)
+    radius = np.power(area/np.pi, 0.5)
+    return [location, radius, brightness]
+
+
+def scale_attribute(attribute, z_val):
+    return attribute*np.power(z_val+1, 2)
+
+
+def main():
+    print "stub"
+
+
+if __name__ == '__main__':
+    main()
