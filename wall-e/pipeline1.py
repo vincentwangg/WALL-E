@@ -39,9 +39,7 @@ if __name__ == '__main__':
     right_offset = 0
 
     # Stereo Rectification process
-    print()
-    print("Starting the stereo rectification map generation process.")
-    print()
+    print("\nStarting the stereo rectification map generation process.\n")
     left_chessboard_video = args.left_video
     right_chessboard_video = args.right_video
 
@@ -54,8 +52,6 @@ if __name__ == '__main__':
                                   left_offset=left_offset, right_offset=right_offset, first_frame=83)
 
     # Applying Stereo Rectification to video
-    print()
-    print("Applying the generated stereo rectification map to " + args.left_video + " and " + args.right_video + ".")
-    print()
+    print("\nApplying the generated stereo rectification map to " + args.left_video + " and " + args.right_video + ".\n")
     undistort_and_stereo_rectify_videos(args.left_video, args.right_video, SR_MAP_GENERATED_FILENAME,
                                         left_offset=left_offset, right_offset=right_offset)

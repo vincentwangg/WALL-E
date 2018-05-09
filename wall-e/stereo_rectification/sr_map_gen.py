@@ -26,14 +26,11 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
                                   left_offset=0, right_offset=0,
                                   first_frame=0, show_original_frame=False, show_undistorted_frame=False):
     print("Welcome to the Stereo Rectification (SR) Map Generator!")
-    print()
-    print("There will be 2 steps to finding the best frame to use to get the best SR map:")
+    print("\nThere will be 2 steps to finding the best frame to use to get the best SR map:")
     print("\t1) Go through the video and accept frames that, in your opinion, will work well")
     print("\t2) Go through the frames you've already selected and choose the frame you think works best")
-    print()
-    print("Good luck!")
-    print()
-    print("Finding the first frame valid for SR map generation...")
+    print("\nGood luck!")
+    print("\nFinding the first frame valid for SR map generation...")
 
     video_frame_loader = VideoFrameLoader(left_video_filename, right_video_filename)
 
@@ -42,8 +39,7 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
                                       video_frame_loader)
 
     if len(frames) == 0:
-        print()
-        print("No frames selected for SR map generation. Exiting now.")
+        print("\nNo frames selected for SR map generation. Exiting now.")
         sys.exit(0)
     elif len(frames) == 1:
         vc_obj_left_success, img_left = video_frame_loader.get_left_frame(frames[0] + left_offset)
@@ -58,8 +54,7 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
         while True:
             generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
 
-            print()
-            print("Only 1 frame selected for SR map generation.")
+            print("\nOnly 1 frame selected for SR map generation.")
             print("Please review the window and press Y/N")
             print("to accept/reject the frame to generate the SR map.")
             key = cv2.waitKey(0)
@@ -114,11 +109,10 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
                 cv2.imshow("Left Undistorted", img_left_undistorted)
                 cv2.imshow("Right Undistorted", img_right_undistorted)
 
-            print()
-            print("Found valid frame for SR! Please review the windows and press: ")
+            print("\nFound valid frame for SR! Please review the windows and press: ")
             print("\t(Y/N) to accept/reject the frame")
-            print("\t(F) to stop the process and choose from selected frames")
-            print("\t(Q) to quit the program")
+            print("\t(F) to move on to the next step, choosing from selected frames")
+            print("\t(Q) quit the program (STOPS THE PROGRAM, CAUTION!!!)")
             print("Frame currently shown: " + str(frame_num))
             print("Frames marked valid:   " + str(frames))
             key = cv2.waitKey(0)
@@ -133,13 +127,13 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
                 print("Frame " + str(frame_num) + " accepted.")
                 break
             elif key == get_keycode_from_key_code_entry(F_KEY):
-                print()
-                print("Moving on to step 2!")
+                print("\nMoving on to step 2!")
                 return frames
             elif key == get_keycode_from_key_code_entry(Q_KEY):
-                print()
-                print("Exiting now.")
+                print("\nExiting now.")
                 sys.exit(0)
+            else:
+                print("\nUnknown key pressed.")
 
         frame_num = frame_num + 1
 
@@ -147,8 +141,7 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
 
 
 def display_no_frames_left_message(frames):
-    print()
-    print("No frames selected for SR map generation.")
+    print("\nNo frames selected for SR map generation.")
     print("If this was a mistake, add --first_frame " + str(frames[0]) + " to the script arguments and start from "
                                                                          "there.")
     print("Frame " + str(frames[0]) + " was the frame just rejected.")
@@ -171,14 +164,13 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
 
         while True:
             generate_and_save_sr_maps(convert_to_gray(img_left_undistorted), convert_to_gray(img_right_undistorted))
-            print()
-            print("Frame selection process has finished. Please review the windows and press:")
+            print("\nFrame selection process has finished. Please review the windows and press:")
             print("(Left/Right Arrow Keys) to look through selected frames.")
-            print("(N) remove currently displayed frame")
-            print("(Z) undo the frame that last got removed")
-            print("(R) restart from the beginning (Adds back in all the frames that got removed)")
-            print("(S) select the frame to use SR map generation.")
-            print("(Q) quit the program")
+            print("\t(N) remove currently displayed frame")
+            print("\t(Z) undo the frame that last got removed")
+            print("\t(R) restart from the beginning (Adds back in all the frames that got removed)")
+            print("\t(S) select the frame to use for SR map generation.")
+            print("\t(Q) quit the program (STOPS THE PROGRAM, CAUTION!!!)")
             print("Viewing the following frames: " + str(frames) + ". Current frame: " + str(current_frame))
 
             key = cv2.waitKey(0)

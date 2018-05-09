@@ -55,39 +55,32 @@ blank_image = np.zeros((480, 640, 3), np.uint8)
 
 def setup():
     print("Welcome to your first time key setup. This setup will only be run once for every new machine you use.")
-    print()
-    print("A blank window will appear. Please click on the window to bring it into \nfocus while keeping the console "
+    print("\nA blank window will appear. Please click on the window to bring it into \nfocus while keeping the console "
           "open to see further instructions.")
-    print()
-    print("WARNING: Make sure your CAPS lock is off!!")
+    print("\nWARNING: Make sure your CAPS lock is off!!")
     print("Mixing lowercase and uppercase letters will give\ndifferent key codes and might confuse you later on.")
 
     for entry in keycode_entries:
-        print()
-        print("Please press your " + entry.message_text + ".")
+        print("\nPlease press your " + entry.message_text + ".")
         keycode = show_blank_image()
         entry.keycode = keycode
         print("Recorded!")
 
-    print()
-    print("Your key codes have been registered. In order to verify that all your key codes are correct, please follow")
+    print("\nYour key codes have been registered. In order to verify that all your key codes are correct, please follow")
     print("the following instructions:")
 
     for entry in keycode_entries:
-        print()
-        print("Please press your " + entry.message_text + ".")
+        print("\nPlease press your " + entry.message_text + ".")
         keycode = show_blank_image()
         if keycode == entry.keycode:
             print("Verified!")
         else:
             print("The key you entered doesn't match the keycode recorded. The program will now stop.")
-            print()
-            print("Please run the following command:")
+            print("\nPlease run the following command:")
             print("python " + __file__)
             sys.exit()
 
-    print()
-    print("Writing to config.txt...")
+    print("\nWriting to config.txt...")
     with open(CONFIG_PATH, 'w') as cfg_file:
         dict_string = "{"
         for entry in keycode_entries:
@@ -97,8 +90,7 @@ def setup():
 
         cfg_file.write(dict_string)
     print("Finished.")
-    print()
-    print("The setup is over. If this setup needs to be run again, run this command:")
+    print("\nThe setup is over. If this setup needs to be run again, run this command:")
     print("python " + __file__)
 
 
