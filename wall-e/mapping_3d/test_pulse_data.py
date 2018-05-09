@@ -28,6 +28,13 @@ invalid_number_string = "3.234"
 #     fpd.add_pulse_to_frame(i, PulseData([2, 2, 3], 0.8, 1), PulseData([3, 3, 4], 0.2, 1))
 # write_pulse_data_to_file(fpd)
 
+# Example of frame pulse data from dark to bright
+# if __name__ == '__main__':
+#     fpd = FramePulseData()
+#     for i in range(0, 100):
+#         fpd.add_pulse_to_frame(i, PulseData([0, 0, 5], 0.2, i / 100.0))
+#     write_pulse_data_to_file(fpd)
+
 
 class TestPulseData(TestCase):
     def test_valid_xyz_coord_list_int(self):

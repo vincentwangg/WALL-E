@@ -5,8 +5,11 @@ import os
 import ast
 import math
 
+
 fps_value = 30
 rotation_toward_pos_z = (0, math.radians(180), math.radians(270))
+RGB_MAX_VAL = 255
+material_names = set()
 
 
 def main(points_filename):
@@ -36,6 +39,9 @@ def main(points_filename):
     # Set the current frame back to the beginning
     bpy.context.scene.frame_set(0)
 
+    # Add colors to materials
+    generate_material_colors()
+
 
 def set_fps(new_fps):
     bpy.context.scene.render.fps = new_fps
@@ -47,11 +53,15 @@ def get_points_from_file(points_filename):
         return ast.literal_eval(points_string)
 
 
-# Coordinates should be in format [x, y, z]
 def plot_pulse(pulse_data, frame_num):
     bpy.ops.mesh.primitive_uv_sphere_add(size=pulse_data[RADIUS_LABEL], location=pulse_data[XYZ_COORD_LABEL])
     obj = bpy.context.active_object
-    obj.color = (255, 255, 255, 1)
+
+    # Create material with color
+    material_name = "{'" + BRIGHTNESS_LABEL + "':" + str(pulse_data[BRIGHTNESS_LABEL]) + "}"
+    material_names.add(material_name)
+    mat = bpy.data.materials.new(name=material_name)
+    obj.data.materials.append(mat)
 
     obj.keyframe_insert('hide', frame=frame_num)
     obj.keyframe_insert('hide_render', frame=frame_num)
@@ -78,6 +88,14 @@ def deselect_all_objects():
 def delete_all_objects():
     select_all_objects()
     bpy.ops.object.delete()
+
+
+def generate_material_colors():
+    for name in material_names:
+        material_dict = ast.literal_eval(name)
+        brightness = material_dict[BRIGHTNESS_LABEL]
+        bpy.data.materials[name].diffuse_color = (brightness, brightness, brightness)
+        print(str((brightness, brightness, 0)))
 
 
 if __name__ == '__main__':
