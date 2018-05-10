@@ -7,6 +7,5 @@ Make sure you are working on your own branch.
 - When you are finished with your code, submit a pull request to merge your branch into the master branch
 
 
-## Using stereorectification
-1)  Run stereorectification.py and it'll save the camera values to a .yml file.
-2)  Call apply_stereo_rectify.py on two videos and it will read from the .yml file and generate the rectification maps. The map is applied to each frame of both videos
+## Processing footage for pulse matching and 3d mapping.
+- Run the pipeline1.py script found in the source code directory. Run "pipeline1.py" -h for help
