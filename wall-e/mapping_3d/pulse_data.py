@@ -51,7 +51,13 @@ class PulseData:
         verify_radius_value(radius)
         verify_brightness_value(brightness)
 
-        self.pulse_data = {XYZ_COORD_LABEL: list(xyz_coord), RADIUS_LABEL: radius, BRIGHTNESS_LABEL: brightness}
+        self.xyz_coord = list(xyz_coord)
+        self.radius = radius
+        self.brightness = brightness
+
+        self.pulse_data = {XYZ_COORD_LABEL: self.xyz_coord,
+                           RADIUS_LABEL: self.radius,
+                           BRIGHTNESS_LABEL: self.brightness}
 
     def __repr__(self):
         return str(self.pulse_data)
@@ -63,14 +69,14 @@ class FramePulseData:
     def __init__(self):
         self.frame_pulse_data = {}
 
+    def __repr__(self):
+        return str(self.frame_pulse_data)
+
     def add_pulse_to_frame(self, frame_num, *pulse_data_args):
         if frame_num not in self.frame_pulse_data.keys():
             self.frame_pulse_data[frame_num] = []
         for pulse_data in pulse_data_args:
             self.frame_pulse_data[frame_num].append(pulse_data)
-
-    def __repr__(self):
-        return str(self.frame_pulse_data)
 
 
 # pulse_data_by_frame should be a dictionary with frame # (key) -> list of pulse data (value)

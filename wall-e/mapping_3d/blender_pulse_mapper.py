@@ -2,7 +2,6 @@ import bpy
 import sys
 import argparse
 import os
-import ast
 import math
 
 
@@ -17,10 +16,10 @@ def main(points_filename):
     set_fps(fps_value)
 
     # Plot ostracod points
-    points = get_points_from_file(points_filename)
+    fpd = read_frame_pulse_data_from_file(points_filename)
 
-    for frame_num in points:
-        for pulse_data in points[frame_num]:
+    for frame_num in fpd.frame_pulse_data.keys():
+        for pulse_data in fpd.frame_pulse_data[frame_num]:
             plot_pulse(pulse_data, frame_num)
 
     # Add camera
@@ -47,18 +46,12 @@ def set_fps(new_fps):
     bpy.context.scene.render.fps = new_fps
 
 
-def get_points_from_file(points_filename):
-    with open(points_filename, 'r') as points_file:
-        points_string = points_file.read()
-        return ast.literal_eval(points_string)
-
-
 def plot_pulse(pulse_data, frame_num):
-    bpy.ops.mesh.primitive_uv_sphere_add(size=pulse_data[RADIUS_LABEL], location=pulse_data[XYZ_COORD_LABEL])
+    bpy.ops.mesh.primitive_uv_sphere_add(size=pulse_data.radius, location=pulse_data.xyz_coord)
     obj = bpy.context.active_object
 
     # Create material with color
-    material_name = "{'" + BRIGHTNESS_LABEL + "':" + str(pulse_data[BRIGHTNESS_LABEL]) + "}"
+    material_name = "{'" + BRIGHTNESS_LABEL + "':" + str(pulse_data.brightness) + "}"
     material_names.add(material_name)
     mat = bpy.data.materials.new(name=material_name)
     obj.data.materials.append(mat)
@@ -95,7 +88,6 @@ def generate_material_colors():
         material_dict = ast.literal_eval(name)
         brightness = material_dict[BRIGHTNESS_LABEL]
         bpy.data.materials[name].diffuse_color = (brightness, brightness, brightness)
-        print(str((brightness, brightness, 0)))
 
 
 if __name__ == '__main__':
@@ -109,7 +101,7 @@ if __name__ == '__main__':
     if walle_basedir not in sys.path:
         sys.path.append(walle_basedir)
 
-    from mapping_3d.pulse_data import XYZ_COORD_LABEL, RADIUS_LABEL, BRIGHTNESS_LABEL
+    from mapping_3d.pulse_data import *
 
     if len(argv) == 1:
         main(argv[0])
