@@ -1,6 +1,6 @@
 # pulse_data.py contains classes that help store pulse data and write that information to a text file for
 # blender_pulse_mapper.py to read.
-
+import ast
 from numbers import Number
 
 XYZ_COORD_LABEL = "xyz_coord"
@@ -56,6 +56,19 @@ class FramePulseData:
 
 
 # pulse_data_by_frame should be a dictionary with frame # (key) -> list of pulse data (value)
-def write_pulse_data_to_file(frame_pulse_data, filename=FRAME_PULSE_DATA_FILENAME):
+def write_frame_pulse_data_to_file(frame_pulse_data, filename=FRAME_PULSE_DATA_FILENAME):
     with open(filename, 'w') as frame_pulse_data_file:
         frame_pulse_data_file.write(str(frame_pulse_data))
+
+
+def read_frame_pulse_data_from_file(filename=FRAME_PULSE_DATA_FILENAME):
+    with open(filename, 'r') as fpd_file:
+        fpd_dict = ast.literal_eval(fpd_file.read())
+
+        fpd = FramePulseData()
+        for frame_num in fpd_dict.keys():
+            for pulse_data in fpd_dict[frame_num]:
+                fpd.add_pulse_to_frame(frame_num, PulseData(pulse_data[XYZ_COORD_LABEL],
+                                                            pulse_data[RADIUS_LABEL],
+                                                            pulse_data[BRIGHTNESS_LABEL]))
+        return fpd
