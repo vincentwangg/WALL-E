@@ -4,6 +4,7 @@ from stereo_rectification.apply_sr import undistort
 from stereo_rectification.apply_sr import generate_maps
 from stereo_rectification.apply_sr import apply_rectify_maps
 from stereo_rectification.sr_map_gen import SR_MAP_GENERATED_FILENAME
+from definitions import PROJECT_ROOT_PATH, SRC_PATH
 
 # TODO: Take a video of a checkerboard at a known distance
 
@@ -20,11 +21,11 @@ class Camera:
         checkerboard_distance = 5 # how far away the checkerboard is from the camera
         width_of_one_square = 2
         optimal_frame_num = 10
-        calibration_video = cv2.VideoCapture("../../videos/45_r_check.mkv")
-        sr_yml_filename = "../stereo_rectification/" + SR_MAP_GENERATED_FILENAME
+        vid_filename = PROJECT_ROOT_PATH + "/videos/45_r_check.mkv"
+        calibration_video = cv2.VideoCapture(vid_filename)
+        sr_yml_filename = SRC_PATH + "/stereo_rectification/" + SR_MAP_GENERATED_FILENAME
 
         (l_map, r_map) = generate_maps(sr_yml_filename)
-
         if optimal_frame_num > 0:
             calibration_video.set(cv2.CAP_PROP_POS_FRAMES, optimal_frame_num-1)
 
