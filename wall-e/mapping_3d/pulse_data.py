@@ -3,9 +3,9 @@
 import ast
 from numbers import Number
 
-XYZ_COORD_LABEL = "xyz_coord"
-RADIUS_LABEL = "radius"
-BRIGHTNESS_LABEL = "brightness"
+XYZ_COORD_LABEL = "c"
+RADIUS_LABEL = "r"
+BRIGHTNESS_LABEL = "b"
 
 Z_COORD_IDX = 2
 
