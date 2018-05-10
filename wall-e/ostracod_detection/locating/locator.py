@@ -43,7 +43,10 @@ def get_ostracods(image):
     print "Ostracods: "
     if image is None:
         sys.exit("unable to load image")
-    imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if len(image[0][0]) == 3:
+        imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        imgray = image
     threshold = filter_image(imgray, 90)
     contours = find_contours(threshold)
     ostracod_list = []
