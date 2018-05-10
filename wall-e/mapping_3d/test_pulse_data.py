@@ -44,7 +44,7 @@ invalid_brightness_greater_than_one = 1.23
 #     fpd = FramePulseData()
 #     for i in range(0, 100):
 #         fpd.add_pulse_to_frame(i, PulseData([0, 0, 5], 0.2, i / 100.0))
-#     write_pulse_data_to_file(fpd)
+#     write_frame_pulse_data_to_file(fpd)
 
 
 class TestPulseData(TestCase):
