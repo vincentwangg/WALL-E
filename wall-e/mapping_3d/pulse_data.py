@@ -7,6 +7,8 @@ XYZ_COORD_LABEL = "xyz_coord"
 RADIUS_LABEL = "radius"
 BRIGHTNESS_LABEL = "brightness"
 
+Z_COORD_IDX = 2
+
 FRAME_PULSE_DATA_FILENAME = "frame_pulse_data.txt"
 
 
@@ -18,20 +20,36 @@ def verify_xyz_coord_type(xyz_coord):
         raise ValueError("Coordinates must have a length of 3.")
 
     for i in xyz_coord:
-        if not isinstance(i, Number):
-            raise TypeError("Coordinate values must be a Number type.")
+        check_value_is_number_type(i)
+
+    if xyz_coord[Z_COORD_IDX] <= 0:
+        raise ValueError("Z-coordinate has to be greater than 0. Value causing error: " + str(xyz_coord[Z_COORD_IDX]))
 
 
-def verify_number_type(value):
-    if not isinstance(value, Number):
+def verify_radius_value(radius):
+    check_value_is_number_type(radius)
+
+    if radius <= 0:
+        raise ValueError("Radius must be greater than 0. Value causing error: " + str(radius))
+
+
+def verify_brightness_value(brightness):
+    check_value_is_number_type(brightness)
+
+    if brightness < 0 or brightness > 1:
+        raise ValueError("Brightness value must be within range [0, 1]. Value causing error: " + str(brightness))
+
+
+def check_value_is_number_type(radius):
+    if not isinstance(radius, Number):
         raise TypeError("Value must be a Number type.")
 
 
 class PulseData:
     def __init__(self, xyz_coord, radius, brightness):
         verify_xyz_coord_type(xyz_coord)
-        verify_number_type(radius)
-        verify_number_type(brightness)
+        verify_radius_value(radius)
+        verify_brightness_value(brightness)
 
         self.pulse_data = {XYZ_COORD_LABEL: list(xyz_coord), RADIUS_LABEL: radius, BRIGHTNESS_LABEL: brightness}
 

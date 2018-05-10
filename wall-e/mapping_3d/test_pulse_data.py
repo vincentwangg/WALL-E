@@ -13,10 +13,21 @@ invalid_xyz_coord_idx_0_not_number = ["hey", 1, 3]
 invalid_xyz_coord_idx_1_not_number = [2, "yo", 3]
 invalid_xyz_coord_idx_2_not_number = [2, 4, "aye"]
 invalid_xyz_coord_all_3_not_number = ["hey", "yo", "aye"]
+invalid_xyz_coord_zcoord_less_than_zero = [1, 2, -2]
+invalid_xyz_coord_zcoord_is_zero = [1, 2, 0]
 
-valid_number_int = 3
-valid_number_decimal = 3.129302
-invalid_number_string = "3.234"
+valid_radius_int = 3
+valid_radius_decimal = 3.129302
+invalid_radius_zero = 0
+invalid_radius_string = "3.234"
+invalid_radius_negative = -12.2
+
+valid_brightness_zero = 0
+valid_brightness_one = 1
+valid_brightness_decimal = 0.23
+invalid_brightness_string = "3.234"
+invalid_brightness_less_than_zero = -12.2
+invalid_brightness_greater_than_one = 1.23
 
 # Example frame pulse data
 # fpd = FramePulseData()
@@ -37,6 +48,8 @@ invalid_number_string = "3.234"
 
 
 class TestPulseData(TestCase):
+    # xyz_coord tests
+
     def test_valid_xyz_coord_list_int(self):
         verify_xyz_coord_type(valid_xyz_coord_list_int)
 
@@ -70,26 +83,64 @@ class TestPulseData(TestCase):
     def test_invalid_xyz_coord_all_3_not_number(self):
         self.assertRaises(TypeError, verify_xyz_coord_type, invalid_xyz_coord_all_3_not_number)
 
-    def test_valid_number_int(self):
-        verify_number_type(valid_number_int)
+    def test_invalid_xyz_coord_zcoord_less_than_zero(self):
+        self.assertRaises(ValueError, verify_xyz_coord_type, invalid_xyz_coord_zcoord_less_than_zero)
 
-    def test_valid_number_decimal(self):
-        verify_number_type(valid_number_decimal)
+    def test_invalid_xyz_coord_zcoord_is_zeroo(self):
+        self.assertRaises(ValueError, verify_xyz_coord_type, invalid_xyz_coord_zcoord_is_zero)
 
-    def test_invalid_number_string(self):
-        self.assertRaises(TypeError, verify_number_type, invalid_number_string)
+    # radius tests
+
+    def test_valid_radius_int(self):
+        verify_radius_value(valid_radius_int)
+
+    def test_valid_radius_decimal(self):
+        verify_radius_value(valid_radius_decimal)
+
+    def test_invalid_radius_zero(self):
+        self.assertRaises(ValueError, verify_radius_value, invalid_radius_zero)
+
+    def test_invalid_radius_string(self):
+        self.assertRaises(TypeError, verify_radius_value, invalid_radius_string)
+
+    def test_invalid_radius_negative(self):
+        self.assertRaises(ValueError, verify_radius_value, invalid_radius_negative)
+
+    # brightness tests
+
+    def test_valid_brightness_zero(self):
+        verify_brightness_value(valid_brightness_zero)
+
+    def test_valid_brightness_one(self):
+        verify_brightness_value(valid_brightness_one)
+
+    def test_valid_brightness_decimal(self):
+        verify_brightness_value(valid_brightness_decimal)
+
+    def test_invalid_brightness_string(self):
+        self.assertRaises(TypeError, verify_brightness_value, invalid_brightness_string)
+
+    def test_invalid_brightness_less_than_zero(self):
+        self.assertRaises(ValueError, verify_brightness_value, invalid_brightness_less_than_zero)
+
+    def test_invalid_brightness_greater_than_one(self):
+        self.assertRaises(ValueError, verify_brightness_value, invalid_brightness_greater_than_one)
+
+    # PulseData tests
 
     def test_valid_args_pulse_data(self):
-        pd = PulseData(valid_xyz_coord_list_decimal, valid_number_decimal, valid_number_int)
+        pd = PulseData(valid_xyz_coord_list_decimal, valid_radius_int, valid_brightness_decimal)
         self.assertEquals(pd.pulse_data[XYZ_COORD_LABEL], valid_xyz_coord_list_decimal)
-        self.assertEquals(pd.pulse_data[RADIUS_LABEL], valid_number_decimal)
-        self.assertEquals(pd.pulse_data[BRIGHTNESS_LABEL], valid_number_int)
+        self.assertEquals(pd.pulse_data[RADIUS_LABEL], valid_radius_int)
+        self.assertEquals(pd.pulse_data[BRIGHTNESS_LABEL], valid_brightness_decimal)
 
     def test_valid_args_pulse_data_converts_tuple_to_list(self):
-        pd = PulseData(valid_xyz_coord_tuple_decimal, valid_number_decimal, valid_number_int)
+        pd = PulseData(valid_xyz_coord_tuple_decimal, valid_radius_int, valid_brightness_decimal)
         self.assertEquals(pd.pulse_data[XYZ_COORD_LABEL], valid_xyz_coord_list_decimal)
-        self.assertEquals(pd.pulse_data[RADIUS_LABEL], valid_number_decimal)
-        self.assertEquals(pd.pulse_data[BRIGHTNESS_LABEL], valid_number_int)
+        self.assertEquals(pd.pulse_data[RADIUS_LABEL], valid_radius_int)
+        self.assertEquals(pd.pulse_data[BRIGHTNESS_LABEL], valid_brightness_decimal)
+
+    # FramePulseData tests
 
     def test_fpd_str_is_correct(self):
         fpd = FramePulseData()
