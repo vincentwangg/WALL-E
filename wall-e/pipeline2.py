@@ -13,7 +13,6 @@ from mapping_3d.camera import Camera
 if __name__ == '__main__':
     left_file_name = "../videos/45_l.mkv"
     right_file_name = "../videos/45_r.mkv"
-    frame_pulse_data_file_name = "test_file.txt"
     baseline = 500
     vfl = VideoFrameLoader(left_file_name, right_file_name)
     camera = Camera(baseline=baseline)
