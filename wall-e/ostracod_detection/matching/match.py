@@ -118,10 +118,10 @@ def match(image_l, image_r):
     else:
         get_matching_pairs(ostracod_list_l, ostracod_list_r)
 
-    print "matches of left: "
-    print_matches(ostracod_list_l)
-    print "matches of right: "
-    print_matches(ostracod_list_r)
+    # print "matches of left: "
+    # print_matches(ostracod_list_l)
+    # print "matches of right: "
+    # print_matches(ostracod_list_r)
 
     return ostracod_list_l, ostracod_list_r
 

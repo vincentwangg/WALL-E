@@ -40,7 +40,7 @@ def get_ostracods(image):
     # compute brightness of each contour
     # compute x, y location of each contour
     # return list of ostracods
-    print "Ostracods: "
+    # print "Ostracods: "
     if image is None:
         sys.exit("unable to load image")
     if len(image[0][0]) == 3:
@@ -62,9 +62,9 @@ def get_ostracods(image):
             ostracod_list.append(ostracod)
 
 
-    print "Brightness", "\tArea", "\tLocation"
-    for o in ostracod_list:
-        print round(o.brightness, 2), "\t\t", o.area, "\t", o.location
+    # print "Brightness", "\tArea", "\tLocation"
+    # for o in ostracod_list:
+    #     print round(o.brightness, 2), "\t\t", o.area, "\t", o.location
     return ostracod_list
 
 
