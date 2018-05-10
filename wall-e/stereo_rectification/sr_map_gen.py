@@ -3,6 +3,7 @@
 import argparse
 from config.keycode_setup import *
 from stereo_rectification.grayscale_converter import convert_to_gray
+from utilities.file_checker import check_if_file_exists
 from utilities.video_frame_loader import VideoFrameLoader
 from utilities.yaml_utility import save_to_yml
 
@@ -407,8 +408,14 @@ if __name__ == '__main__':
     if args.right_offset < 0:
         sys.exit("Right offset must be greater than or equal to 0.")
 
+    left_video_filename = args.left_video
+    right_video_filename = args.right_video
+
+    check_if_file_exists(left_video_filename)
+    check_if_file_exists(right_video_filename)
+
     load_keycodes()
-    find_and_generate_best_sr_map(args.left_video, args.right_video,
+    find_and_generate_best_sr_map(left_video_filename, right_video_filename,
                                   left_offset=args.left_offset, right_offset=args.right_offset,
                                   first_frame=args.first_frame, show_original_frame=args.show_original_frame,
                                   show_undistorted_frame=args.show_undistorted_frame)

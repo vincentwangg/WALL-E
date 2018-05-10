@@ -5,9 +5,9 @@ import argparse
 import cv2
 import os
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
+from utilities.file_checker import check_if_file_exists
 from utilities.yaml_utility import read_from_yml
 from utilities.video_frame_loader import VideoFrameLoader
-import time
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.php
 
@@ -95,7 +95,7 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
           full_filename_l + "\" and \"" + full_filename_r + "\"")
 
 
-def main():
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("left_video", help="filename of the left video feed")
     parser.add_argument("right_video", help="filename of the right video feed")
@@ -115,10 +115,12 @@ def main():
 
     args = parser.parse_args()
 
-    undistort_and_stereo_rectify_videos(args.left_video, args.right_video, args.yaml_file,
+    left_video_filename = args.left_video
+    right_video_filename = args.right_video
+
+    check_if_file_exists(left_video_filename)
+    check_if_file_exists(right_video_filename)
+
+    undistort_and_stereo_rectify_videos(left_video_filename, right_video_filename, args.yaml_file,
                                         left_offset=args.left_offset, right_offset=args.right_offset,
                                         show_lines=args.show_lines)
-
-
-if __name__ == '__main__':
-    main()
