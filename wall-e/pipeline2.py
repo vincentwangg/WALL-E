@@ -16,7 +16,7 @@ if __name__ == '__main__':
     frame_pulse_data_file_name = "test_file.txt"
     baseline = 500
     vfl = VideoFrameLoader(left_file_name, right_file_name)
-    # camera = Camera(baseline=baseline)
+    camera = Camera(baseline=baseline)
     fpd = FramePulseData()
 
 
