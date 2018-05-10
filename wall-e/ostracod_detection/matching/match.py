@@ -9,10 +9,6 @@ from cv2 import imread
 
 # match up the corresponding ostracods in each list
 
-# TODO: Maybe take out distance from the mean as an attribute(need to test)
-# TODO: Maybe add shape as an attribute
-
-
 class Variance:
     def __init__(self, ostracod_list1, ostracod_list2):
         self.brightness = None

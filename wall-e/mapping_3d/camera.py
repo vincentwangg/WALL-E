@@ -4,6 +4,8 @@ from stereo_rectification.apply_sr import undistort
 from stereo_rectification.apply_sr import generate_maps
 from stereo_rectification.apply_sr import apply_rectify_maps
 
+# TODO: Take a video of a checkerboard at a known distance
+
 class Camera:
     def __init__(self, baseline, focal_length=None):
         if focal_length is None:
