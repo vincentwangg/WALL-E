@@ -1,8 +1,8 @@
 import os
-
+import argparse
 import cv2
-import sys
 from stereo_rectification.sr_map_gen import undistort
+from utilities.file_checker import *
 
 
 def undistort_video(video_filename, new_file_ext, frame_cap=0):
@@ -56,10 +56,14 @@ def undistort_video(video_filename, new_file_ext, frame_cap=0):
 
 
 if __name__ == '__main__':
-    print(sys.argv)
-    if len(sys.argv) != 2:
-        print("Please provide one argument (filename of video)")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("video_filename", help="filename of the video containing the chessboard")
+    args = parser.parse_args()
 
-    print("Undistorting video: " + sys.argv[1])
-    new_filename = undistort_video(sys.argv[1], ".mkv")
+    video_filename = args.video_filename
+
+    check_if_file_exists(video_filename)
+
+    print("Undistorting video: " + video_filename)
+    new_filename = undistort_video(video_filename, ".mkv")
     print("Video undistorted. New video name: " + new_filename)
