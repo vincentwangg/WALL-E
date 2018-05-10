@@ -11,7 +11,7 @@ RGB_MAX_VAL = 255
 material_names = set()
 
 
-def main(points_filename):
+def map_points_on_blender(points_filename):
     delete_all_objects()
     set_fps(fps_value)
 
@@ -93,20 +93,26 @@ def generate_material_colors():
 if __name__ == '__main__':
     argv = sys.argv
     if "--" not in argv:
-        argv = []  # as if no args are passed
+        argv = []
     else:
-        argv = argv[argv.index("--") + 1:]  # get all args after "--"
+        argv = argv[argv.index("--") + 1:]
 
+    parser = argparse.ArgumentParser(description='Run blender in background mode',
+                                     prog="blender --background --python " + __file__ + " --")
+
+    # Add Wall-E path to blender for imports
     walle_basedir = sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     if walle_basedir not in sys.path:
         sys.path.append(walle_basedir)
 
     from mapping_3d.pulse_data import *
 
-    if len(argv) == 1:
-        main(argv[0])
-    else:
-        print("Incorrect number of arguments. "
-              + "Usage: blender --background "
-              + "--python " + os.path.basename(__file__) + " "
-              + "-- [points filename]")
+    try:
+        parser.add_argument("-f", "--points_filename", default=FRAME_PULSE_DATA_FILENAME,
+                            help="show original frame before undistortion and stereo rectification")
+
+        args = parser.parse_args(argv)
+
+        map_points_on_blender(args.points_filename)
+    except SystemExit as e:
+        print(repr(e))
