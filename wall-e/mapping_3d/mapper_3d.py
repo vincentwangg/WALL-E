@@ -4,6 +4,7 @@ from pulse_data import PulseData
 from camera import Camera
 import sys
 
+#TODO: implement get_z_val()
 
 def depth_map(ostracod_list1, ostracod_list2, framepulsedata, framenum, camera):
     if not isinstance(framepulsedata, FramePulseData):
