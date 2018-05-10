@@ -1,7 +1,6 @@
 # This pipeline is responsible for matching ostracods between two frames, 3d mapping, and writing
 # the blender information to a text file from an FramePulseData object
 
-import cv2
 from utilities.video_frame_loader import VideoFrameLoader
 from ostracod_detection.matching.match import match
 from mapping_3d.mapper_3d import depth_map
