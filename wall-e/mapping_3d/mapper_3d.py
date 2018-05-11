@@ -21,7 +21,7 @@ def generate_pulse_data(ostracod1, ostracod2, camera):
     avg_brightness = (ostracod1.brightness + ostracod2.brightness)/2
     avg_area = (ostracod1.area + ostracod2.area)/2
 
-    z = get_z_val()
+    z = get_z_val(ostracod1.location[0], ostracod2.location[0], camera.focal_length, camera.baseline)
 
     real_coordinate_ratio = z/camera.focal_length
     location = [ostracod1.location[0]*real_coordinate_ratio, ostracod2.location[1]*real_coordinate_ratio, z]
@@ -32,8 +32,8 @@ def generate_pulse_data(ostracod1, ostracod2, camera):
     return PulseData(xyz_coord=location, radius=radius, brightness=brightness)
 
 
-def get_z_val():
-    return 1
+def get_z_val(left_x, right_x, focal_length, baseline):
+    return focal_length * baseline / (left_x - right_x)
 
 
 def scale_2d_attribute(attribute, z_val):
