@@ -30,6 +30,8 @@ LEFT_ARROW_KEY = KeyCodeEntry("LEFT_ARROW_KEY", "left arrow key")
 RIGHT_ARROW_KEY = KeyCodeEntry("RIGHT_ARROW_KEY", "right arrow key")
 UP_ARROW_KEY = KeyCodeEntry("UP_ARROW_KEY", "up arrow key")
 DOWN_ARROW_KEY = KeyCodeEntry("DOWN_ARROW_KEY", "down arrow key")
+A_KEY = KeyCodeEntry("A_KEY", "\"A\" key")
+D_KEY = KeyCodeEntry("D_KEY", "\"D\" key")
 F_KEY = KeyCodeEntry("F_KEY", "\"F\" key")
 N_KEY = KeyCodeEntry("N_KEY", "\"N\" key")
 Q_KEY = KeyCodeEntry("Q_KEY", "\"Q\" key")
@@ -41,7 +43,7 @@ SPACE_KEY = KeyCodeEntry("SPACE_KEY", "space bar")
 
 keycode_entries = [
     LEFT_ARROW_KEY, RIGHT_ARROW_KEY, UP_ARROW_KEY, DOWN_ARROW_KEY,
-    F_KEY, N_KEY, Q_KEY, R_KEY, S_KEY, Y_KEY, Z_KEY,
+    A_KEY, D_KEY, F_KEY, N_KEY, Q_KEY, R_KEY, S_KEY, Y_KEY, Z_KEY,
     SPACE_KEY
 ]
 keyname_to_KeyCodeEntry = {}
@@ -106,6 +108,7 @@ def load_keycodes():
         cfg_dictionary = ast.literal_eval(cfg_file.readline())
 
         if len(cfg_dictionary) != len(keycode_entries):
+            print("New key codes are required to be registered :(.\nThe first time setup will run again.\n")
             setup()
             load_keycodes()
             return

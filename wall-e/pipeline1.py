@@ -7,6 +7,7 @@ import argparse
 from config.keycode_setup import load_keycodes
 from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
 from stereo_rectification.apply_sr import undistort_and_stereo_rectify_videos
+from utilities.video_frame_player import play_video
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -37,6 +38,9 @@ if __name__ == '__main__':
     # ~frame matching logic~
     left_offset = 0
     right_offset = 0
+
+    # Show video frame player to verify offset
+    left_offset, right_offset = play_video(args.left_video, args.right_video, left_offset, right_offset, 0)
 
     # Stereo Rectification process
     print("\nStarting the stereo rectification map generation process.\n")
