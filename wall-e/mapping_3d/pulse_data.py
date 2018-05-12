@@ -73,10 +73,11 @@ class FramePulseData:
         return str(self.frame_pulse_data)
 
     def add_pulse_to_frame(self, frame_num, *pulse_data_args):
-        if frame_num not in self.frame_pulse_data.keys():
-            self.frame_pulse_data[frame_num] = []
         for pulse_data in pulse_data_args:
-            self.frame_pulse_data[frame_num].append(pulse_data)
+            if pulse_data is not None:
+                if frame_num not in self.frame_pulse_data.keys():
+                    self.frame_pulse_data[frame_num] = []
+                self.frame_pulse_data[frame_num].append(pulse_data)
 
 
 # pulse_data_by_frame should be a dictionary with frame # (key) -> list of pulse data (value)
