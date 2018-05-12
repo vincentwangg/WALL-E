@@ -53,7 +53,9 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
         img_right_undistorted = convert_to_gray(undistort(img_right))
 
         while True:
-            generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+            valid_sr_frame, img_left_sr, img_right_sr = \
+                generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+            show_sr_images(valid_sr_frame, img_left_sr, img_right_sr)
 
             print("\nOnly 1 frame selected for SR map generation.")
             print("Please review the window and press Y/N")
@@ -95,50 +97,53 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
 
         if not vc_obj_left_success or not vc_obj_right_success:
             print("Reached the end of video")
-            break
+            sys.exit(0)
 
         img_left_undistorted = convert_to_gray(undistort(img_left))
         img_right_undistorted = convert_to_gray(undistort(img_right))
 
         while True:
-            generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+            valid_frame_found, left_img_sr, right_img_sr = \
+                generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+            if valid_frame_found:
+                if show_original_frame:
+                    cv2.imshow("Original Left", img_left)
+                    cv2.imshow("Original Right", img_right)
+                if show_undistorted_frame:
+                    cv2.imshow("Left Undistorted", img_left_undistorted)
+                    cv2.imshow("Right Undistorted", img_right_undistorted)
 
-            if show_original_frame:
-                cv2.imshow("Original Left", img_left)
-                cv2.imshow("Original Right", img_right)
-            if show_undistorted_frame:
-                cv2.imshow("Left Undistorted", img_left_undistorted)
-                cv2.imshow("Right Undistorted", img_right_undistorted)
+                show_sr_images(valid_frame_found, left_img_sr, right_img_sr)
 
-            print("\nFound valid frame for SR! Please review the windows and press: ")
-            print("\t(Y/N) to accept/reject the frame")
-            print("\t(F) to move on to the next step, choosing from selected frames")
-            print("\t(Q) quit the program (STOPS THE PROGRAM, CAUTION!!!)")
-            print("Frame currently shown: " + str(frame_num))
-            print("Frames marked valid:   " + str(frames))
-            key = cv2.waitKey(0)
-            cv2.destroyAllWindows()
-            cv2.waitKey(1)
+                print("\nFound valid frame for SR! Please review the windows and press: ")
+                print("\t(Y/N) to accept/reject the frame")
+                print("\t(F) to move on to the next step, choosing from selected frames")
+                print("\t(Q) quit the program (STOPS THE PROGRAM, CAUTION!!!)")
+                print("Frame currently shown: " + str(frame_num))
+                print("Frames marked valid:   " + str(frames))
+                key = cv2.waitKey(0)
+                cv2.destroyAllWindows()
+                cv2.waitKey(1)
 
-            if key == get_keycode_from_key_code_entry(N_KEY):
-                print("Frame " + str(frame_num) + " rejected.")
-                break
-            elif key == get_keycode_from_key_code_entry(Y_KEY):
-                frames.append(frame_num)
-                print("Frame " + str(frame_num) + " accepted.")
-                break
-            elif key == get_keycode_from_key_code_entry(F_KEY):
-                print("\nMoving on to step 2!")
-                return frames
-            elif key == get_keycode_from_key_code_entry(Q_KEY):
-                print("\nExiting now.")
-                sys.exit(0)
+                if key == get_keycode_from_key_code_entry(N_KEY):
+                    print("Frame " + str(frame_num) + " rejected.")
+                    break
+                elif key == get_keycode_from_key_code_entry(Y_KEY):
+                    frames.append(frame_num)
+                    print("Frame " + str(frame_num) + " accepted.")
+                    break
+                elif key == get_keycode_from_key_code_entry(F_KEY):
+                    print("\nMoving on to step 2!")
+                    return frames
+                elif key == get_keycode_from_key_code_entry(Q_KEY):
+                    print("\nExiting now.")
+                    sys.exit(0)
+                else:
+                    print("\nUnknown key pressed.")
             else:
-                print("\nUnknown key pressed.")
+                break
 
         frame_num = frame_num + 1
-
-    return frames
 
 
 def display_no_frames_left_message(frames):
@@ -164,7 +169,10 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
         img_right_undistorted = undistort(img_right)
 
         while True:
-            generate_and_save_sr_maps(convert_to_gray(img_left_undistorted), convert_to_gray(img_right_undistorted))
+            valid_sr_frame, img_left_sr, img_right_sr = \
+                generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+            show_sr_images(valid_sr_frame, img_left_sr, img_right_sr)
+
             print("\nFrame selection process has finished. Please review the windows and press:")
             print("(Left/Right Arrow Keys) to look through selected frames.")
             print("\t(N) remove currently displayed frame")
@@ -214,7 +222,7 @@ def generate_and_save_sr_maps(img_left, img_right):
     # print "Detected corners in right image:\t" + str(img_left_corners_success)
 
     if not (img_left_corners_success and img_right_corners_success):
-        return False
+        return False, None, None
 
     # Tuning these parameters does not appear to effect the end result
     max_iterations = 30
@@ -296,11 +304,11 @@ def generate_and_save_sr_maps(img_left, img_right):
     save_to_yml(SR_MAP_GENERATED_FILENAME, "R2", R2)
     save_to_yml(SR_MAP_GENERATED_FILENAME, "P2", P2)
 
-    img_left = cv2.remap(img_left,
+    new_img_left = cv2.remap(img_left,
                          map_l[0],
                          map_l[1],
                          cv2.INTER_LANCZOS4)
-    img_right = cv2.remap(img_right,
+    new_img_right = cv2.remap(img_right,
                           map_r[0],
                           map_r[1],
                           cv2.INTER_LANCZOS4)
@@ -309,16 +317,19 @@ def generate_and_save_sr_maps(img_left, img_right):
         img_left[line * 20, :] = 255
         img_right[line * 20, :] = 255
 
-    left_window_title = "Left Image - Stereorectified"
-    right_window_title = "Right Image - Stereorectified"
+    return True, new_img_left, new_img_right
 
-    cv2.imshow(left_window_title, img_left)
-    cv2.imshow(right_window_title, img_right)
 
-    cv2.moveWindow(left_window_title, 0, 0)
-    cv2.moveWindow(right_window_title, img_left.shape[1], 0)
-
-    return True
+def show_sr_images(valid_sr_frame, img_left, img_right):
+    if valid_sr_frame:
+        left_window_title = "Left Image - Stereorectified"
+        right_window_title = "Right Image - Stereorectified"
+        cv2.imshow(left_window_title, img_left)
+        cv2.imshow(right_window_title, img_right)
+        cv2.moveWindow(left_window_title, 0, 0)
+        cv2.moveWindow(right_window_title, img_left.shape[1], 0)
+    else:
+        print("The frame found is no longer valid for SR, this shouldn't happen.")
 
 
 def undistort(img):
