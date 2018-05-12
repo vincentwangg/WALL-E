@@ -54,7 +54,7 @@ def main():
         vid_start = time.time()
         success_r, right_image = vfl.get_next_right_frame()
         success_l, left_image = vfl.get_next_left_frame()
-        reading_vid_time = time.time() - vid_start
+        reading_vid_time += time.time() - vid_start
 
         frame_num += 1
 
