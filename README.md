@@ -9,3 +9,8 @@ Make sure you are working on your own branch.
 
 ## Processing footage for pulse matching and 3d mapping.
 - Run the pipeline1.py script found in the source code directory. Run "pipeline1.py" -h for help
+
+## Required Dependencies
+- OpenCV
+- Pillow (pip install Pillow)
+- Numpy

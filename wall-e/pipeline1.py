@@ -5,6 +5,7 @@
 
 import argparse
 from config.keycode_setup import load_keycodes
+from gui.pipeline1.pipeline1_gui_controller import Pipeline1GuiController
 from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
 from stereo_rectification.apply_sr import undistort_and_stereo_rectify_videos
 from utilities.video_frame_player import play_video
@@ -21,6 +22,9 @@ if __name__ == '__main__':
                                                         "rectification")
     args = parser.parse_args()
 
+    gui = Pipeline1GuiController()
+    gui.mainloop()
+
     load_keycodes()
 
     print("Welcome to the full WALL-E footage processing experience!!")
@@ -29,6 +33,8 @@ if __name__ == '__main__':
     print("\t2) Finding and generating the best SR map")
     print("\t3) Stereo rectifying the videos")
     print("\nGood luck!")
+
+    print("\nPlease choose your media files.")
 
     # Frame matching process
     # TODO: Using placeholder var's for now. delete this comment and replace with actual logic. Keep the left_offset
@@ -56,6 +62,7 @@ if __name__ == '__main__':
                                   left_offset=left_offset, right_offset=right_offset, first_frame=83)
 
     # Applying Stereo Rectification to video
-    print("\nApplying the generated stereo rectification map to " + args.left_video + " and " + args.right_video + ".\n")
+    print(
+        "\nApplying the generated stereo rectification map to " + args.left_video + " and " + args.right_video + ".\n")
     undistort_and_stereo_rectify_videos(args.left_video, args.right_video, SR_MAP_GENERATED_FILENAME,
                                         left_offset=left_offset, right_offset=right_offset)
