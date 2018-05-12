@@ -1,6 +1,8 @@
 from tkinter import *
 from gui.pipeline1.welcome_screen import WelcomeScreen
 from gui.pipeline1.video_selection_screen import VideoSelectionScreen
+from gui.walle_header import WalleHeader
+from utilities.video_frame_player_gui import VideoFramePlayer
 
 
 class Pipeline1GuiController(Tk):
@@ -18,31 +20,24 @@ class Pipeline1GuiController(Tk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        container = Frame(self, bg="red")
-        container.grid(row=0, column=0)
-        container['borderwidth'] = 2
+        container = Frame(self)
+        container.pack(fill="both", expand=True)
+
+        walle_header = WalleHeader(parent=container, controller=self)
+        walle_header.grid(row=0, column=0, sticky="w")
 
         self.frames = {}
-        for frame_class in (WelcomeScreen, VideoSelectionScreen):
+        for frame_class in (WelcomeScreen, VideoSelectionScreen, VideoFramePlayer):
             frame = frame_class(parent=container, controller=self)
-
-            frame.grid(row=1, column=1)
-            frame.grid_rowconfigure(0, weight=1)
-            frame.grid_rowconfigure(1, weight=1)
-            frame.grid_rowconfigure(2, weight=1)
-            frame.grid_columnconfigure(0, weight=1)
-            frame.grid_columnconfigure(1, weight=1)
-            frame.grid_columnconfigure(2, weight=1)
-
-            label = Label(container, bg="blue")
-            label.grid(row=0, column=0)
-
-            label = Label(container, bg="green")
-            label.grid(row=2, column=2)
+            frame.grid(row=1, column=0, sticky="nsew")
 
             self.frames[frame_class] = frame
 
-        self.show_frame(VideoSelectionScreen)
+        self.adjust_frame_dimensions()
+
+        self.center(self.winfo_width(), self.winfo_height())
+
+        self.show_frame(WelcomeScreen)
 
     def show_frame(self, frame_class):
         self.frames[frame_class].tkraise()
@@ -50,5 +45,27 @@ class Pipeline1GuiController(Tk):
     def set_video_filenames(self, left_video_fn, right_video_fn):
         self.left_video_filename = left_video_fn
         self.right_video_filename = right_video_fn
-        print(self.left_video_filename)
-        print(self.right_video_filename)
+        self.frames[VideoFramePlayer].set_video_filenames(left_video_fn, right_video_fn)
+
+        # TODO Link frame matching offset results
+        self.frames[VideoFramePlayer].start_video()
+
+    def adjust_frame_dimensions(self):
+        self.update()
+        window_height = self.winfo_height()
+        window_width = self.winfo_width()
+        walle_header_height = self.winfo_height()
+
+        frame_height = window_height-walle_header_height
+
+        for key in self.frames:
+            self.frames[key].set_dimensions(width=window_width, height=frame_height)
+
+    def center(self, width, height):
+        self.update_idletasks()
+        w = self.winfo_screenwidth()
+        h = self.winfo_screenheight()
+        size = (width, height)
+        x = w / 2 - size[0] / 2
+        y = h / 2 - size[1] / 2
+        self.geometry("%dx%d+%d+%d" % (size + (x, y)))

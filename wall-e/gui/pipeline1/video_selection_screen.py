@@ -3,19 +3,23 @@ from gui.gui_base_frame import GuiBaseFrame
 from tkinter import *
 from tkinter import filedialog
 from definitions import *
-from PIL import ImageTk, Image
+from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT
+from gui.widgets.header1_label import Header1Label
+from gui.widgets.p_label import PLabel
+from utilities.image_converter import cv2_image_to_tkinter_with_resize
+from utilities.video_frame_player_gui import VideoFramePlayer
 
-THUMBNAIL_HEIGHT = 480
-THUMBNAIL_WIDTH = 640
-
-INSTRUCTION_ROW = 0
-THUMBNAIL_ROW = 1
-FILENAME_PREVIEW_ROW = 2
-CHOOSE_VIDEO_BUTTON_ROW = 3
-NEXT_BUTTON_ROW = 4
+SCREEN_TITLE_ROW = 0
+INSTRUCTION_ROW = SCREEN_TITLE_ROW + 1
+THUMBNAIL_ROW = INSTRUCTION_ROW + 1
+FILENAME_PREVIEW_ROW = THUMBNAIL_ROW + 1
+CHOOSE_VIDEO_BUTTON_ROW = FILENAME_PREVIEW_ROW + 1
+NEXT_BUTTON_ROW = CHOOSE_VIDEO_BUTTON_ROW + 1
 
 LEFT_VIDEO_THUMBNAIL_COL = 0
-RIGHT_VIDEO_THUMBNAIL_COL = 2
+RIGHT_VIDEO_THUMBNAIL_COL = 1
+
+CENTER_SCREEN_COLSPAN = 2
 
 
 class VideoSelectionScreen(GuiBaseFrame):
@@ -23,7 +27,8 @@ class VideoSelectionScreen(GuiBaseFrame):
         GuiBaseFrame.__init__(self, parent, controller)
 
     def setup_widgets(self):
-        self.configure(bg="white")
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
 
         self.left_video_selected = False
         self.right_video_selected = False
@@ -31,34 +36,40 @@ class VideoSelectionScreen(GuiBaseFrame):
         self.left_video_filename = None
         self.right_video_filename = None
 
-        self.instruction_label = Label(self, text="Please choose your left and right video files.")
-        self.left_video_filename_preview_label = Label(self, text="No Video Selected")
+        self.screen_title_label = Header1Label(self, text="Video Selection")
+        self.instruction_label = PLabel(self, text="Please choose your left and right video files.")
+        self.left_video_filename_preview_label = PLabel(self, text="No Video Selected")
         self.left_video_button = Button(self, text="Choose Left Video",
                                         command=lambda: self.set_left_video_thumbnail())
-        self.right_video_filename_preview_label = Label(self, text="No Video Selected")
+        self.right_video_filename_preview_label = PLabel(self, text="No Video Selected")
         self.right_video_button = Button(self, text="Choose Right Video",
                                          command=lambda: self.set_right_video_thumbnail())
         self.next_button = Button(self, text="Next", state=DISABLED,
-                                  command=lambda: self.controller.set_video_filenames(self.left_video_filename,
-                                                                                      self.right_video_filename))
+                                  command=lambda: self.next_screen())
 
         self.add_img_previews()
 
-        self.instruction_label.grid(row=INSTRUCTION_ROW, column=0, columnspan=3)
-        self.left_video_thumbnail.grid(row=THUMBNAIL_ROW, column=0)
-        self.left_video_filename_preview_label.grid(row=FILENAME_PREVIEW_ROW, column=0)
-        self.left_video_button.grid(row=CHOOSE_VIDEO_BUTTON_ROW, column=0)
-        self.right_video_thumbnail.grid(row=THUMBNAIL_ROW, column=2)
-        self.right_video_filename_preview_label.grid(row=FILENAME_PREVIEW_ROW, column=2)
-        self.right_video_button.grid(row=CHOOSE_VIDEO_BUTTON_ROW, column=2)
-        self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=3)
+        self.screen_title_label.grid(row=SCREEN_TITLE_ROW, column = 0, columnspan=CENTER_SCREEN_COLSPAN)
+        self.instruction_label.grid(row=INSTRUCTION_ROW, column=LEFT_VIDEO_THUMBNAIL_COL,
+                                    columnspan=CENTER_SCREEN_COLSPAN)
+
+        self.left_video_thumbnail.grid(row=THUMBNAIL_ROW, column=LEFT_VIDEO_THUMBNAIL_COL)
+        self.left_video_filename_preview_label.grid(row=FILENAME_PREVIEW_ROW, column=LEFT_VIDEO_THUMBNAIL_COL)
+        self.left_video_button.grid(row=CHOOSE_VIDEO_BUTTON_ROW, column=LEFT_VIDEO_THUMBNAIL_COL)
+
+        self.right_video_thumbnail.grid(row=THUMBNAIL_ROW, column=RIGHT_VIDEO_THUMBNAIL_COL)
+        self.right_video_filename_preview_label.grid(row=FILENAME_PREVIEW_ROW, column=RIGHT_VIDEO_THUMBNAIL_COL)
+        self.right_video_button.grid(row=CHOOSE_VIDEO_BUTTON_ROW, column=RIGHT_VIDEO_THUMBNAIL_COL)
+
+        self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=CENTER_SCREEN_COLSPAN)
+
+    def next_screen(self):
+        self.controller.set_video_filenames(self.left_video_filename, self.right_video_filename)
+        self.controller.show_frame(VideoFramePlayer)
 
     def add_img_previews(self):
         img_not_available = cv2.imread(get_asset_filename(IMG_NOT_AVAILABLE_FILENAME))
-        img_not_available = cv2.cvtColor(img_not_available, cv2.COLOR_BGR2RGB)
-        img_not_available = Image.fromarray(img_not_available)
-        img_not_available = img_not_available.resize((THUMBNAIL_WIDTH, THUMBNAIL_WIDTH), Image.ANTIALIAS)
-        img_not_available = ImageTk.PhotoImage(img_not_available)
+        img_not_available = cv2_image_to_tkinter_with_resize(img_not_available, VIDEO_WIDTH, VIDEO_HEIGHT)
 
         self.left_video_thumbnail = Label(self, image=img_not_available)
         self.left_video_thumbnail.image = img_not_available
@@ -74,9 +85,8 @@ class VideoSelectionScreen(GuiBaseFrame):
             self.left_video_filename_preview_label.config(text=os.path.basename(os.path.normpath(filename)))
             self.set_next_button_state()
 
-            self.left_video_thumbnail = Label(self, image=img)
+            self.left_video_thumbnail.configure(image=img)
             self.left_video_thumbnail.image = img
-            self.left_video_thumbnail.grid(row=1, column=0)
 
     def set_right_video_thumbnail(self):
         video_selected, img, filename = get_video_thumbnail()
@@ -87,9 +97,8 @@ class VideoSelectionScreen(GuiBaseFrame):
             self.right_video_filename_preview_label.config(text=os.path.basename(os.path.normpath(filename)))
             self.set_next_button_state()
 
-            self.right_video_thumbnail = Label(self, image=img)
+            self.right_video_thumbnail.configure(image=img)
             self.right_video_thumbnail.image = img
-            self.right_video_thumbnail.grid(row=1, column=2)
 
     def set_next_button_state(self):
         if self.left_video_selected and self.right_video_selected:
@@ -101,14 +110,10 @@ def get_video_thumbnail():
 
     if len(video_filename) > 0:
         vc_object = cv2.VideoCapture(video_filename)
-        vc_object.set(cv2.CAP_PROP_POS_FRAMES, 0)
         _, img = vc_object.read()
         vc_object.release()
 
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = Image.fromarray(img)
-        img = img.resize((THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT), Image.ANTIALIAS)
-        img = ImageTk.PhotoImage(img)
+        img = cv2_image_to_tkinter_with_resize(img, VIDEO_WIDTH, VIDEO_HEIGHT)
         return True, img, video_filename
     return False, None, None
 
