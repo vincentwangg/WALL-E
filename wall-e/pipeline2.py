@@ -5,7 +5,7 @@ from utilities.video_frame_loader import VideoFrameLoader
 from ostracod_detection.matching.match import get_matching_pairs
 from mapping_3d.mapper_3d import depth_map
 from mapping_3d.pulse_data import FramePulseData
-from mapping_3d.pulse_data import write_pulse_data_to_file
+from mapping_3d.pulse_data import write_frame_pulse_data_to_file
 from mapping_3d.camera import Camera
 from ostracod_detection.locating import locator
 import time
@@ -59,7 +59,7 @@ def main():
         frame_num += 1
 
     write_start = time.time()
-    write_pulse_data_to_file(frame_pulse_data=fpd)
+    write_frame_pulse_data_to_file(frame_pulse_data=fpd)
     write_time = time.time() - write_start
 
     print "depth map time: ", depth_map_time, "seconds"
