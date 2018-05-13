@@ -77,3 +77,8 @@ class Pipeline1GuiController(Tk):
         x = w / 2 - size[0] / 2
         y = h / 2 - size[1] / 2
         self.geometry("%dx%d+%d+%d" % (size + (x, y)))
+
+class VideoOffsets:
+    def __init__(self, left_offset=0, right_offset=0):
+        self.left_offset = left_offset
+        self.right_offset = right_offset
