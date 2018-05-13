@@ -27,6 +27,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.wait_text = PLabel(self.content_wrapper, text="\nThis might take a few minutes...")
         self.left_frames_count = PLabel(self.content_wrapper, text=LEFT_FRAMES_COUNT_PREFIX + "0")
         self.right_frames_count = PLabel(self.content_wrapper, text=RIGHT_FRAMES_COUNT_PREFIX + "0")
+        self.empty_space = PLabel(self.content_wrapper, text=" ")
         self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
                                   # TODO change to frame matching screen
                                   command=lambda: self.controller.show_frame(VideoFramePlayer))
@@ -36,6 +37,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.wait_text.pack()
         self.left_frames_count.pack()
         self.right_frames_count.pack()
+        self.empty_space.pack()
         self.next_button.pack()
         self.content_wrapper.place(relx=0.5, rely=0.4, anchor=CENTER)
 

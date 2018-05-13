@@ -43,7 +43,7 @@ class VideoFrameLoader:
         else:
             return False, None
 
-    def get_right_frame_tkinter_resize(self, frame_num, width, height):
+    def get_right_frame_tkinter_with_resize(self, frame_num, width, height):
         self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
         success, img = self.vc_right.read()
         if success:

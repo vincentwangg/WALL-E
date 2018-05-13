@@ -14,9 +14,11 @@ class Pipeline1GuiController(Tk):
 
         self.video_frame_loader = None
         self.top_frame = None
+        self.video_offsets = VideoOffsets()
 
         self.title("Video Processing Part 1 (of 2)")
         self.resizable(0, 0)
+        self.geometry("1000x710")
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -24,8 +26,8 @@ class Pipeline1GuiController(Tk):
         container = Frame(self)
         container.pack(fill="both", expand=True)
 
-        walle_header = WalleHeader(parent=container, controller=self)
-        walle_header.grid(row=0, column=0, sticky="w")
+        self.walle_header = WalleHeader(parent=container, controller=self)
+        self.walle_header.grid(row=0, column=0, sticky="w")
 
         self.frames = {}
         for frame_class in (WelcomeScreen, VideoSelectionScreen, VideoScanScreen, VideoFramePlayer):
@@ -62,9 +64,9 @@ class Pipeline1GuiController(Tk):
         self.update()
         window_height = self.winfo_height()
         window_width = self.winfo_width()
-        walle_header_height = self.winfo_height()
+        walle_header_height = self.walle_header.winfo_height()
 
-        frame_height = window_height-walle_header_height
+        frame_height = window_height - walle_header_height
 
         for key in self.frames:
             self.frames[key].set_dimensions(width=window_width, height=frame_height)
@@ -77,6 +79,7 @@ class Pipeline1GuiController(Tk):
         x = w / 2 - size[0] / 2
         y = h / 2 - size[1] / 2
         self.geometry("%dx%d+%d+%d" % (size + (x, y)))
+
 
 class VideoOffsets:
     def __init__(self, left_offset=0, right_offset=0):
