@@ -1,22 +1,23 @@
 from tkinter import *
-from gui.pipeline1.welcome_screen import WelcomeScreen
+
+from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
+from gui.pipeline1.video_scan_screen import VideoScanScreen
 from gui.pipeline1.video_selection_screen import VideoSelectionScreen
+from gui.pipeline1.welcome_screen import WelcomeScreen
 from gui.walle_header import WalleHeader
-from utilities.video_frame_player_gui import VideoFramePlayer
+from utilities.video_frame_loader import VideoFrameLoader
 
 
 class Pipeline1GuiController(Tk):
     def __init__(self):
         Tk.__init__(self)
 
-        self.left_video_filename = None
-        self.right_video_filename = None
-
-        self.resizable(0, 0)
+        self.video_frame_loader = None
+        self.top_frame = None
 
         self.title("Video Processing Part 1 (of 2)")
+        self.resizable(0, 0)
 
-        # self.geometry("500x500")
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
@@ -27,30 +28,37 @@ class Pipeline1GuiController(Tk):
         walle_header.grid(row=0, column=0, sticky="w")
 
         self.frames = {}
-        for frame_class in (WelcomeScreen, VideoSelectionScreen, VideoFramePlayer):
-            frame = frame_class(parent=container, controller=self)
+        for frame_class in (WelcomeScreen, VideoSelectionScreen, VideoScanScreen, VideoFramePlayer):
+            frame = frame_class(parent=container, controller=self, borderwidth=2, relief="groove")
             frame.grid(row=1, column=0, sticky="nsew")
 
             self.frames[frame_class] = frame
 
-        self.adjust_frame_dimensions()
+        self.adjust_frame_content_dimensions()
+        self.center_in_computer_screen(self.winfo_width(), self.winfo_height())
 
-        self.center(self.winfo_width(), self.winfo_height())
-
-        self.show_frame(WelcomeScreen)
+        self.set_and_start_top_frame(VideoSelectionScreen)
 
     def show_frame(self, frame_class):
+        self.stop_top_frame()
+        self.set_and_start_top_frame(frame_class)
+
+    def set_and_start_top_frame(self, frame_class):
+        self.top_frame = frame_class
         self.frames[frame_class].tkraise()
+        self.frames[frame_class].start()
+
+    def stop_top_frame(self):
+        self.frames[self.top_frame].stop()
+
+    def update_frame(self, data):
+        self.frames[self.top_frame].update_frame(data)
 
     def set_video_filenames(self, left_video_fn, right_video_fn):
-        self.left_video_filename = left_video_fn
-        self.right_video_filename = right_video_fn
-        self.frames[VideoFramePlayer].set_video_filenames(left_video_fn, right_video_fn)
+        self.video_frame_loader = VideoFrameLoader(left_video_fn, right_video_fn)
 
-        # TODO Link frame matching offset results
-        self.frames[VideoFramePlayer].start_video()
-
-    def adjust_frame_dimensions(self):
+    # Informs all the frames of the actual width and height they should be using
+    def adjust_frame_content_dimensions(self):
         self.update()
         window_height = self.winfo_height()
         window_width = self.winfo_width()
@@ -61,7 +69,7 @@ class Pipeline1GuiController(Tk):
         for key in self.frames:
             self.frames[key].set_dimensions(width=window_width, height=frame_height)
 
-    def center(self, width, height):
+    def center_in_computer_screen(self, width, height):
         self.update_idletasks()
         w = self.winfo_screenwidth()
         h = self.winfo_screenheight()

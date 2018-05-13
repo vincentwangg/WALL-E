@@ -6,8 +6,8 @@ from gui.widgets.p_label import PLabel
 
 
 class WelcomeScreen(GuiBaseFrame):
-    def __init__(self, parent, controller):
-        GuiBaseFrame.__init__(self, parent, controller)
+    def __init__(self, parent, controller, **kw):
+        GuiBaseFrame.__init__(self, parent, controller, **kw)
 
     def setup_widgets(self):
         self.text_container = Frame(self)
@@ -28,3 +28,9 @@ class WelcomeScreen(GuiBaseFrame):
         self.good_luck_label.pack()
         self.next_button.pack()
         self.text_container.place(relx=0.5, rely=0.4, anchor=CENTER)
+
+    def start(self):
+        pass
+
+    def stop(self):
+        pass

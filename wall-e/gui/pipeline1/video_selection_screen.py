@@ -1,13 +1,13 @@
 import cv2
-from gui.gui_base_frame import GuiBaseFrame
 from tkinter import *
 from tkinter import filedialog
 from definitions import *
+from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT
+from gui.pipeline1.video_scan_screen import VideoScanScreen
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 from utilities.image_converter import cv2_image_to_tkinter_with_resize
-from utilities.video_frame_player_gui import VideoFramePlayer
 
 SCREEN_TITLE_ROW = 0
 INSTRUCTION_ROW = SCREEN_TITLE_ROW + 1
@@ -23,8 +23,8 @@ CENTER_SCREEN_COLSPAN = 2
 
 
 class VideoSelectionScreen(GuiBaseFrame):
-    def __init__(self, parent, controller):
-        GuiBaseFrame.__init__(self, parent, controller)
+    def __init__(self, parent, controller, **kw):
+        GuiBaseFrame.__init__(self, parent, controller, **kw)
 
     def setup_widgets(self):
         self.grid_columnconfigure(0, weight=1)
@@ -65,7 +65,7 @@ class VideoSelectionScreen(GuiBaseFrame):
 
     def next_screen(self):
         self.controller.set_video_filenames(self.left_video_filename, self.right_video_filename)
-        self.controller.show_frame(VideoFramePlayer)
+        self.controller.show_frame(VideoScanScreen)
 
     def add_img_previews(self):
         img_not_available = cv2.imread(get_asset_filename(IMG_NOT_AVAILABLE_FILENAME))
@@ -103,6 +103,12 @@ class VideoSelectionScreen(GuiBaseFrame):
     def set_next_button_state(self):
         if self.left_video_selected and self.right_video_selected:
             self.next_button.configure(state=NORMAL)
+
+    def start(self):
+        pass
+
+    def stop(self):
+        pass
 
 
 def get_video_thumbnail():
