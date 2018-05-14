@@ -7,7 +7,7 @@ from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT
 from gui.pipeline1.video_scan_screen import VideoScanScreen
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
-from utilities.image_converter import cv2_image_to_tkinter_with_resize
+from utilities.image_converter import cv2_bgr_image_to_tkinter_with_resize
 
 SCREEN_TITLE_ROW = 0
 INSTRUCTION_ROW = SCREEN_TITLE_ROW + 1
@@ -69,7 +69,7 @@ class VideoSelectionScreen(GuiBaseFrame):
 
     def add_img_previews(self):
         img_not_available = cv2.imread(get_asset_filename(IMG_NOT_AVAILABLE_FILENAME))
-        img_not_available = cv2_image_to_tkinter_with_resize(img_not_available, VIDEO_WIDTH, VIDEO_HEIGHT)
+        img_not_available = cv2_bgr_image_to_tkinter_with_resize(img_not_available, VIDEO_WIDTH, VIDEO_HEIGHT)
 
         self.left_video_thumbnail = Label(self, image=img_not_available)
         self.left_video_thumbnail.image = img_not_available
@@ -119,7 +119,7 @@ def get_video_thumbnail():
         _, img = vc_object.read()
         vc_object.release()
 
-        img = cv2_image_to_tkinter_with_resize(img, VIDEO_WIDTH, VIDEO_HEIGHT)
+        img = cv2_bgr_image_to_tkinter_with_resize(img, VIDEO_WIDTH, VIDEO_HEIGHT)
         return True, img, video_filename
     return False, None, None
 

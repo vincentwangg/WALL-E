@@ -1,11 +1,12 @@
 from tkinter import *
-
-from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
-from gui.pipeline1.video_scan_screen import VideoScanScreen
-from gui.pipeline1.video_selection_screen import VideoSelectionScreen
-from gui.pipeline1.welcome_screen import WelcomeScreen
-from gui.walle_header import WalleHeader
+from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from utilities.video_frame_loader import VideoFrameLoader
+from gui.walle_header import WalleHeader
+from gui.pipeline1.welcome_screen import WelcomeScreen
+from gui.pipeline1.video_selection_screen import VideoSelectionScreen
+from gui.pipeline1.video_scan_screen import VideoScanScreen
+from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
+from gui.pipeline1.sr_scan_screen import SrScanScreen
 
 
 class Pipeline1GuiController(Tk):
@@ -18,7 +19,7 @@ class Pipeline1GuiController(Tk):
 
         self.title("Video Processing Part 1 (of 2)")
         self.resizable(0, 0)
-        self.geometry("1000x710")
+        self.geometry(str(WINDOW_WIDTH) + "x" + str(WINDOW_HEIGHT))
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -30,7 +31,7 @@ class Pipeline1GuiController(Tk):
         self.walle_header.grid(row=0, column=0, sticky="w")
 
         self.frames = {}
-        for frame_class in (WelcomeScreen, VideoSelectionScreen, VideoScanScreen, VideoFramePlayer):
+        for frame_class in (WelcomeScreen, VideoSelectionScreen, VideoScanScreen, VideoFramePlayer, SrScanScreen):
             frame = frame_class(parent=container, controller=self, borderwidth=2, relief="groove")
             frame.grid(row=1, column=0, sticky="nsew")
 

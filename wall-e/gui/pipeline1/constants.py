@@ -1,2 +1,24 @@
-VIDEO_HEIGHT = int(480 * 3 / 4)
+WINDOW_WIDTH = 1000
+WINDOW_HEIGHT = 710
+
 VIDEO_WIDTH = int(640 * 3 / 4)
+VIDEO_HEIGHT = int(480 * 3 / 4)
+
+ELAPSED_TIME_PREFIX = "Elapsed time: "
+
+# Video scan screen
+COUNTING_LEFT_FRAMES_MESSAGE = "left"
+COUNTING_RIGHT_FRAMES_MESSAGE = "right"
+
+LEFT_FRAMES_COUNT_PREFIX = "Frames read for left video: "
+RIGHT_FRAMES_COUNT_PREFIX = "Frames read for right video: "
+
+# SR Scan Screen
+PROGRESS_DICT_KEYS = ["valid_frames", "frames_read", "total_frames"]
+PROGRESS_DICT_VALID_FRAMES_FOUND = PROGRESS_DICT_KEYS[0]
+PROGRESS_DICT_FRAMES_READ = PROGRESS_DICT_KEYS[1]
+PROGRESS_DICT_TOTAL_FRAMES = PROGRESS_DICT_KEYS[2]
+
+VALID_FRAMES_FOUND_PREFIX = "Valid frames found: "
+FRAMES_READ_PREFIX = "Number of frames scanned: "
+ESTIMATED_TIME_LEFT_PREFIX = "Estimated time left: "

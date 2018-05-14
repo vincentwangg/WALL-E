@@ -1,9 +1,13 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
 
 import argparse
+import json
 from config.keycode_setup import *
+from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT, PROGRESS_DICT_KEYS
+from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
 from utilities.file_checker import check_if_file_exists
+from utilities.image_converter import cv2_gray_image_to_tkinter_with_resize
 from utilities.video_frame_loader import VideoFrameLoader
 from utilities.yaml_utility import save_to_yml
 
@@ -21,6 +25,8 @@ SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_GENERATED_FILENAME + "\"
                                                                              "map!\nFor future use, this file is " \
                                                                              "recommended to be copied somewhere and " \
                                                                              "renamed. "
+
+sr_map = {}
 
 
 def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
@@ -54,7 +60,7 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
 
         while True:
             valid_sr_frame, img_left_sr, img_right_sr = \
-                generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+                generate_sr_map(img_left_undistorted, img_right_undistorted)
             show_sr_images(valid_sr_frame, img_left_sr, img_right_sr)
 
             print("\nOnly 1 frame selected for SR map generation.")
@@ -84,7 +90,7 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
         img_left_undistorted = convert_to_gray(undistort(img_left))
         img_right_undistorted = convert_to_gray(undistort(img_right))
 
-        generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+        generate_sr_map(img_left_undistorted, img_right_undistorted)
 
 
 def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original_frame, show_undistorted_frame,
@@ -103,8 +109,7 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
         img_right_undistorted = convert_to_gray(undistort(img_right))
 
         while True:
-            valid_frame_found, left_img_sr, right_img_sr = \
-                generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+            valid_frame_found, left_img_sr, right_img_sr = generate_sr_map(img_left_undistorted, img_right_undistorted)
             if valid_frame_found:
                 if show_original_frame:
                     cv2.imshow("Original Left", img_left)
@@ -146,6 +151,51 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
         frame_num = frame_num + 1
 
 
+# For GUI class VideoScanScreen in sr_scan_screen.py
+def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_frame_loader, controller):
+    sr_results = []
+
+    video_frame_loader.set_left_current_frame_num(left_offset)
+    video_frame_loader.set_right_current_frame_num(right_offset)
+
+    num_frames_to_scan = min([video_frame_loader.frame_count_left - left_offset,
+                              video_frame_loader.frame_count_right - right_offset])
+
+    num_frames_scanned = 0
+
+    create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
+
+    while True:
+        l_success, left_img = video_frame_loader.get_next_left_frame()
+        r_success, right_img = video_frame_loader.get_next_right_frame()
+
+        if not l_success or not r_success:
+            break
+
+        left_frame_num = video_frame_loader.get_left_current_frame_num()
+        right_frame_num = video_frame_loader.get_right_current_frame_num()
+
+        if is_valid_sr_frame(left_img, right_img):
+            sr_results.append([left_frame_num, right_frame_num])
+
+        num_frames_scanned += 1
+
+        if num_frames_scanned % 10 == 0:
+            create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
+
+    create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
+    return sr_results
+
+
+def create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, valid_frames):
+    json_string = create_json_for_progress(valid_frames, num_frames_scanned, num_frames_to_scan)
+    controller.update_frame(json_string)
+
+
+def create_json_for_progress(valid_frames_found, num_frames_scanned, total_frames):
+    return json.dumps(dict(zip(PROGRESS_DICT_KEYS, [valid_frames_found, num_frames_scanned, total_frames])))
+
+
 def display_no_frames_left_message(frames):
     print("\nNo frames selected for SR map generation.")
     print("If this was a mistake, add --first_frame " + str(frames[0]) + " to the script arguments and start from "
@@ -170,7 +220,7 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
 
         while True:
             valid_sr_frame, img_left_sr, img_right_sr = \
-                generate_and_save_sr_maps(img_left_undistorted, img_right_undistorted)
+                generate_sr_map(img_left_undistorted, img_right_undistorted)
             show_sr_images(valid_sr_frame, img_left_sr, img_right_sr)
 
             print("\nFrame selection process has finished. Please review the windows and press:")
@@ -211,15 +261,14 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
                 sys.exit(0)
 
 
-def generate_and_save_sr_maps(img_left, img_right):
-    # For the 3rd argument, removing those parameters seems to have no effect
-    img_left_corners_success, img_left_corner_coords = cv2.findChessboardCorners(img_left, CHECKERBOARD,
-                                                                                 cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
-    img_right_corners_success, img_right_corner_coords = cv2.findChessboardCorners(img_right, CHECKERBOARD,
-                                                                                   cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
+def is_valid_sr_frame(left_img, right_img):
+    img_left_corners_success, img_right_corners_success, _, _ = find_chessboard_corners(left_img, right_img)
+    return img_left_corners_success and img_right_corners_success
 
-    # print "Detected corners in left image:\t\t" + str(img_right_corners_success)
-    # print "Detected corners in right image:\t" + str(img_left_corners_success)
+
+def generate_sr_map(left_img, right_img):
+    img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords =\
+        find_chessboard_corners(left_img, right_img)
 
     if not (img_left_corners_success and img_right_corners_success):
         return False, None, None
@@ -243,27 +292,27 @@ def generate_and_save_sr_maps(img_left, img_right):
         objpoints.append(objp)
 
         # cornerSubPix refines the corner coordinates. (tuning these params does nothing)
-        img_points_left = [cv2.cornerSubPix(img_left, img_left_corner_coords, (11, 11), (-1, -1), criteria)]
-        img_points_right = [cv2.cornerSubPix(img_right, img_right_corner_coords, (11, 11), (-1, -1), criteria)]
+        img_points_left = [cv2.cornerSubPix(left_img, img_left_corner_coords, (11, 11), (-1, -1), criteria)]
+        img_points_right = [cv2.cornerSubPix(right_img, img_right_corner_coords, (11, 11), (-1, -1), criteria)]
 
-        cv2.drawChessboardCorners(img_left, CHECKERBOARD, img_left_corner_coords, img_left_corners_success)
-        cv2.drawChessboardCorners(img_right, CHECKERBOARD, img_right_corner_coords, img_right_corners_success)
+        cv2.drawChessboardCorners(left_img, CHECKERBOARD, img_left_corner_coords, img_left_corners_success)
+        cv2.drawChessboardCorners(right_img, CHECKERBOARD, img_right_corner_coords, img_right_corners_success)
 
     reprojection_error_left, cam_mtx_l, dist_l, rotation_vec_left, translation_vec_left = cv2.calibrateCamera(
         objpoints,
         img_points_left,
-        img_left.shape[::-1],
+        left_img.shape[::-1],
         None, None)
     reprojection_error_right, cam_mtx_r, dist_r, rotation_vec_right, translation_vec_right = cv2.calibrateCamera(
         objpoints,
         img_points_right,
-        img_right.shape[::-1],
+        right_img.shape[::-1],
         None, None)
 
     # getting optimal camera matrix and setting alpha to 0
     a = 0
-    cam_mtx_l, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_l, dist_l, img_left.shape[::-1], alpha=a)
-    cam_mtx_r, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_r, dist_r, img_right.shape[::-1], alpha=a)
+    cam_mtx_l, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_l, dist_l, left_img.shape[::-1], alpha=a)
+    cam_mtx_r, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_r, dist_r, right_img.shape[::-1], alpha=a)
 
     # https://docs.opencv.org/3.1.0/d9/d0c/group__calib3d.html#ga246253dcc6de2e0376c599e7d692303a
     img_left_corners_success, cam_mtx_l, dist_l, cam_mtx_r, dist_r, R, T, E, F = cv2.stereoCalibrate(
@@ -271,7 +320,7 @@ def generate_and_save_sr_maps(img_left, img_right):
         img_points_left,
         img_points_right,
         cam_mtx_l, dist_l, cam_mtx_r, dist_r,
-        img_right.shape[::-1],
+        right_img.shape[::-1],
         flags=cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
     # cv2.CALIB_USE_INTRINSIC_GUESS
 
@@ -280,44 +329,55 @@ def generate_and_save_sr_maps(img_left, img_right):
                                                                       dist_l,
                                                                       cam_mtx_r,
                                                                       dist_r,
-                                                                      img_right.shape[::-1],
+                                                                      right_img.shape[::-1],
                                                                       R, T, alpha=a)
 
     map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
                                         dist_l,
                                         R1, P1,
-                                        img_left.shape[::-1],
+                                        left_img.shape[::-1],
                                         cv2.CV_32F)
     map_r = cv2.initUndistortRectifyMap(cam_mtx_r,
                                         dist_r,
                                         R2, P2,
-                                        img_right.shape[::-1],
+                                        right_img.shape[::-1],
                                         cv2.CV_32F)
 
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "cam_mtx_l", cam_mtx_l, w=1)
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "dist_l", dist_l)
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "R1", R1)
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "P1", P1)
+    sr_map.clear()
 
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "cam_mtx_r", cam_mtx_r)
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "dist_r", dist_r)
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "R2", R2)
-    save_to_yml(SR_MAP_GENERATED_FILENAME, "P2", P2)
+    sr_map[CAM_MTX_L_LABEL] = cam_mtx_l
+    sr_map[DIST_L_LABEL] = dist_l
+    sr_map[R1_LABEL] = R1
+    sr_map[P1_LABEL] = P1
 
-    new_img_left = cv2.remap(img_left,
-                         map_l[0],
-                         map_l[1],
-                         cv2.INTER_LANCZOS4)
-    new_img_right = cv2.remap(img_right,
-                          map_r[0],
-                          map_r[1],
-                          cv2.INTER_LANCZOS4)
+    sr_map[CAM_MTX_R_LABEL] = cam_mtx_r
+    sr_map[DIST_R_LABEL] = dist_r
+    sr_map[R2_LABEL] = R2
+    sr_map[P2_LABEL] = P2
 
-    for line in range(0, int(img_left.shape[0] / 20)):
-        img_left[line * 20, :] = 255
-        img_right[line * 20, :] = 255
+    new_img_left = cv2.remap(left_img,
+                             map_l[0],
+                             map_l[1],
+                             cv2.INTER_LANCZOS4)
+    new_img_right = cv2.remap(right_img,
+                              map_r[0],
+                              map_r[1],
+                              cv2.INTER_LANCZOS4)
+
+    for line in range(0, int(left_img.shape[0] / 20)):
+        left_img[line * 20, :] = 255
+        right_img[line * 20, :] = 255
 
     return True, new_img_left, new_img_right
+
+
+def find_chessboard_corners(left_img, right_img):
+    # For the 3rd argument, removing those parameters seems to have no effect
+    img_left_corners_success, img_left_corner_coords = cv2.findChessboardCorners(left_img, CHECKERBOARD,
+                                                                                 cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
+    img_right_corners_success, img_right_corner_coords = cv2.findChessboardCorners(right_img, CHECKERBOARD,
+                                                                                   cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
+    return img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords
 
 
 def show_sr_images(valid_sr_frame, img_left, img_right):
@@ -335,6 +395,13 @@ def show_sr_images(valid_sr_frame, img_left, img_right):
 def undistort(img):
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     return undistorted_img
+
+
+def write_sr_map_to_file():
+    write = 1
+    for key in sr_map.keys():
+        save_to_yml(SR_MAP_GENERATED_FILENAME, key, sr_map[key], w=write)
+        write = 0
 
 
 class FrameTracker:

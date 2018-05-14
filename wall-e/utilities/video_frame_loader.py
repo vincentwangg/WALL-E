@@ -1,7 +1,7 @@
 import cv2
-from gui.pipeline1.video_scan_screen import COUNTING_LEFT_FRAMES_MESSAGE, COUNTING_RIGHT_FRAMES_MESSAGE, \
-    LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX
-from utilities.image_converter import cv2_image_to_tkinter, cv2_image_to_tkinter_with_resize
+from gui.pipeline1.constants import COUNTING_LEFT_FRAMES_MESSAGE, LEFT_FRAMES_COUNT_PREFIX, \
+    COUNTING_RIGHT_FRAMES_MESSAGE, RIGHT_FRAMES_COUNT_PREFIX
+from utilities.image_converter import cv2_image_to_tkinter, cv2_bgr_image_to_tkinter_with_resize
 
 
 class VideoFrameLoader:
@@ -15,6 +15,12 @@ class VideoFrameLoader:
         self.vc_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
         return self.vc_left.read()
 
+    def get_left_current_frame_num(self):
+        return self.vc_left.get(cv2.CAP_PROP_POS_FRAMES)
+
+    def set_left_current_frame_num(self, frame_num):
+        self.vc_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+
     def get_left_frame_tkinter(self, frame_num):
         self.vc_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
         success, img = self.vc_left.read()
@@ -27,27 +33,7 @@ class VideoFrameLoader:
         self.vc_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
         success, img = self.vc_left.read()
         if success:
-            return True, cv2_image_to_tkinter_with_resize(img, width, height)
-        else:
-            return False, None
-
-    def get_right_frame(self, frame_num):
-        self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
-        return self.vc_right.read()
-
-    def get_right_frame_tkinter(self, frame_num):
-        self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
-        success, img = self.vc_right.read()
-        if success:
-            return True, cv2_image_to_tkinter(img)
-        else:
-            return False, None
-
-    def get_right_frame_tkinter_with_resize(self, frame_num, width, height):
-        self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
-        success, img = self.vc_right.read()
-        if success:
-            return True, cv2_image_to_tkinter_with_resize(img, width, height)
+            return True, cv2_bgr_image_to_tkinter_with_resize(img, width, height)
         else:
             return False, None
 
@@ -64,7 +50,33 @@ class VideoFrameLoader:
     def get_next_left_frame_tkinter_with_resize(self, width, height):
         success, img = self.vc_left.read()
         if success:
-            return True, cv2_image_to_tkinter_with_resize(img, width, height)
+            return True, cv2_bgr_image_to_tkinter_with_resize(img, width, height)
+        else:
+            return False, None
+
+    def get_right_frame(self, frame_num):
+        self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+        return self.vc_right.read()
+
+    def get_right_current_frame_num(self):
+        return self.vc_right.get(cv2.CAP_PROP_POS_FRAMES)
+
+    def set_right_current_frame_num(self, frame_num):
+        self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+
+    def get_right_frame_tkinter(self, frame_num):
+        self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+        success, img = self.vc_right.read()
+        if success:
+            return True, cv2_image_to_tkinter(img)
+        else:
+            return False, None
+
+    def get_right_frame_tkinter_with_resize(self, frame_num, width, height):
+        self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+        success, img = self.vc_right.read()
+        if success:
+            return True, cv2_bgr_image_to_tkinter_with_resize(img, width, height)
         else:
             return False, None
 
@@ -81,7 +93,7 @@ class VideoFrameLoader:
     def get_next_right_frame_tkinter_with_resize(self, width, height):
         success, img = self.vc_right.read()
         if success:
-            return True, cv2_image_to_tkinter_with_resize(img, width, height)
+            return True, cv2_bgr_image_to_tkinter_with_resize(img, width, height)
         else:
             return False, None
 

@@ -3,6 +3,7 @@ from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import VIDEO_HEIGHT, VIDEO_WIDTH
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
+from gui.pipeline1.sr_scan_screen import SrScanScreen
 
 TITLE_ROW = 0
 SUBTITLE_ROW = TITLE_ROW + 1
@@ -130,7 +131,8 @@ class VideoFramePlayer(GuiBaseFrame):
                              self.left_video_frame_inc_30_button, self.right_video_frame_inc_30_button,
                              self.right_video_frame_inc_150_button, self.right_video_frame_inc_300_button])
 
-        self.next_button = Button(self.content_wrapper, text="Next")
+        self.next_button = Button(self.content_wrapper, text="Next",
+                                  command=lambda: self.controller.show_frame(SrScanScreen))
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=12)
 
         self.content_wrapper.pack()

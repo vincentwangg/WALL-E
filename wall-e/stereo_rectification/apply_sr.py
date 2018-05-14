@@ -4,6 +4,7 @@
 import argparse
 import cv2
 import os
+from stereo_rectification.constants import *
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
 from utilities.file_checker import check_if_file_exists
 from utilities.yaml_utility import read_from_yml
@@ -21,15 +22,15 @@ def apply_rectify_maps(image, map_0, map_1):
 # returns left map and right map
 def generate_maps(yml_filename):
     fs = cv2.FileStorage(yml_filename, cv2.FILE_STORAGE_READ)
-    cam_mtx_l = read_from_yml(fs, "cam_mtx_l")
-    dist_l = read_from_yml(fs, "dist_l")
-    R1 = read_from_yml(fs, "R1")
-    P1 = read_from_yml(fs, "P1")
+    cam_mtx_l = read_from_yml(fs, CAM_MTX_L_LABEL)
+    dist_l = read_from_yml(fs, DIST_L_LABEL)
+    R1 = read_from_yml(fs, R1_LABEL)
+    P1 = read_from_yml(fs, P1_LABEL)
 
-    cam_mtx_r = read_from_yml(fs, "cam_mtx_r")
-    dist_r = read_from_yml(fs, "dist_r")
-    R2 = read_from_yml(fs, "R2")
-    P2 = read_from_yml(fs, "P2")
+    cam_mtx_r = read_from_yml(fs, CAM_MTX_R_LABEL)
+    dist_r = read_from_yml(fs, DIST_R_LABEL)
+    R2 = read_from_yml(fs, R2_LABEL)
+    P2 = read_from_yml(fs, P2_LABEL)
     map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
                                         dist_l,
                                         R1, P1,
