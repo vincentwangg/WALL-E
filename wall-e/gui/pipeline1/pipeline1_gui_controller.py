@@ -1,6 +1,7 @@
 from tkinter import *
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
+from gui.pipeline1.sr_frame_suggestion_time_select_screen import SrFrameSuggestionTimeSelectScreen
 from utilities.video_frame_loader import VideoFrameLoader
 from gui.walle_header import WalleHeader
 from gui.pipeline1.welcome_screen import WelcomeScreen
@@ -14,8 +15,9 @@ screen_classes_in_order = (WelcomeScreen,
                            VideoScanScreen,
                            VideoFramePlayer,
                            SrFrameSuggestionIntroScreen,
+                           SrFrameSuggestionTimeSelectScreen,
                            SrScanScreen)
-first_screen = SrFrameSuggestionIntroScreen
+first_screen = WelcomeScreen
 
 
 class Pipeline1GuiController(Tk):
@@ -89,6 +91,29 @@ class Pipeline1GuiController(Tk):
         x = w / 2 - size[0] / 2
         y = h / 2 - size[1] / 2
         self.geometry("%dx%d+%d+%d" % (size + (x, y)))
+
+    def get_filename_of_video_with_0_offset(self):
+        if self.video_offsets.left_offset == 0:
+            return self.video_frame_loader.left_feed_filename
+        else:
+            return self.video_frame_loader.right_feed_filename
+
+    def get_file_basename_of_video_with_0_offset(self):
+        if self.video_offsets.left_offset == 0:
+            return self.video_frame_loader.left_feed_basename
+        else:
+            return self.video_frame_loader.right_feed_basename
+
+    def is_frame_num_valid(self, frame_num):
+        if frame_num < 0:
+            return False
+
+        if frame_num + self.video_offsets.left_offset > self.video_frame_loader.last_frame_num_left:
+            return False
+        if frame_num + self.video_offsets.right_offset > self.video_frame_loader.last_frame_num_right:
+            return False
+
+        return True
 
 
 class VideoOffsets:

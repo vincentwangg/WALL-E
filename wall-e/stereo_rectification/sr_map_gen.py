@@ -158,8 +158,8 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
     video_frame_loader.set_left_current_frame_num(left_offset)
     video_frame_loader.set_right_current_frame_num(right_offset)
 
-    num_frames_to_scan = min([video_frame_loader.frame_count_left - left_offset,
-                              video_frame_loader.frame_count_right - right_offset])
+    num_frames_to_scan = min([video_frame_loader.last_frame_num_left - left_offset,
+                              video_frame_loader.last_frame_num_right - right_offset])
 
     num_frames_scanned = 0
 

@@ -1,7 +1,6 @@
 from tkinter import *
-from tkinter.ttk import Progressbar
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.constants import *
+from gui.pipeline1.sr_frame_suggestion_time_select_screen import SrFrameSuggestionTimeSelectScreen
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -23,7 +22,8 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
                                                     "chessboard in view.\n\nIf you feel that this step isn't "
                                                     "necessary,\nfeel free to press skip.\n")
         self.button_wrapper = Frame(self.content_wrapper)
-        self.next_button = Button(self.button_wrapper, text="Next")
+        self.next_button = Button(self.button_wrapper, text="Next",
+                                  command=lambda: self.controller.show_frame(SrFrameSuggestionTimeSelectScreen))
         self.skip_button = Button(self.button_wrapper, text="Skip")
 
         self.screen_title.pack()

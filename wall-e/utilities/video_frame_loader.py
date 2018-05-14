@@ -1,3 +1,5 @@
+import os
+
 import cv2
 from gui.pipeline1.constants import COUNTING_LEFT_FRAMES_MESSAGE, LEFT_FRAMES_COUNT_PREFIX, \
     COUNTING_RIGHT_FRAMES_MESSAGE, RIGHT_FRAMES_COUNT_PREFIX
@@ -8,8 +10,12 @@ class VideoFrameLoader:
     def __init__(self, left_feed_filename, right_feed_filename):
         self.vc_left = cv2.VideoCapture(left_feed_filename)
         self.vc_right = cv2.VideoCapture(right_feed_filename)
-        self.frame_count_left = None
-        self.frame_count_right = None
+        self.left_feed_filename = left_feed_filename
+        self.right_feed_filename = right_feed_filename
+        self.left_feed_basename = os.path.basename(left_feed_filename)
+        self.right_feed_basename = os.path.basename(right_feed_filename)
+        self.last_frame_num_left = None
+        self.last_frame_num_right = None
 
     def get_left_frame(self, frame_num):
         self.vc_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
@@ -98,15 +104,15 @@ class VideoFrameLoader:
             return False, None
 
     def count_frames_in_videos(self, controller):
-        if self.frame_count_left is None:
+        if self.last_frame_num_left is None:
             controller.update_frame(COUNTING_LEFT_FRAMES_MESSAGE)
-            self.frame_count_left = count_frames_in_vc_object(self.vc_left, controller, LEFT_FRAMES_COUNT_PREFIX)
+            self.last_frame_num_left = count_frames_in_vc_object(self.vc_left, controller, LEFT_FRAMES_COUNT_PREFIX)
 
-        if self.frame_count_right is None:
+        if self.last_frame_num_right is None:
             controller.update_frame(COUNTING_RIGHT_FRAMES_MESSAGE)
-            self.frame_count_right = count_frames_in_vc_object(self.vc_right, controller, RIGHT_FRAMES_COUNT_PREFIX)
+            self.last_frame_num_right = count_frames_in_vc_object(self.vc_right, controller, RIGHT_FRAMES_COUNT_PREFIX)
 
-        return self.frame_count_left, self.frame_count_right
+        return self.last_frame_num_left, self.last_frame_num_right
 
 
 def count_frames_in_vc_object(vc_obj, controller, message_prefix):

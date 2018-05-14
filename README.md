@@ -14,3 +14,4 @@ Make sure you are working on your own branch.
 - OpenCV
 - Pillow (pip install Pillow)
 - Numpy
+- tkinter

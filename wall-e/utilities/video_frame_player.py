@@ -23,6 +23,7 @@ left_offset_actions = {}
 right_offset_actions = {}
 
 
+# Normalize offsets so that at least one of the offsets is always 0.
 def normalize_offsets(left_offset, right_offset):
     smaller_offset = min([left_offset, right_offset])
     return (left_offset - smaller_offset), (right_offset - smaller_offset)

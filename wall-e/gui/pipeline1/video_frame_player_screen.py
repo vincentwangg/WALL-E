@@ -1,9 +1,9 @@
 from tkinter import *
 from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import VIDEO_HEIGHT, VIDEO_WIDTH
+from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
-from gui.pipeline1.sr_scan_screen import SrScanScreen
 
 TITLE_ROW = 0
 SUBTITLE_ROW = TITLE_ROW + 1
@@ -132,7 +132,7 @@ class VideoFramePlayer(GuiBaseFrame):
                              self.right_video_frame_inc_150_button, self.right_video_frame_inc_300_button])
 
         self.next_button = Button(self.content_wrapper, text="Next",
-                                  command=lambda: self.controller.show_frame(SrScanScreen))
+                                  command=lambda: self.controller.show_frame(SrFrameSuggestionIntroScreen))
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=12)
 
         self.content_wrapper.pack()
@@ -179,8 +179,8 @@ class VideoFramePlayer(GuiBaseFrame):
 
         left_offset = self.controller.video_offsets.left_offset
         right_offset = self.controller.video_offsets.right_offset
-        last_frame_left = self.controller.video_frame_loader.frame_count_left
-        last_frame_right = self.controller.video_frame_loader.frame_count_right
+        last_frame_left = self.controller.video_frame_loader.last_frame_num_left
+        last_frame_right = self.controller.video_frame_loader.last_frame_num_right
 
         if self.frame_num + left_offset > last_frame_left:
             self.frame_num = last_frame_left - left_offset
