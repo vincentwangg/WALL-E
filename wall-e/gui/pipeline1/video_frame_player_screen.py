@@ -132,7 +132,7 @@ class VideoFramePlayer(GuiBaseFrame):
                              self.right_video_frame_inc_150_button, self.right_video_frame_inc_300_button])
 
         self.next_button = Button(self.content_wrapper, text="Next",
-                                  command=lambda: self.controller.show_frame(SrFrameSuggestionIntroScreen))
+                                  command=lambda: self.controller.show_next_frame())
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=12)
 
         self.content_wrapper.pack()

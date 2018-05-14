@@ -23,7 +23,8 @@ class SrFrameSuggestionTimeSelectScreen(GuiBaseFrame):
         self.input_content_wrapper = Frame(self.content_wrapper)
         self.setup_input()
 
-        self.next_button = Button(self.content_wrapper, text="Next")
+        self.next_button = Button(self.content_wrapper, text="Next",
+                                  command=lambda: self.controller.show_next_frame())
 
         self.screen_title.pack()
         self.screen_instruction_1_label.pack()

@@ -14,14 +14,14 @@ class WelcomeScreen(GuiBaseFrame):
         self.welcome_label = Header1Label(self.text_container,
                                           text="Welcome to the full WALL-E footage processing experience!!")
         self.description_label = PLabel(self.text_container,
-                                              text="This process helps you perform the following in order:\n"
-                                            "\t1) Frame matching the videos\n"
-                                            "\t2) Finding and generating the best SR map\n"
-                                            "\t3) Stereo rectifying the videos",
-                                              justify=LEFT)
+                                        text="This process helps you perform the following in order:\n"
+                                             "\t1) Frame matching the videos\n"
+                                             "\t2) Finding and generating the best SR map\n"
+                                             "\t3) Stereo rectifying the videos",
+                                        justify=LEFT)
         self.good_luck_label = PLabel(self.text_container, text="Good Luck!")
         self.next_button = Button(self.text_container, text="Get Started",
-                                  command=lambda: self.controller.show_frame(VideoSelectionScreen))
+                                  command=lambda: self.controller.show_next_frame())
 
         self.welcome_label.pack()
         self.description_label.pack()

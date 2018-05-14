@@ -5,7 +5,6 @@ from tkinter.ttk import *
 from tkinter import *
 from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import *
-from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -29,8 +28,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.elapsed_time_label = PLabel(self.content_wrapper)
         self.empty_space = PLabel(self.content_wrapper, text=" ")
         self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
-                                  # TODO change to frame matching screen
-                                  command=lambda: self.controller.show_frame(VideoFramePlayer))
+                                  command=lambda: self.controller.show_next_frame())
 
         self.screen_title.pack()
         self.progress_bar.pack()

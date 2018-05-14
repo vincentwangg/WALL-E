@@ -66,7 +66,7 @@ class VideoSelectionScreen(GuiBaseFrame):
 
     def next_screen(self):
         self.controller.set_video_filenames(self.left_video_filename, self.right_video_filename)
-        self.controller.show_frame(VideoScanScreen)
+        self.controller.show_next_frame()
 
     def add_img_previews(self):
         img_not_available = cv2.imread(get_asset_filename(IMG_NOT_AVAILABLE_FILENAME))

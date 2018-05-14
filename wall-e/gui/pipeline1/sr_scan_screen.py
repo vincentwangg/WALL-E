@@ -32,7 +32,8 @@ class SrScanScreen(GuiBaseFrame):
         self.elapsed_time_label = PLabel(self.content_wrapper)
         self.estimated_time_left_label = PLabel(self.content_wrapper)
         self.empty_space = PLabel(self.content_wrapper, text=" ")
-        self.next_button = Button(self.content_wrapper, text="Next")
+        self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
+                                  command=lambda: self.controller.show_next_frame())
 
         self.screen_title.pack()
         self.progress_bar.pack()

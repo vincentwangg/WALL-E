@@ -23,7 +23,7 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
                                                     "necessary,\nfeel free to press skip.\n")
         self.button_wrapper = Frame(self.content_wrapper)
         self.next_button = Button(self.button_wrapper, text="Next",
-                                  command=lambda: self.controller.show_frame(SrFrameSuggestionTimeSelectScreen))
+                                  command=lambda: self.controller.show_next_frame())
         self.skip_button = Button(self.button_wrapper, text="Skip")
 
         self.screen_title.pack()
