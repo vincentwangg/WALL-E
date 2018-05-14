@@ -1,6 +1,6 @@
 from tkinter import *
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.sr_frame_suggestion_time_select_screen import SrFrameSuggestionTimeSelectScreen
+from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 

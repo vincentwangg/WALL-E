@@ -1,7 +1,8 @@
 from tkinter import *
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
-from gui.pipeline1.sr_frame_suggestion_time_select_screen import SrFrameSuggestionTimeSelectScreen
+from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
+from gui.pipeline1.sr_frame_suggestion_time_end_screen import SrFrameSuggestionTimeEndScreen
 from utilities.video_frame_loader import VideoFrameLoader
 from gui.walle_header import WalleHeader
 from gui.pipeline1.welcome_screen import WelcomeScreen
@@ -11,11 +12,12 @@ from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
 from gui.pipeline1.sr_scan_screen import SrScanScreen
 
 screen_classes_in_order = (WelcomeScreen,
+                           SrFrameSuggestionTimeEndScreen,
                            VideoSelectionScreen,
                            VideoScanScreen,
                            VideoFramePlayer,
                            SrFrameSuggestionIntroScreen,
-                           SrFrameSuggestionTimeSelectScreen,
+                           SrFrameSuggestionTimeStartScreen,
                            SrScanScreen)
 first_screen = WelcomeScreen
 
