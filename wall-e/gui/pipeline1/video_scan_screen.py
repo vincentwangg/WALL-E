@@ -40,7 +40,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.elapsed_time_label.pack()
         self.empty_space.pack()
         self.next_button.pack()
-        self.content_wrapper.place(relx=0.5, rely=0.4, anchor=CENTER)
+        self.content_wrapper.place(relx=0.5, rely=0.45, anchor=CENTER)
 
     def start(self):
         self.start_time = time.time()

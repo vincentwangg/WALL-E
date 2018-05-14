@@ -1,5 +1,6 @@
 from tkinter import *
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
+from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from utilities.video_frame_loader import VideoFrameLoader
 from gui.walle_header import WalleHeader
 from gui.pipeline1.welcome_screen import WelcomeScreen
@@ -7,6 +8,14 @@ from gui.pipeline1.video_selection_screen import VideoSelectionScreen
 from gui.pipeline1.video_scan_screen import VideoScanScreen
 from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
 from gui.pipeline1.sr_scan_screen import SrScanScreen
+
+screen_classes_in_order = (WelcomeScreen,
+                           VideoSelectionScreen,
+                           VideoScanScreen,
+                           VideoFramePlayer,
+                           SrFrameSuggestionIntroScreen,
+                           SrScanScreen)
+first_screen = SrFrameSuggestionIntroScreen
 
 
 class Pipeline1GuiController(Tk):
@@ -31,7 +40,7 @@ class Pipeline1GuiController(Tk):
         self.walle_header.grid(row=0, column=0, sticky="w")
 
         self.frames = {}
-        for frame_class in (WelcomeScreen, VideoSelectionScreen, VideoScanScreen, VideoFramePlayer, SrScanScreen):
+        for frame_class in screen_classes_in_order:
             frame = frame_class(parent=container, controller=self, borderwidth=2, relief="groove")
             frame.grid(row=1, column=0, sticky="nsew")
 
@@ -40,7 +49,7 @@ class Pipeline1GuiController(Tk):
         self.adjust_frame_content_dimensions()
         self.center_in_computer_screen(self.winfo_width(), self.winfo_height())
 
-        self.set_and_start_top_frame(VideoSelectionScreen)
+        self.set_and_start_top_frame(first_screen)
 
     def show_frame(self, frame_class):
         self.stop_top_frame()
