@@ -1,6 +1,8 @@
 import datetime
 from tkinter import *
+
 from gui.gui_base_frame import GuiBaseFrame
+from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
 from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
 from gui.pipeline1.utilities.inputs import setup_hms_input, calculate_frame_num_from_inputs, create_error_message_string
 from gui.widgets.header1_label import Header1Label
@@ -37,7 +39,7 @@ class SrFrameSuggestionTimeEndScreen(GuiBaseFrame):
         self.back_button.grid(row=0, column=0)
         self.next_button.grid(row=0, column=1)
         self.screen_navigation_button_wrapper.pack()
-        self.content_wrapper.place(relx=0.5, rely=0.45, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def start(self):
         self.error_message_label.configure(text="")

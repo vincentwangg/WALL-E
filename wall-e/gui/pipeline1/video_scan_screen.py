@@ -1,8 +1,9 @@
+import datetime
 import threading
 import time
-import datetime
-from tkinter.ttk import *
 from tkinter import *
+from tkinter.ttk import Progressbar
+
 from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import *
 from gui.widgets.header1_label import Header1Label
@@ -16,7 +17,7 @@ class VideoScanScreen(GuiBaseFrame):
 
     def setup_widgets(self):
         self.content_wrapper = Frame(self)
-        self.content_wrapper.configure(bg="white")
+        self.content_wrapper.configure(background="white")
         self.screen_title = Header1Label(self.content_wrapper,
                                          text="Scanning video for information...\n")
         self.progress_bar = Progressbar(self.content_wrapper, orient=HORIZONTAL, mode="indeterminate",
@@ -38,7 +39,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.elapsed_time_label.pack()
         self.empty_space.pack()
         self.next_button.pack()
-        self.content_wrapper.place(relx=0.5, rely=0.45, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def start(self):
         self.start_time = time.time()

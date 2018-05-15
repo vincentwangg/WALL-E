@@ -1,6 +1,7 @@
 from tkinter import *
+
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.video_selection_screen import VideoSelectionScreen
+from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -27,7 +28,7 @@ class WelcomeScreen(GuiBaseFrame):
         self.description_label.pack()
         self.good_luck_label.pack()
         self.next_button.pack()
-        self.text_container.place(relx=0.5, rely=0.45, anchor=CENTER)
+        self.text_container.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def start(self):
         pass

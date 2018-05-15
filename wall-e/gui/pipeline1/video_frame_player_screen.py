@@ -1,7 +1,7 @@
 from tkinter import *
+
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.constants import VIDEO_HEIGHT, VIDEO_WIDTH
-from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
+from gui.pipeline1.constants import VIDEO_HEIGHT, VIDEO_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -135,7 +135,7 @@ class VideoFramePlayer(GuiBaseFrame):
                                   command=lambda: self.controller.show_next_frame())
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=12)
 
-        self.content_wrapper.pack()
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def set_video_frame(self, frame_num, left_offset, right_offset):
         _, left_img = \

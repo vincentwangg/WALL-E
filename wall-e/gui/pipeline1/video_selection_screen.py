@@ -1,9 +1,11 @@
-import cv2
 from tkinter import *
 from tkinter import filedialog
+
+import cv2
+
 from definitions import *
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT
+from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT, SCREENS_REL_X, VIDEO_SELECT_SCREEN_REL_Y
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 from utilities.image_converter import cv2_bgr_image_to_tkinter_with_resize
@@ -26,8 +28,10 @@ class VideoSelectionScreen(GuiBaseFrame):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
 
     def setup_widgets(self):
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
+        self.content_wrapper = Frame(self)
+
+        self.content_wrapper.grid_columnconfigure(0, weight=1)
+        self.content_wrapper.grid_columnconfigure(1, weight=1)
 
         self.left_video_selected = False
         self.right_video_selected = False
@@ -35,15 +39,15 @@ class VideoSelectionScreen(GuiBaseFrame):
         self.left_video_filename = None
         self.right_video_filename = None
 
-        self.screen_title_label = Header1Label(self, text="Video Selection")
-        self.instruction_label = PLabel(self, text="Please choose your left and right video files.")
-        self.left_video_filename_preview_label = PLabel(self, text="No Video Selected")
-        self.left_video_button = Button(self, text="Choose Left Video",
+        self.screen_title_label = Header1Label(self.content_wrapper, text="Video Selection")
+        self.instruction_label = PLabel(self.content_wrapper, text="Please choose your left and right video files.")
+        self.left_video_filename_preview_label = PLabel(self.content_wrapper, text="No Video Selected")
+        self.left_video_button = Button(self.content_wrapper, text="Choose Left Video",
                                         command=lambda: self.set_left_video_thumbnail())
-        self.right_video_filename_preview_label = PLabel(self, text="No Video Selected")
-        self.right_video_button = Button(self, text="Choose Right Video",
+        self.right_video_filename_preview_label = PLabel(self.content_wrapper, text="No Video Selected")
+        self.right_video_button = Button(self.content_wrapper, text="Choose Right Video",
                                          command=lambda: self.set_right_video_thumbnail())
-        self.next_button = Button(self, text="Next", state=DISABLED,
+        self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
                                   command=lambda: self.next_screen())
 
         self.add_img_previews()
@@ -61,6 +65,7 @@ class VideoSelectionScreen(GuiBaseFrame):
         self.right_video_button.grid(row=CHOOSE_VIDEO_BUTTON_ROW, column=RIGHT_VIDEO_THUMBNAIL_COL)
 
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=CENTER_SCREEN_COLSPAN)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=VIDEO_SELECT_SCREEN_REL_Y, anchor=CENTER)
 
     def next_screen(self):
         self.controller.set_video_filenames(self.left_video_filename, self.right_video_filename)
@@ -70,9 +75,9 @@ class VideoSelectionScreen(GuiBaseFrame):
         img_not_available = cv2.imread(get_asset_filename(IMG_NOT_AVAILABLE_FILENAME))
         img_not_available = cv2_bgr_image_to_tkinter_with_resize(img_not_available, VIDEO_WIDTH, VIDEO_HEIGHT)
 
-        self.left_video_thumbnail = Label(self, image=img_not_available)
+        self.left_video_thumbnail = Label(self.content_wrapper, image=img_not_available)
         self.left_video_thumbnail.image = img_not_available
-        self.right_video_thumbnail = Label(self, image=img_not_available)
+        self.right_video_thumbnail = Label(self.content_wrapper, image=img_not_available)
         self.right_video_thumbnail.image = img_not_available
 
     def set_left_video_thumbnail(self):

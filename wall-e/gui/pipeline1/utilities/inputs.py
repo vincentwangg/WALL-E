@@ -1,5 +1,6 @@
 import datetime
 from tkinter import *
+
 from gui.widgets.p_label import PLabel
 
 ENTRY_WIDTH = 5

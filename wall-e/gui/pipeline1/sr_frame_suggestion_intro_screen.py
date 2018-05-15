@@ -1,6 +1,7 @@
 from tkinter import *
+
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
+from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -31,7 +32,7 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
         self.button_wrapper.pack()
         self.next_button.grid(row=0, column=0)
         self.skip_button.grid(row=0, column=1)
-        self.content_wrapper.place(relx=0.5, rely=0.45, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def start(self):
         pass

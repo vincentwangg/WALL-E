@@ -1,9 +1,10 @@
+import datetime
 import json
 import threading
 import time
-import datetime
 from tkinter import *
 from tkinter.ttk import Progressbar
+
 from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import *
 from gui.widgets.header1_label import Header1Label
@@ -44,7 +45,7 @@ class SrScanScreen(GuiBaseFrame):
         self.estimated_time_left_label.pack()
         self.empty_space.pack()
         self.next_button.pack()
-        self.content_wrapper.place(relx=0.5, rely=0.45, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def start(self):
         self.start_time = time.time()

@@ -4,6 +4,11 @@ WINDOW_HEIGHT = 710
 VIDEO_WIDTH = int(640 * 3 / 4)
 VIDEO_HEIGHT = int(480 * 3 / 4)
 
+SCREENS_REL_X = 0.5
+SCREENS_REL_Y = 0.45
+
+VIDEO_SELECT_SCREEN_REL_Y = 0.47
+
 ELAPSED_TIME_PREFIX = "Elapsed time: "
 
 # Video scan screen
