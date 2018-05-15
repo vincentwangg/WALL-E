@@ -1,8 +1,8 @@
 import os
 
 import cv2
-from gui.pipeline1.constants import COUNTING_LEFT_FRAMES_MESSAGE, LEFT_FRAMES_COUNT_PREFIX, \
-    COUNTING_RIGHT_FRAMES_MESSAGE, RIGHT_FRAMES_COUNT_PREFIX
+
+from gui.pipeline1.constants import LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX
 from utilities.image_converter import cv2_image_to_tkinter, cv2_bgr_image_to_tkinter_with_resize
 
 
@@ -105,11 +105,9 @@ class VideoFrameLoader:
 
     def count_frames_in_videos(self, controller):
         if self.last_frame_num_left is None:
-            controller.update_frame(COUNTING_LEFT_FRAMES_MESSAGE)
             self.last_frame_num_left = count_frames_in_vc_object(self.vc_left, controller, LEFT_FRAMES_COUNT_PREFIX)
 
         if self.last_frame_num_right is None:
-            controller.update_frame(COUNTING_RIGHT_FRAMES_MESSAGE)
             self.last_frame_num_right = count_frames_in_vc_object(self.vc_right, controller, RIGHT_FRAMES_COUNT_PREFIX)
 
         return self.last_frame_num_left, self.last_frame_num_right

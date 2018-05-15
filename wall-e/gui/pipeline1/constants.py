@@ -11,10 +11,13 @@ VIDEO_SELECT_SCREEN_REL_Y = 0.47
 
 ELAPSED_TIME_PREFIX = "Elapsed time: "
 
-# Video scan screen
-COUNTING_LEFT_FRAMES_MESSAGE = "left"
-COUNTING_RIGHT_FRAMES_MESSAGE = "right"
+LEFT = "left"
+RIGHT = "right"
 
+# Video Selection Screen
+VIDEOS_SELECTED_TMP_FILENAME = "videos_selected.cache"
+
+# Video Scan Screen
 LEFT_FRAMES_COUNT_PREFIX = "Frames read for left video: "
 RIGHT_FRAMES_COUNT_PREFIX = "Frames read for right video: "
 

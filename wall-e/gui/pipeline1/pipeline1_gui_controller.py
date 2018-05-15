@@ -61,7 +61,7 @@ class Pipeline1GuiController(Tk):
     def show_next_frame(self):
         idx = screen_classes_in_order.index(self.top_frame)
         next_frame_class = screen_classes_in_order[idx + 1]
-        self.set_and_start_top_frame(next_frame_class)
+        self.show_frame(next_frame_class)
 
     def show_frame(self, frame_class):
         self.stop_top_frame()
