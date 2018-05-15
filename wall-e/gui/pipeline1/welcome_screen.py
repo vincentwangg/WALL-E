@@ -27,7 +27,7 @@ class WelcomeScreen(GuiBaseFrame):
         self.description_label.pack()
         self.good_luck_label.pack()
         self.next_button.pack()
-        self.text_container.place(relx=0.5, rely=0.4, anchor=CENTER)
+        self.text_container.place(relx=0.5, rely=0.45, anchor=CENTER)
 
     def start(self):
         pass

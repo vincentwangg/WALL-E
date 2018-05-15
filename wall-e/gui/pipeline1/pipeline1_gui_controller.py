@@ -12,12 +12,12 @@ from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
 from gui.pipeline1.sr_scan_screen import SrScanScreen
 
 screen_classes_in_order = (WelcomeScreen,
-                           SrFrameSuggestionTimeEndScreen,
                            VideoSelectionScreen,
                            VideoScanScreen,
                            VideoFramePlayer,
                            SrFrameSuggestionIntroScreen,
                            SrFrameSuggestionTimeStartScreen,
+                           SrFrameSuggestionTimeEndScreen,
                            SrScanScreen)
 first_screen = WelcomeScreen
 
@@ -29,6 +29,8 @@ class Pipeline1GuiController(Tk):
         self.video_frame_loader = None
         self.top_frame = None
         self.video_offsets = VideoOffsets()
+
+        self.sr_scan_start_seconds = None
 
         self.title("Video Processing Part 1 (of 2)")
         self.resizable(0, 0)

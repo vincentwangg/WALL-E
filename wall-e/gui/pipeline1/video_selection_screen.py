@@ -4,8 +4,6 @@ from tkinter import filedialog
 from definitions import *
 from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT
-from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
-from gui.pipeline1.video_scan_screen import VideoScanScreen
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 from utilities.image_converter import cv2_bgr_image_to_tkinter_with_resize

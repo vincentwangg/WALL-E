@@ -1,7 +1,8 @@
 import os
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_PATH = os.path.join(ROOT_DIR, "config.txt")
+CONFIG_PATH = os.path.join(ROOT_DIR, ".keybindings.cfg")
+GUI_CACHE_PATH = os.path.join(ROOT_DIR, ".gui_cache.txt")
 
 ASSETS_PATH = os.path.join(os.path.dirname(ROOT_DIR), "assets")
 IMG_NOT_AVAILABLE_FILENAME = "img_not_available.jpg"

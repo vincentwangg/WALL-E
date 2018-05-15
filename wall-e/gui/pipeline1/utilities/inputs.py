@@ -1,3 +1,4 @@
+import datetime
 from tkinter import *
 from gui.widgets.p_label import PLabel
 
@@ -17,17 +18,60 @@ def setup_hms_input(screen_frame, input_content_wrapper):
 
     screen_frame.minute_label = PLabel(input_content_wrapper, text="M: ")
     screen_frame.minute_input = Entry(input_content_wrapper, width=ENTRY_WIDTH, justify=CENTER,
-                                    validate="key", validatecommand=validate_command)
+                                      validate="key", validatecommand=validate_command)
     screen_frame.minute_input.insert(0, 0)
     screen_frame.minute_label.grid(row=0, column=2)
     screen_frame.minute_input.grid(row=0, column=3)
 
     screen_frame.seconds_label = PLabel(input_content_wrapper, text="S: ")
     screen_frame.seconds_input = Entry(input_content_wrapper, width=ENTRY_WIDTH, justify=CENTER,
-                                    validate="key", validatecommand=validate_command)
+                                       validate="key", validatecommand=validate_command)
     screen_frame.seconds_input.insert(0, 0)
     screen_frame.seconds_label.grid(row=0, column=4)
     screen_frame.seconds_input.grid(row=0, column=5)
+
+    return screen_frame.hour_input, screen_frame.minute_input, screen_frame.seconds_input
+
+
+def calculate_frame_num_from_inputs(hour_input, minute_input, seconds_input, frames_per_second=30):
+    hours = int("0" + hour_input.get())
+    minutes = int("0" + minute_input.get())
+    seconds = int("0" + seconds_input.get())
+
+    total_seconds = seconds + minutes * 60 + hours * 60 * 60
+    frame_num = total_seconds * frames_per_second
+    return frame_num
+
+
+def create_error_message_string(error_message_label, seconds, frame_num_inputted,
+                                left_offset, left_frame_num, last_frame_num_left,
+                                right_offset, right_frame_num, last_frame_num_right):
+    frame_num_inputted_str = str(frame_num_inputted)
+    text_string = "".join([
+        "The provided timestamp is invalid.\nPlease make sure the timestamp is "
+        "within the bounds of both videos.\n",
+        str(datetime.timedelta(seconds=seconds)),
+        " => Frame #",
+        frame_num_inputted_str,
+        "\nFrame number for left video: ",
+        frame_num_inputted_str,
+        " + ",
+        str(left_offset),
+        " (offset) = ",
+        str(left_frame_num),
+        " (of ",
+        str(last_frame_num_left),
+        " total)\nFrame number for right video: ",
+        frame_num_inputted_str,
+        " + ",
+        str(right_offset),
+        " (offset) = ",
+        str(right_frame_num),
+        " (of ",
+        str(last_frame_num_right),
+        " total)"
+    ])
+    error_message_label.configure(text=text_string, fg="red")
 
 
 def validate_hms_input(action, text):
