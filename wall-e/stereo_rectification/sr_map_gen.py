@@ -152,14 +152,21 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
 
 
 # For GUI class VideoScanScreen in sr_scan_screen.py
-def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_frame_loader, controller):
+def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_frame_loader, controller,
+                                            first_frame, last_frame_inclusive):
     sr_results = []
 
-    video_frame_loader.set_left_current_frame_num(left_offset)
-    video_frame_loader.set_right_current_frame_num(right_offset)
+    first_frame_left = first_frame + left_offset
+    first_frame_right = first_frame + right_offset
 
-    num_frames_to_scan = min([video_frame_loader.last_frame_num_left - left_offset,
-                              video_frame_loader.last_frame_num_right - right_offset])
+    last_frame_left = last_frame_inclusive + left_offset
+    last_frame_right = last_frame_inclusive + right_offset
+
+    video_frame_loader.set_left_current_frame_num(first_frame_left)
+    video_frame_loader.set_right_current_frame_num(first_frame_right)
+
+    num_frames_to_scan = min([last_frame_left - first_frame_left,
+                              last_frame_right - first_frame_right])
 
     num_frames_scanned = 0
 
@@ -169,6 +176,7 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
         l_success, left_img = video_frame_loader.get_next_left_frame()
         r_success, right_img = video_frame_loader.get_next_right_frame()
 
+        # If one of the videos reach the end of video
         if not l_success or not r_success:
             break
 
@@ -182,6 +190,10 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
 
         if num_frames_scanned % 10 == 0:
             create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
+
+        # If one of the videos reach their last frame to scan
+        if left_frame_num >= last_frame_left or right_frame_num >= last_frame_right:
+            break
 
     create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
     return sr_results

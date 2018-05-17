@@ -57,7 +57,12 @@ class SrScanScreen(GuiBaseFrame):
                                                               "video_frame_loader":
                                                                   self.controller.video_frame_loader,
                                                               "controller":
-                                                                  self.controller})
+                                                                  self.controller,
+                                                              "first_frame":
+                                                                  self.controller.sr_scan_range.first_frame,
+                                                              "last_frame_inclusive":
+                                                                  self.controller.sr_scan_range.last_frame_inclusive
+                                                              })
         self.sr_frame_count_thread.start()
         self.master.after(50, self.check_thread)
 
@@ -67,6 +72,7 @@ class SrScanScreen(GuiBaseFrame):
         valid_frames = progress_data[PROGRESS_DICT_VALID_FRAMES_FOUND]
         frames_read = progress_data[PROGRESS_DICT_FRAMES_READ]
         total_frames = progress_data[PROGRESS_DICT_TOTAL_FRAMES]
+        total_frames = max([1, total_frames])
         progress_percent = frames_read * 100.0 / total_frames
 
         # Progress values may come in out of order, so if the value that

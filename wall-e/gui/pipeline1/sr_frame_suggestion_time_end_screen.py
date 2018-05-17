@@ -48,7 +48,8 @@ class SrFrameSuggestionTimeEndScreen(GuiBaseFrame):
         pass
 
     def stop(self):
-        pass
+        self.controller.sr_scan_range.last_frame_inclusive = \
+            calculate_frame_num_from_inputs(self.hour_input, self.minute_input, self.seconds_input)
 
     def next_button_command(self):
         frame_num_inputted = calculate_frame_num_from_inputs(self.hour_input, self.minute_input, self.seconds_input)

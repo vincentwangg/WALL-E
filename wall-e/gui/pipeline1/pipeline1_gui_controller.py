@@ -30,6 +30,7 @@ class Pipeline1GuiController(Tk):
         self.video_frame_loader = None
         self.top_frame = None
         self.video_offsets = VideoOffsets()
+        self.sr_scan_range = VideoSrScanRange()
 
         self.sr_scan_start_seconds = None
 
@@ -130,3 +131,9 @@ class VideoOffsets:
     def __init__(self, left_offset=0, right_offset=0):
         self.left_offset = left_offset
         self.right_offset = right_offset
+
+
+class VideoSrScanRange:
+    def __init__(self, first_frame=0, last_frame_inclusive=-1):
+        self.first_frame = first_frame
+        self.last_frame_inclusive = last_frame_inclusive

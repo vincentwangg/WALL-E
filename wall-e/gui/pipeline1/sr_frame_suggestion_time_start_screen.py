@@ -46,7 +46,8 @@ class SrFrameSuggestionTimeStartScreen(GuiBaseFrame):
         pass
 
     def stop(self):
-        pass
+        self.controller.sr_scan_range.first_frame = calculate_frame_num_from_inputs(self.hour_input, self.minute_input,
+                                                                                    self.seconds_input)
 
     def next_button_command(self):
         frame_num_inputted = calculate_frame_num_from_inputs(self.hour_input, self.minute_input, self.seconds_input)
