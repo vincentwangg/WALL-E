@@ -64,6 +64,11 @@ class Pipeline1GuiController(Tk):
         next_frame_class = screen_classes_in_order[idx + 1]
         self.show_frame(next_frame_class)
 
+    def show_prev_frame(self):
+        idx = screen_classes_in_order.index(self.top_frame)
+        prev_frame_class = screen_classes_in_order[idx - 1]
+        self.show_frame(prev_frame_class)
+
     def show_frame(self, frame_class):
         self.stop_top_frame()
         self.set_and_start_top_frame(frame_class)
@@ -136,4 +141,10 @@ class VideoOffsets:
 class VideoSrScanRange:
     def __init__(self, first_frame=0, last_frame_inclusive=-1):
         self.first_frame = first_frame
+
+        # if last_frame_inclusive is -1, then the last frame should be the last frame in the video
         self.last_frame_inclusive = last_frame_inclusive
+
+    def reset_to_default(self):
+        self.first_frame = 0
+        self.last_frame_inclusive = -1

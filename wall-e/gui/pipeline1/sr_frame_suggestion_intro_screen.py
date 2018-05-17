@@ -2,6 +2,7 @@ from tkinter import *
 
 from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.sr_scan_screen import SrScanScreen
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -25,7 +26,8 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
         self.button_wrapper = Frame(self.content_wrapper)
         self.next_button = Button(self.button_wrapper, text="Next",
                                   command=lambda: self.controller.show_next_frame())
-        self.skip_button = Button(self.button_wrapper, text="Skip")
+        self.skip_button = Button(self.button_wrapper, text="Skip",
+                                  command=lambda: self.skip_sr_frame_suggestion())
 
         self.screen_title.pack()
         self.screen_description_label.pack()
@@ -42,3 +44,7 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
 
     def stop(self):
         pass
+
+    def skip_sr_frame_suggestion(self):
+        self.controller.sr_scan_range.reset_to_default()
+        self.controller.show_frame(SrScanScreen)

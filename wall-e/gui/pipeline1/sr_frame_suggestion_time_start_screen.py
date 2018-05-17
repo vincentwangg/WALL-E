@@ -24,7 +24,11 @@ class SrFrameSuggestionTimeStartScreen(GuiBaseFrame):
         self.input_content_wrapper = Frame(self.content_wrapper)
         self.hour_input, self.minute_input, self.seconds_input = setup_hms_input(self, self.input_content_wrapper)
         self.error_message_label = PLabel(self.content_wrapper)
-        self.next_button = Button(self.content_wrapper, text="Next",
+
+        self.button_wrapper = Frame(self.content_wrapper)
+        self.back_button = Button(self.button_wrapper, text="Back",
+                                  command=lambda: self.controller.show_prev_frame())
+        self.next_button = Button(self.button_wrapper, text="Next",
                                   command=lambda: self.next_button_command())
 
         self.screen_title.pack()
@@ -32,7 +36,9 @@ class SrFrameSuggestionTimeStartScreen(GuiBaseFrame):
         self.screen_instruction_2_label.pack()
         self.input_content_wrapper.pack()
         self.error_message_label.pack()
-        self.next_button.pack()
+        self.back_button.grid(row=0, column=0)
+        self.next_button.grid(row=0, column=1)
+        self.button_wrapper.pack()
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def start(self):

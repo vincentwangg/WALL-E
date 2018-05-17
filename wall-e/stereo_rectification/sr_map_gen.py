@@ -159,8 +159,12 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
     first_frame_left = first_frame + left_offset
     first_frame_right = first_frame + right_offset
 
-    last_frame_left = last_frame_inclusive + left_offset
-    last_frame_right = last_frame_inclusive + right_offset
+    if last_frame_inclusive != -1:
+        last_frame_left = last_frame_inclusive + left_offset
+        last_frame_right = last_frame_inclusive + right_offset
+    else:
+        last_frame_left = video_frame_loader.last_frame_num_left
+        last_frame_right = video_frame_loader.last_frame_num_right
 
     video_frame_loader.set_left_current_frame_num(first_frame_left)
     video_frame_loader.set_right_current_frame_num(first_frame_right)
