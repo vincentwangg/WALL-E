@@ -1,8 +1,11 @@
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 710
 
-VIDEO_WIDTH = int(640 * 3 / 4)
-VIDEO_HEIGHT = int(480 * 3 / 4)
+VIDEO_PREVIEW_WIDTH = int(640 * 3 / 4)
+VIDEO_PREVIEW_HEIGHT = int(480 * 3 / 4)
+
+VIDEO_SR_SELECT_PREVIEW_WIDTH = int(640 * 0.625)
+VIDEO_SR_SELECT_PREVIEW_HEIGHT = int(480 * 0.625)
 
 SCREENS_REL_X = 0.5
 SCREENS_REL_Y = 0.45
@@ -13,6 +16,7 @@ ELAPSED_TIME_PREFIX = "Elapsed time: "
 
 LEFT = "left"
 RIGHT = "right"
+FRAME_NUM_LABEL = "frame_num"
 
 # Video Selection Screen
 VIDEOS_SELECTED_TMP_FILENAME = "videos_selected.cache"

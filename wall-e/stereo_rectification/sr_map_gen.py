@@ -2,12 +2,14 @@
 
 import argparse
 import json
+
 from config.keycode_setup import *
-from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT, PROGRESS_DICT_KEYS
+from gui.pipeline1.constants import PROGRESS_DICT_KEYS, LEFT, RIGHT, \
+    VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
 from utilities.file_checker import check_if_file_exists
-from utilities.image_converter import cv2_gray_image_to_tkinter_with_resize
+from utilities.image_converter import cv2_rgb_image_to_tkinter, cv2_gray_image_to_tkinter_with_resize
 from utilities.video_frame_loader import VideoFrameLoader
 from utilities.yaml_utility import save_to_yml
 
@@ -188,7 +190,18 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
         right_frame_num = video_frame_loader.get_right_current_frame_num()
 
         if is_valid_sr_frame(left_img, right_img):
-            sr_results.append([left_frame_num, right_frame_num])
+            img_left_undistorted = convert_to_gray(undistort(left_img))
+            img_right_undistorted = convert_to_gray(undistort(right_img))
+            success, left_img_sr, right_img_sr = generate_sr_map(img_left_undistorted, img_right_undistorted)
+            if success:
+                sr_results.append({LEFT: cv2_gray_image_to_tkinter_with_resize(left_img_sr,
+                                                                               VIDEO_SR_SELECT_PREVIEW_WIDTH,
+                                                                               VIDEO_SR_SELECT_PREVIEW_HEIGHT),
+                                   RIGHT: cv2_gray_image_to_tkinter_with_resize(right_img_sr,
+                                                                                VIDEO_SR_SELECT_PREVIEW_WIDTH,
+                                                                                VIDEO_SR_SELECT_PREVIEW_HEIGHT),
+                                   FRAME_NUM_LABEL: min([left_frame_num, right_frame_num])
+                                   })
 
         num_frames_scanned += 1
 
@@ -200,7 +213,7 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
             break
 
     create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
-    return sr_results
+    controller.sr_results = sr_results
 
 
 def create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, valid_frames):
@@ -283,7 +296,7 @@ def is_valid_sr_frame(left_img, right_img):
 
 
 def generate_sr_map(left_img, right_img):
-    img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords =\
+    img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords = \
         find_chessboard_corners(left_img, right_img)
 
     if not (img_left_corners_success and img_right_corners_success):

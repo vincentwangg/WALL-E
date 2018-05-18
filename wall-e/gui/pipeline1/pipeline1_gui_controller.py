@@ -20,9 +20,10 @@ screen_classes_in_order = (WelcomeScreen,
                            SrFrameSuggestionIntroScreen,
                            SrFrameSuggestionTimeStartScreen,
                            SrFrameSuggestionTimeEndScreen,
-                           SrFrameSelection,
-                           SrScanScreen)
-first_screen = SrFrameSelection
+                           SrScanScreen,
+                           SrFrameSelection
+                           )
+first_screen = WelcomeScreen
 
 
 class Pipeline1GuiController(Tk):
@@ -33,6 +34,7 @@ class Pipeline1GuiController(Tk):
         self.top_frame = None
         self.video_offsets = VideoOffsets()
         self.sr_scan_range = VideoSrScanRange()
+        self.sr_results = None
 
         self.sr_scan_start_seconds = None
 

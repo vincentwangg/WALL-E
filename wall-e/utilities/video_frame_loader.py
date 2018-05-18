@@ -3,7 +3,7 @@ import os
 import cv2
 
 from gui.pipeline1.constants import LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX
-from utilities.image_converter import cv2_image_to_tkinter, cv2_bgr_image_to_tkinter_with_resize
+from utilities.image_converter import cv2_bgr_image_to_tkinter, cv2_bgr_image_to_tkinter_with_resize
 
 
 class VideoFrameLoader:
@@ -31,7 +31,7 @@ class VideoFrameLoader:
         self.vc_left.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
         success, img = self.vc_left.read()
         if success:
-            return True, cv2_image_to_tkinter(img)
+            return True, cv2_bgr_image_to_tkinter(img)
         else:
             return False, None
 
@@ -49,7 +49,7 @@ class VideoFrameLoader:
     def get_next_left_frame_tkinter(self):
         success, img = self.vc_left.read()
         if success:
-            return True, cv2_image_to_tkinter(img)
+            return True, cv2_bgr_image_to_tkinter(img)
         else:
             return False, None
 
@@ -74,7 +74,7 @@ class VideoFrameLoader:
         self.vc_right.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
         success, img = self.vc_right.read()
         if success:
-            return True, cv2_image_to_tkinter(img)
+            return True, cv2_bgr_image_to_tkinter(img)
         else:
             return False, None
 
@@ -92,7 +92,7 @@ class VideoFrameLoader:
     def get_next_right_frame_tkinter(self):
         success, img = self.vc_right.read()
         if success:
-            return True, cv2_image_to_tkinter(img)
+            return True, cv2_bgr_image_to_tkinter(img)
         else:
             return False, None
 

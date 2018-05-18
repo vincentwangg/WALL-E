@@ -6,7 +6,7 @@ import cv2
 
 from definitions import *
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.constants import VIDEO_WIDTH, VIDEO_HEIGHT, SCREENS_REL_X, VIDEO_SELECT_SCREEN_REL_Y, \
+from gui.pipeline1.constants import VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT, SCREENS_REL_X, VIDEO_SELECT_SCREEN_REL_Y, \
     VIDEOS_SELECTED_TMP_FILENAME, LEFT, RIGHT
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -78,7 +78,7 @@ class VideoSelectionScreen(GuiBaseFrame):
 
     def add_img_previews(self):
         img_not_available = cv2.imread(get_asset_filename(IMG_NOT_AVAILABLE_FILENAME))
-        img_not_available = cv2_bgr_image_to_tkinter_with_resize(img_not_available, VIDEO_WIDTH, VIDEO_HEIGHT)
+        img_not_available = cv2_bgr_image_to_tkinter_with_resize(img_not_available, VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT)
 
         self.left_video_thumbnail = Label(self.content_wrapper, image=img_not_available)
         self.left_video_thumbnail.image = img_not_available
@@ -110,7 +110,7 @@ class VideoSelectionScreen(GuiBaseFrame):
             _, img = vc_object.read()
             vc_object.release()
 
-            img = cv2_bgr_image_to_tkinter_with_resize(img, VIDEO_WIDTH, VIDEO_HEIGHT)
+            img = cv2_bgr_image_to_tkinter_with_resize(img, VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT)
             self.update_ui(video_filename, img, True, video_side)
 
     def update_ui(self, filename, img, video_selected, video_side=LEFT):

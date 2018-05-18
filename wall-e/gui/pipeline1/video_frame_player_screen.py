@@ -1,7 +1,7 @@
 from tkinter import *
 
 from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.constants import VIDEO_HEIGHT, VIDEO_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.constants import VIDEO_PREVIEW_HEIGHT, VIDEO_PREVIEW_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -140,10 +140,10 @@ class VideoFramePlayer(GuiBaseFrame):
     def set_video_frame(self, frame_num, left_offset, right_offset):
         _, left_img = \
             self.controller.video_frame_loader.get_left_frame_tkinter_with_resize(frame_num + left_offset,
-                                                                                  VIDEO_WIDTH, VIDEO_HEIGHT)
+                                                                                  VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT)
         _, right_img = \
             self.controller.video_frame_loader.get_right_frame_tkinter_with_resize(frame_num + right_offset,
-                                                                                   VIDEO_WIDTH, VIDEO_HEIGHT)
+                                                                                   VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT)
 
         self.left_video_label.configure(image=left_img)
         self.left_video_label.image = left_img
