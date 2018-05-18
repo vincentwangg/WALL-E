@@ -1,9 +1,10 @@
-from tkinter import *
+from tkinter import Frame
 
 
 class GuiBaseFrame(Frame):
     def __init__(self, master, controller, **kw):
         Frame.__init__(self, master, **kw)
+        self.master = master
         self.controller = controller
         self.setup_widgets()
 

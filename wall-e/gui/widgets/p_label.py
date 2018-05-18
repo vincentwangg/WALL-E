@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Label
 
 
 class PLabel(Label):

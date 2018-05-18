@@ -1,6 +1,7 @@
 from tkinter import *
 
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
+from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from gui.pipeline1.sr_frame_suggestion_time_end_screen import SrFrameSuggestionTimeEndScreen
 from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
@@ -19,8 +20,9 @@ screen_classes_in_order = (WelcomeScreen,
                            SrFrameSuggestionIntroScreen,
                            SrFrameSuggestionTimeStartScreen,
                            SrFrameSuggestionTimeEndScreen,
+                           SrFrameSelection,
                            SrScanScreen)
-first_screen = WelcomeScreen
+first_screen = SrFrameSelection
 
 
 class Pipeline1GuiController(Tk):
