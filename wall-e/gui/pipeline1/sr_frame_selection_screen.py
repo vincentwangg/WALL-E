@@ -2,11 +2,15 @@ from tkinter import Canvas, Frame, Scrollbar, Label, VERTICAL, CENTER, Button
 
 import datetime
 
+from math import ceil
+
 from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT, SCREENS_REL_X, SCREENS_REL_Y, LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
+
+RESULTS_PER_PAGE = 10
 
 
 class SrFrameSelection(GuiBaseFrame):
@@ -19,49 +23,73 @@ class SrFrameSelection(GuiBaseFrame):
         self.screen_description = PLabel(self.content_wrapper, text="Please select a frame that has a satisfactory "
                                                                     "stereo rectification result.")
 
-        self.canvas_wrapper = Frame(self.content_wrapper, borderwidth="1", relief="solid")
-        self.canvas = Canvas(self.canvas_wrapper, width=int(WINDOW_WIDTH * 7 / 8), height=(WINDOW_HEIGHT * 2 / 3))
-        self.scroll_bar = Scrollbar(self.canvas_wrapper, orient=VERTICAL, command=self.canvas.yview)
-        self.results_list_frame = Frame(self.canvas)
-
-        self.canvas.configure(yscrollcommand=self.scroll_bar.set)
-        self.canvas.create_window(VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT,
-                                  window=self.results_list_frame)
-        self.canvas.bind_all("<Up>", self.on_up_key)
-        self.canvas.bind_all("<Down>", self.on_down_key)
-
-        self.canvas.grid(row=0, column=0, sticky="nsew")
-        self.scroll_bar.grid(row=0, column=1, sticky="ns")
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        self.screen_title.grid(row=0)
-        self.screen_description.grid(row=1)
-        self.canvas_wrapper.grid(row=2, sticky="nsew")
+        self.screen_title.grid(row=0, column=0, columnspan=3)
+        self.screen_description.grid(row=1, columnspan=3)
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=0.48, anchor=CENTER)
 
     def start(self):
-        for row in range(0, len(self.controller.sr_results)):
-            frame_num = self.controller.sr_results[row][FRAME_NUM_LABEL]
+        self.canvas_wrappers = []
+        self.canvases = []
+        self.page_num = 0
 
-            result_entry = Frame(self.results_list_frame, borderwidth="1", relief="solid")
-            description = PLabel(result_entry, text="Frame #" + str(int(frame_num)) +
-                                                    ", Time: " +
-                                                    str(datetime.timedelta(seconds=frame_num / 30)))
-            preview_wrapper = Frame(result_entry)
-            left_video_preview = Label(preview_wrapper, image=self.controller.sr_results[row][LEFT])
-            right_video_preview = Label(preview_wrapper, image=self.controller.sr_results[row][RIGHT])
-            select_button = Button(preview_wrapper, text="Select")
+        pages = int(ceil(len(self.controller.sr_results) / 10))
+        for page in range(0, pages):
+            canvas_wrapper = Frame(self.content_wrapper, borderwidth="1", relief="solid")
+            canvas = Canvas(canvas_wrapper, width=int(WINDOW_WIDTH * 7 / 8), height=(WINDOW_HEIGHT * 2 / 3))
+            scroll_bar = Scrollbar(canvas_wrapper, orient=VERTICAL, command=canvas.yview)
+            results_list_frame = Frame(canvas)
 
-            description.pack()
-            left_video_preview.grid(row=row, column=0)
-            right_video_preview.grid(row=row, column=1)
-            select_button.grid(row=row, column=2)
-            preview_wrapper.pack()
-            result_entry.pack()
+            canvas.configure(yscrollcommand=scroll_bar.set)
+            canvas.create_window(0, 0, window=results_list_frame)
+            canvas.bind_all("<Up>", self.on_up_key)
+            canvas.bind_all("<Down>", self.on_down_key)
 
-        self.master.update_idletasks()
-        self.canvas.config(scrollregion=self.canvas.bbox("all"))
-        self.canvas.yview_moveto(0)
+            canvas.grid(row=0, column=0, sticky="nsew")
+            scroll_bar.grid(row=0, column=1, sticky="ns")
+            canvas_wrapper.grid(row=2, column=0, columnspan=3, sticky="nsew")
+
+            for row in range(0, RESULTS_PER_PAGE):
+                result_num = page * RESULTS_PER_PAGE + row
+                if result_num < len(self.controller.sr_results):
+                    frame_num = self.controller.sr_results[result_num][FRAME_NUM_LABEL]
+
+                    result_entry = Frame(results_list_frame, borderwidth="1", relief="solid")
+                    description = PLabel(result_entry, text="Frame #" + str(int(frame_num)) +
+                                                            ", Time: " +
+                                                            str(datetime.timedelta(seconds=frame_num / 30)))
+                    preview_wrapper = Frame(result_entry)
+                    left_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][LEFT])
+                    right_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][RIGHT])
+                    select_button = Button(preview_wrapper, text="Select")
+
+                    description.pack()
+                    left_video_preview.grid(row=row, column=0)
+                    right_video_preview.grid(row=row, column=1)
+                    select_button.grid(row=row, column=2)
+                    preview_wrapper.pack()
+                    result_entry.pack()
+
+            self.master.update_idletasks()
+            canvas.config(scrollregion=canvas.bbox("all"))
+            canvas.yview_moveto(0)
+            self.canvas_wrappers.append(canvas_wrapper)
+            self.canvases.append(canvas)
+
+        self.prev_result_page = Button(self.content_wrapper, text="<",
+                                       command=lambda: self.prev_page_command())
+        self.page_info_label = PLabel(self.content_wrapper,
+                                      text=get_page_info_label_message(self.page_num,
+                                                                       len(self.canvases),
+                                                                       RESULTS_PER_PAGE))
+        self.next_result_page = Button(self.content_wrapper, text=">",
+                                       command=lambda: self.next_page_command())
+
+        self.prev_result_page.grid(row=3, column=0)
+        self.page_info_label.grid(row=3, column=1)
+        self.next_result_page.grid(row=3, column=2)
+        self.canvas_wrappers[self.page_num].tkraise()
 
     def update_frame(self, data):
         pass
@@ -70,7 +98,28 @@ class SrFrameSelection(GuiBaseFrame):
         pass
 
     def on_up_key(self, event):
-        self.canvas.yview_scroll(-5, 'units')
+        self.canvases[self.page_num].yview_scroll(-7, 'units')
 
     def on_down_key(self, event):
-        self.canvas.yview_scroll(5, 'units')
+        self.canvases[self.page_num].yview_scroll(7, 'units')
+
+    def prev_page_command(self):
+        if self.page_num > 0:
+            self.page_num -= 1
+            self.canvas_wrappers[self.page_num].tkraise()
+            self.page_info_label.configure(text=get_page_info_label_message(self.page_num,
+                                                                       len(self.canvases),
+                                                                       RESULTS_PER_PAGE))
+
+    def next_page_command(self):
+        if self.page_num < len(self.canvas_wrappers) - 1:
+            self.page_num += 1
+            self.canvas_wrappers[self.page_num].tkraise()
+            self.page_info_label.configure(text=get_page_info_label_message(self.page_num,
+                                                                       len(self.canvases),
+                                                                       RESULTS_PER_PAGE))
+
+
+def get_page_info_label_message(page_num, total_pages, results_per_page):
+    return "".join(["Page ", str(page_num + 1), " of ", str(total_pages), ". Showing ",
+                    str(results_per_page), " results per page."])
