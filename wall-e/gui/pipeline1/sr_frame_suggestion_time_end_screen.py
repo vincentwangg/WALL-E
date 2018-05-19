@@ -1,10 +1,10 @@
 import datetime
 from tkinter import *
 
-from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
 from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
 from gui.pipeline1.utilities.inputs import setup_hms_input, calculate_frame_num_from_inputs, create_error_message_string
+from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
@@ -17,7 +17,6 @@ class SrFrameSuggestionTimeEndScreen(GuiBaseFrame):
 
     def setup_widgets(self):
         self.content_wrapper = Frame(self)
-        self.content_wrapper.configure(bg="white")
 
         self.screen_title = Header1Label(self.content_wrapper,
                                          text="Chessboard Frame Suggestion")

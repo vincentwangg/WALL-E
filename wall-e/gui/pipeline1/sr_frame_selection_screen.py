@@ -1,14 +1,13 @@
+import datetime
+from math import ceil
 from tkinter import Canvas, Frame, Scrollbar, Label, VERTICAL, CENTER, Button
 
-import datetime
-
-from math import ceil
-
-from gui.gui_base_frame import GuiBaseFrame
-from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT, SCREENS_REL_X, SCREENS_REL_Y, LEFT, RIGHT, \
-    VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL
+from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT, SCREENS_REL_X, LEFT, RIGHT, \
+    FRAME_NUM_LABEL, SR_MAP_LABEL
+from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
+from gui.widgets.sr_select_button import SrSelectButton
 
 RESULTS_PER_PAGE = 10
 
@@ -50,6 +49,8 @@ class SrFrameSelection(GuiBaseFrame):
             scroll_bar.grid(row=0, column=1, sticky="ns")
             canvas_wrapper.grid(row=2, column=0, columnspan=3, sticky="nsew")
 
+            select_buttons_on_page = []
+
             for row in range(0, RESULTS_PER_PAGE):
                 result_num = page * RESULTS_PER_PAGE + row
                 if result_num < len(self.controller.sr_results):
@@ -62,7 +63,10 @@ class SrFrameSelection(GuiBaseFrame):
                     preview_wrapper = Frame(result_entry)
                     left_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][LEFT])
                     right_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][RIGHT])
-                    select_button = Button(preview_wrapper, text="Select")
+                    select_button = SrSelectButton(preview_wrapper, self.controller,
+                                                   self.controller.sr_results[result_num][SR_MAP_LABEL], text="Select")
+
+                    select_buttons_on_page.append(select_button)
 
                     description.pack()
                     left_video_preview.grid(row=row, column=0)
@@ -70,6 +74,9 @@ class SrFrameSelection(GuiBaseFrame):
                     select_button.grid(row=row, column=2)
                     preview_wrapper.pack()
                     result_entry.pack()
+
+            for i in range(0, len(select_buttons_on_page)):
+                select_buttons_on_page[i].configure(command=select_buttons_on_page[i].use_sr_map)
 
             self.master.update_idletasks()
             canvas.config(scrollregion=canvas.bbox("all"))

@@ -5,9 +5,9 @@ from tkinter import filedialog
 import cv2
 
 from definitions import *
-from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT, SCREENS_REL_X, VIDEO_SELECT_SCREEN_REL_Y, \
     VIDEOS_SELECTED_TMP_FILENAME, LEFT, RIGHT
+from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 from utilities.image_converter import cv2_bgr_image_to_tkinter_with_resize

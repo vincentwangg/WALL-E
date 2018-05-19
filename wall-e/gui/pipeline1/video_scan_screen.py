@@ -4,8 +4,8 @@ import time
 from tkinter import *
 from tkinter.ttk import Progressbar
 
-from gui.gui_base_frame import GuiBaseFrame
 from gui.pipeline1.constants import *
+from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 

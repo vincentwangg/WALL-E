@@ -10,7 +10,7 @@ from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
 from gui.pipeline1.video_scan_screen import VideoScanScreen
 from gui.pipeline1.video_selection_screen import VideoSelectionScreen
 from gui.pipeline1.welcome_screen import WelcomeScreen
-from gui.walle_header import WalleHeader
+from gui.widgets.walle_header import WalleHeader
 from utilities.video_frame_loader import VideoFrameLoader
 
 screen_classes_in_order = (WelcomeScreen,
@@ -35,6 +35,7 @@ class Pipeline1GuiController(Tk):
         self.video_offsets = VideoOffsets()
         self.sr_scan_range = VideoSrScanRange()
         self.sr_results = None
+        self.sr_map = None
 
         self.sr_scan_start_seconds = None
 

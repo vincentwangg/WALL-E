@@ -1,7 +1,9 @@
-import cv2
 from tkinter import *
+
+import cv2
+
 from definitions import *
-from gui.gui_base_frame import GuiBaseFrame
+from gui.widgets.gui_base_frame import GuiBaseFrame
 from utilities.image_converter import cv2_bgr_image_to_tkinter_with_resize
 
 WALLE_ICON_WIDTH = 292
