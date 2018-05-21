@@ -123,9 +123,7 @@ def threshold_matches(ostracod_list_l, ostracod_list_r, threshold_value):
                 break
 
 
-def match(image_l, image_r):
-    ostracod_list_l = locator.get_ostracods(image_l)
-    ostracod_list_r = locator.get_ostracods(image_r)
+def match(ostracod_list_l, ostracod_list_r):
     if len(ostracod_list_r) < len(ostracod_list_l):
         get_matching_pairs(ostracod_list_r, ostracod_list_l)
     else:

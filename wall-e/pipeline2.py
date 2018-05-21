@@ -2,7 +2,7 @@
 # the blender information to a text file from an FramePulseData object
 
 from utilities.video_frame_loader import VideoFrameLoader
-from ostracod_detection.matching.match import get_matching_pairs
+from ostracod_detection.matching import match
 from mapping_3d.mapper_3d import depth_map
 from mapping_3d.pulse_data import FramePulseData
 from mapping_3d.pulse_data import write_frame_pulse_data_to_file
@@ -27,7 +27,7 @@ def main():
     check_if_file_exists(right_file_name)
 
     vfl = VideoFrameLoader(left_file_name, right_file_name)
-    camera = Camera(baseline=baseline)
+    camera = Camera(baseline=baseline, focal_length=100)
     fpd = FramePulseData()
 
     success_r, right_image = vfl.get_next_right_frame()
@@ -45,10 +45,7 @@ def main():
         locate_time += time.time() - locate_start
 
         match_start = time.time()
-        if len(ostracod_list_r) < len(ostracod_list_l):
-            get_matching_pairs(ostracod_list_r, ostracod_list_l)
-        else:
-            get_matching_pairs(ostracod_list_l, ostracod_list_r)
+        match.match(ostracod_list_l, ostracod_list_r)
         match_time += time.time() - match_start
 
         depth_map_start = time.time()
