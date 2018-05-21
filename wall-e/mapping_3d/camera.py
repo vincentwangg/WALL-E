@@ -1,11 +1,10 @@
-import cv2
-import sys
 from stereo_rectification.apply_sr import undistort
 from stereo_rectification.apply_sr import generate_maps
 from stereo_rectification.apply_sr import apply_rectify_maps
 from stereo_rectification.sr_map_gen import SR_MAP_GENERATED_FILENAME
 from definitions import PROJECT_ROOT_PATH, SRC_PATH
 from config.keycode_setup import *
+from utilities.file_checker import check_if_file_exists
 
 # TODO: Take a video of a checkerboard at a known distance
 
@@ -25,8 +24,13 @@ class Camera:
         width_of_one_square = 2.6 # mm
         start_frame_num = 1
         vid_filename = PROJECT_ROOT_PATH + "/videos/45_r_check.mkv"
+
+        check_if_file_exists(vid_filename)
+
         calibration_video = cv2.VideoCapture(vid_filename)
         sr_yml_filename = SRC_PATH + "/stereo_rectification/" + SR_MAP_GENERATED_FILENAME
+
+        check_if_file_exists(sr_yml_filename)
 
         (l_map, r_map) = generate_maps(sr_yml_filename)
         if start_frame_num > 0:

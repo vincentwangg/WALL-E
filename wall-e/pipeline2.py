@@ -10,6 +10,7 @@ from mapping_3d.camera import Camera
 from ostracod_detection.locating import locator
 import time
 import argparse
+from utilities.file_checker import check_if_file_exists
 
 def main():
     parser = argparse.ArgumentParser(description="Reads in left and right videos as well as the camera baseline.")
@@ -21,6 +22,9 @@ def main():
     left_file_name = args.left_video
     right_file_name = args.right_video
     baseline = args.baseline
+
+    check_if_file_exists(left_file_name)
+    check_if_file_exists(right_file_name)
 
     vfl = VideoFrameLoader(left_file_name, right_file_name)
     camera = Camera(baseline=baseline)
