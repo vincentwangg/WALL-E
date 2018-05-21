@@ -31,26 +31,17 @@ def generate_pulse_data(ostracod_l, ostracod_r, camera):
         return
 
     brightness = avg_brightness/255
-    area = scale_2d_attribute(avg_area, z)
-    radius = (area/math.pi)**0.5
+    radius = (avg_area/math.pi)**0.5
+    radius = radius * z/camera.focal_length
+
     return PulseData(xyz_coord=location, radius=radius, brightness=brightness)
 
 
 def get_coord(left_coord, right_coord, focal_length, baseline):
-    # hardcode pixel widths
-    pixel_width = 0.0084 #mm
-    pixel_height = 0.0098 #mm
-
     X_L, X_R, _ = left_coord - np.array([320, 239, 0])
     Y_L, Y_R, _ = right_coord - np.array([320, 239, 0])
     z = focal_length * baseline / (float(X_L - X_R))
-
-    x_l = X_L * pixel_width
-    y_l = Y_L * pixel_height
     
-    return [x_l * z / focal_length, y_l * z / focal_length, z]
+    return [X_L * z / focal_length, Y_L * z / focal_length, z]
 
-
-def scale_2d_attribute(attribute, z_val):
-    return attribute*(z_val+1)**2
 
