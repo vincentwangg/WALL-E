@@ -18,7 +18,7 @@ class SrFrameSuggestionTimeStartScreen(GuiBaseFrame):
                                          text="Chessboard Frame Suggestion")
         self.screen_instruction_1_label = PLabel(self.content_wrapper)
         self.screen_instruction_2_label = PLabel(self.content_wrapper,
-                                                 text="What was the time stamp when this happened?")
+                                                 text="What was the timestamp when this happened?")
 
         self.input_content_wrapper = Frame(self.content_wrapper)
         self.hour_input, self.minute_input, self.seconds_input = setup_hms_input(self, self.input_content_wrapper)
@@ -42,7 +42,7 @@ class SrFrameSuggestionTimeStartScreen(GuiBaseFrame):
 
     def start(self):
         self.screen_instruction_1_label.configure(text="Please open the following video and\n"
-                                                       "find the first frame where a chessboard appears.\n\n" +
+                                                       "find the first timestamp where a chessboard appears.\n\n" +
                                                        self.controller.get_filename_of_video_with_0_offset() +
                                                        "\n")
         self.error_message_label.configure(text="")
