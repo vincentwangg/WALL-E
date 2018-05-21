@@ -25,7 +25,7 @@ screen_classes_in_order = (WelcomeScreen,
                            SrFrameSelection,
                            ApplySrIntroScreen
                            )
-first_screen = ApplySrIntroScreen
+first_screen = WelcomeScreen
 
 
 class Pipeline1GuiController(Tk):
@@ -35,11 +35,14 @@ class Pipeline1GuiController(Tk):
         self.video_frame_loader = None
         self.top_frame = None
         self.video_offsets = VideoOffsets()
-        self.sr_scan_range = VideoSrScanRange()
+        self.sr_scan_range = FrameRange()
+        self.sr_scan_start_seconds = None
         self.sr_results = None
         self.sr_map = None
 
-        self.sr_scan_start_seconds = None
+        self.apply_sr_frame_range = FrameRange()
+        self.apply_sr_start_seconds = None
+
 
         self.title("Video Processing Part 1 (of 2)")
         self.resizable(0, 0)
@@ -145,7 +148,7 @@ class VideoOffsets:
         self.right_offset = right_offset
 
 
-class VideoSrScanRange:
+class FrameRange:
     def __init__(self, first_frame=0, last_frame_inclusive=-1):
         self.first_frame = first_frame
 

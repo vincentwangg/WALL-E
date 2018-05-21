@@ -4,10 +4,11 @@
 #   3) Applying SR maps to original videos
 
 import argparse
+
 from config.keycode_setup import load_keycodes
 from gui.pipeline1.pipeline1_gui_controller import Pipeline1GuiController
-from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
 from stereo_rectification.apply_sr import undistort_and_stereo_rectify_videos
+from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
 from utilities.video_frame_player import play_video
 
 if __name__ == '__main__':

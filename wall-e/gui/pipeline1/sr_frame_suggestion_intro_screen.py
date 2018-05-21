@@ -1,6 +1,6 @@
 from tkinter import *
 
-from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y, SR_FRAME_SELECTION_TITLE
 from gui.pipeline1.sr_scan_screen import SrScanScreen
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
@@ -14,8 +14,7 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
     def setup_widgets(self):
         self.content_wrapper = Frame(self)
 
-        self.screen_title = Header1Label(self.content_wrapper,
-                                         text="Chessboard Frame Suggestion")
+        self.screen_title = Header1Label(self.content_wrapper, text=SR_FRAME_SELECTION_TITLE)
         self.screen_description_label = PLabel(self.content_wrapper,
                                                text="\nFor long videos, it may take hours to search\nfor frames that "
                                                     "contain a chessboard.\n\nAs an option, you can help us save time "

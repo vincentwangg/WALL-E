@@ -44,7 +44,7 @@ def calculate_frame_num_from_inputs(hour_input, minute_input, seconds_input, fra
     return frame_num
 
 
-def create_error_message_string(error_message_label, seconds, frame_num_inputted,
+def create_error_message_string(seconds, frame_num_inputted,
                                 left_offset, left_frame_num, last_frame_num_left,
                                 right_offset, right_frame_num, last_frame_num_right):
     frame_num_inputted_str = str(frame_num_inputted)
@@ -72,7 +72,7 @@ def create_error_message_string(error_message_label, seconds, frame_num_inputted
         str(last_frame_num_right),
         " total)"
     ])
-    error_message_label.configure(text=text_string, fg="red")
+    return text_string
 
 
 def validate_hms_input(action, text):

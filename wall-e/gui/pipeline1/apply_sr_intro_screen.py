@@ -1,7 +1,6 @@
 from tkinter import *
 
-from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
-from gui.pipeline1.sr_scan_screen import SrScanScreen
+from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y, APPLY_SR_SCREEN_TITLE
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -14,8 +13,7 @@ class ApplySrIntroScreen(GuiBaseFrame):
     def setup_widgets(self):
         self.content_wrapper = Frame(self)
 
-        self.screen_title = Header1Label(self.content_wrapper,
-                                         text="Video Stereo Rectification")
+        self.screen_title = Header1Label(self.content_wrapper, text=APPLY_SR_SCREEN_TITLE)
         self.screen_description_label = PLabel(self.content_wrapper,
                                                text="\nFor long videos, it may take hours to create\na new stereo "
                                                     "rectified video.\n\nIn the next few screens, you may enter "

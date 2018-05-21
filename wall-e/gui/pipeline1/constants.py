@@ -25,6 +25,9 @@ VIDEOS_SELECTED_TMP_FILENAME = "videos_selected.cache"
 LEFT_FRAMES_COUNT_PREFIX = "Frames read for left video: "
 RIGHT_FRAMES_COUNT_PREFIX = "Frames read for right video: "
 
+# SR Frame Selection
+SR_FRAME_SELECTION_TITLE = "Chessboard Frame Suggestion"
+
 # SR Scan Screen
 PROGRESS_DICT_KEYS = ["valid_frames", "frames_read", "total_frames"]
 PROGRESS_DICT_VALID_FRAMES_FOUND = PROGRESS_DICT_KEYS[0]
@@ -36,3 +39,6 @@ SR_MAP_LABEL = "sr_map"
 VALID_FRAMES_FOUND_PREFIX = "Valid frames found: "
 FRAMES_READ_PREFIX = "Number of frames scanned: "
 ESTIMATED_TIME_LEFT_PREFIX = "Estimated time left: "
+
+# Apply SR Screen
+APPLY_SR_SCREEN_TITLE = "Video Stereo Rectification"
