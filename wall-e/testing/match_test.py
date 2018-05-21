@@ -31,7 +31,7 @@ def main():
     ostracod_list_l = locator.get_ostracods(image_l)
     ostracod_list_r = locator.get_ostracods(image_r)
 
-    l_list, r_list = match.match(ostracod_list_l, ostracod_list_r)
+    l_list, r_list = match.match(ostracod_list_l, ostracod_list_r, threshold=5)
     for o in l_list:
         if len(o.matches) > 0:
             color = random_color()

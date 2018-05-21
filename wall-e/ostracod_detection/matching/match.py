@@ -123,13 +123,13 @@ def threshold_matches(ostracod_list_l, ostracod_list_r, threshold_value):
                 break
 
 
-def match(ostracod_list_l, ostracod_list_r):
+def match(ostracod_list_l, ostracod_list_r, threshold):
     if len(ostracod_list_r) < len(ostracod_list_l):
         get_matching_pairs(ostracod_list_r, ostracod_list_l)
     else:
         get_matching_pairs(ostracod_list_l, ostracod_list_r)
 
-    threshold_matches(ostracod_list_l, ostracod_list_r, 5)
+    threshold_matches(ostracod_list_l, ostracod_list_r, threshold)
 
     # print "matches of left: "
     # print_matches(ostracod_list_l)

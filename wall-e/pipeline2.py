@@ -27,7 +27,7 @@ def main():
     check_if_file_exists(right_file_name)
 
     vfl = VideoFrameLoader(left_file_name, right_file_name)
-    camera = Camera(baseline=baseline, focal_length=100)
+    camera = Camera(baseline=baseline)
     fpd = FramePulseData()
 
     success_r, right_image = vfl.get_next_right_frame()
@@ -45,7 +45,7 @@ def main():
         locate_time += time.time() - locate_start
 
         match_start = time.time()
-        match.match(ostracod_list_l, ostracod_list_r)
+        match.match(ostracod_list_l, ostracod_list_r, threshold=5)
         match_time += time.time() - match_start
 
         depth_map_start = time.time()
