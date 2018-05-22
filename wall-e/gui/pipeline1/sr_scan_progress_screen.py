@@ -68,11 +68,9 @@ class SrScanProgressScreen(GuiBaseFrame):
         self.master.after(50, self.check_thread)
 
     def update_frame(self, data):
-        progress_data = json.loads(data)
-
-        valid_frames = progress_data[PROGRESS_DICT_VALID_FRAMES_FOUND]
-        frames_read = progress_data[PROGRESS_DICT_FRAMES_READ]
-        total_frames = progress_data[PROGRESS_DICT_TOTAL_FRAMES]
+        valid_frames = data[SR_PROGRESS_DICT_VALID_FRAMES_FOUND]
+        frames_read = data[SR_PROGRESS_DICT_FRAMES_READ]
+        total_frames = data[SR_PROGRESS_DICT_TOTAL_FRAMES]
         total_frames = max([1, total_frames])
         progress_percent = frames_read * 100.0 / total_frames
 

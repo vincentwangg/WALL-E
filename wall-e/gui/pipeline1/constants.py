@@ -21,18 +21,18 @@ FRAME_NUM_LABEL = "frame_num"
 # Video Selection Screen
 VIDEOS_SELECTED_TMP_FILENAME = "videos_selected.cache"
 
-# Video Scan Screen
+# Video Progress Screen
 LEFT_FRAMES_COUNT_PREFIX = "Frames read for left video: "
 RIGHT_FRAMES_COUNT_PREFIX = "Frames read for right video: "
 
 # SR Frame Selection
 SR_FRAME_SELECTION_TITLE = "Chessboard Frame Suggestion"
 
-# SR Scan Screen
-PROGRESS_DICT_KEYS = ["valid_frames", "frames_read", "total_frames"]
-PROGRESS_DICT_VALID_FRAMES_FOUND = PROGRESS_DICT_KEYS[0]
-PROGRESS_DICT_FRAMES_READ = PROGRESS_DICT_KEYS[1]
-PROGRESS_DICT_TOTAL_FRAMES = PROGRESS_DICT_KEYS[2]
+# SR Progress Screen
+SR_PROGRESS_DICT_KEYS = ["valid_frames", "frames_read", "total_frames"]
+SR_PROGRESS_DICT_VALID_FRAMES_FOUND = SR_PROGRESS_DICT_KEYS[0]
+SR_PROGRESS_DICT_FRAMES_READ = SR_PROGRESS_DICT_KEYS[1]
+SR_PROGRESS_DICT_TOTAL_FRAMES = SR_PROGRESS_DICT_KEYS[2]
 
 SR_MAP_LABEL = "sr_map"
 
@@ -42,3 +42,8 @@ ESTIMATED_TIME_LEFT_PREFIX = "Estimated time left: "
 
 # Apply SR Screen
 APPLY_SR_SCREEN_TITLE = "Video Stereo Rectification"
+
+# Apply SR Progress Screen
+APPLY_SR_SCREEN_PROGRESS_DICT_KEYS = ["frames_processed", "total_frames"]
+APPLY_SR_PROGRESS_FRAMES_PROCESSED = APPLY_SR_SCREEN_PROGRESS_DICT_KEYS[0]
+APPLY_SR_PROGRESS_TOTAL_FRAMES = APPLY_SR_SCREEN_PROGRESS_DICT_KEYS[1]

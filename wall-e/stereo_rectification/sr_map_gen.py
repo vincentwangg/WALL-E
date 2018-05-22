@@ -4,7 +4,7 @@ import argparse
 import json
 
 from config.keycode_setup import *
-from gui.pipeline1.constants import PROGRESS_DICT_KEYS, LEFT, RIGHT, \
+from gui.pipeline1.constants import SR_PROGRESS_DICT_KEYS, LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
@@ -174,7 +174,7 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
 
     num_frames_scanned = 0
 
-    create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
+    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
 
     while True:
         l_success, left_img = video_frame_loader.get_next_left_frame()
@@ -205,23 +205,18 @@ def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_fra
         num_frames_scanned += 1
 
         if num_frames_scanned % 10 == 0:
-            create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
+            create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
 
         # If one of the videos reach their last frame to scan
         if left_frame_num >= last_frame_left or right_frame_num >= last_frame_right:
             break
 
-    create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, len(sr_results))
     controller.sr_results = sr_results
+    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
 
 
-def create_json_string_and_update_ui(controller, num_frames_scanned, num_frames_to_scan, valid_frames):
-    json_string = create_json_for_progress(valid_frames, num_frames_scanned, num_frames_to_scan)
-    controller.update_frame(json_string)
-
-
-def create_json_for_progress(valid_frames_found, num_frames_scanned, total_frames):
-    return json.dumps(dict(zip(PROGRESS_DICT_KEYS, [valid_frames_found, num_frames_scanned, total_frames])))
+def create_data_package_for_ui(controller, valid_frames, num_frames_scanned, num_frames_to_scan):
+    controller.update_frame(dict(zip(SR_PROGRESS_DICT_KEYS, [valid_frames, num_frames_scanned, num_frames_to_scan])))
 
 
 def display_no_frames_left_message(frames):
