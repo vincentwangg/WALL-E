@@ -51,19 +51,7 @@ class SrScanProgressScreen(GuiBaseFrame):
     def on_show_frame(self):
         self.start_time = time.time()
         self.sr_frame_count_thread = threading.Thread(target=get_list_of_valid_frames_for_sr_tkinter,
-                                                      kwargs={"left_offset":
-                                                                  self.controller.video_offsets.left_offset,
-                                                              "right_offset":
-                                                                  self.controller.video_offsets.right_offset,
-                                                              "video_frame_loader":
-                                                                  self.controller.video_frame_loader,
-                                                              "controller":
-                                                                  self.controller,
-                                                              "first_frame":
-                                                                  self.controller.sr_scan_frame_range.first_frame,
-                                                              "last_frame_inclusive":
-                                                                  self.controller.sr_scan_frame_range.last_frame_inclusive
-                                                              })
+                                                      kwargs={"controller": self.controller})
         self.sr_frame_count_thread.start()
         self.master.after(50, self.check_thread)
 

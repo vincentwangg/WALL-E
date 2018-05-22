@@ -1,5 +1,6 @@
 from tkinter import *
 
+from gui.pipeline1.apply_sr_progress_screen import ApplySrProgressScreen
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y, APPLY_SR_SCREEN_TITLE
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
@@ -45,4 +46,4 @@ class ApplySrIntroScreen(GuiBaseFrame):
 
     def skip_sr_frame_suggestion(self):
         self.controller.apply_sr_frame_range.reset_to_default()
-        # self.controller.show_frame()
+        self.controller.show_frame(ApplySrProgressScreen)

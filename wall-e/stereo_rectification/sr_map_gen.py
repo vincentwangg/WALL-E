@@ -8,6 +8,7 @@ from gui.pipeline1.constants import SR_PROGRESS_DICT_KEYS, LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
+from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
 from utilities.file_checker import check_if_file_exists
 from utilities.image_converter import cv2_gray_image_to_tkinter_with_resize
 from utilities.video_frame_loader import VideoFrameLoader
@@ -152,25 +153,23 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
 
 
 # For GUI class VideoScanScreen in sr_scan_progress_screen.py
-def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_frame_loader, controller,
-                                            first_frame, last_frame_inclusive):
+def get_list_of_valid_frames_for_sr_tkinter(controller):
     sr_results = []
 
-    first_frame_left = first_frame + left_offset
-    first_frame_right = first_frame + right_offset
+    first_frame = controller.sr_scan_frame_range.first_frame
+    last_frame_inclusive = controller.sr_scan_frame_range.last_frame_inclusive
+    left_offset = controller.video_offsets.left_offset
+    right_offset = controller.video_offsets.right_offset
+    video_frame_loader = controller.video_frame_loader
 
-    if last_frame_inclusive != -1:
-        last_frame_left = last_frame_inclusive + left_offset
-        last_frame_right = last_frame_inclusive + right_offset
-    else:
-        last_frame_left = video_frame_loader.last_frame_num_left
-        last_frame_right = video_frame_loader.last_frame_num_right
+    last_frame_left, last_frame_right, num_frames_to_scan = calculate_last_frame_and_num_frames_to_scan(first_frame,
+                                                                                                        last_frame_inclusive,
+                                                                                                        left_offset,
+                                                                                                        right_offset,
+                                                                                                        video_frame_loader)
 
-    video_frame_loader.set_left_current_frame_num(first_frame_left)
-    video_frame_loader.set_right_current_frame_num(first_frame_right)
-
-    num_frames_to_scan = min([last_frame_left - first_frame_left,
-                              last_frame_right - first_frame_right])
+    video_frame_loader.set_left_current_frame_num(first_frame + left_offset)
+    video_frame_loader.set_right_current_frame_num(first_frame + right_offset)
 
     num_frames_scanned = 0
 

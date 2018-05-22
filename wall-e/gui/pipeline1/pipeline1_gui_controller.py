@@ -1,6 +1,7 @@
 from tkinter import *
 
 from gui.pipeline1.apply_sr_intro_screen import ApplySrIntroScreen
+from gui.pipeline1.apply_sr_progress_screen import ApplySrProgressScreen
 from gui.pipeline1.apply_sr_time_end_screen import ApplySrTimeEndScreen
 from gui.pipeline1.apply_sr_time_start_screen import ApplySrTimeStartScreen
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
@@ -27,7 +28,8 @@ screen_classes_in_order = (WelcomeScreen,
                            SrFrameSelection,
                            ApplySrIntroScreen,
                            ApplySrTimeStartScreen,
-                           ApplySrTimeEndScreen
+                           ApplySrTimeEndScreen,
+                           ApplySrProgressScreen
                            )
 first_screen = WelcomeScreen
 
@@ -44,6 +46,9 @@ class Pipeline1GuiController(Tk):
         self.sr_map = None
 
         self.apply_sr_frame_range = FrameRange()
+
+        self.left_video_filename_sr = None
+        self.right_video_filename_sr = None
 
         self.title("Video Processing Part 1 (of 2)")
         self.resizable(0, 0)
