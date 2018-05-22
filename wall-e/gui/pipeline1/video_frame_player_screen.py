@@ -32,35 +32,25 @@ class VideoFramePlayer(GuiBaseFrame):
 
         self.frame_num = 0
 
-    def setup_widgets(self):
+    def init_widgets(self):
         self.buttons = []
         self.content_wrapper = Frame(self)
 
         self.title_label = Header1Label(self.content_wrapper, text="Frame Offset Validation")
         self.subtitle_label = PLabel(self.content_wrapper,
                                      text="Use the buttons below to ensure that the video frame offset is valid.")
-        self.title_label.grid(row=TITLE_ROW, column=0, columnspan=12)
-        self.subtitle_label.grid(row=SUBTITLE_ROW, column=0, columnspan=12)
 
         self.left_frame_num_label = PLabel(self.content_wrapper)
         self.right_frame_num_label = PLabel(self.content_wrapper)
-        self.left_frame_num_label.grid(row=FRAME_NUM_ROW, column=0, columnspan=6)
-        self.right_frame_num_label.grid(row=FRAME_NUM_ROW, column=6, columnspan=6)
 
         self.left_video_label = PLabel(self.content_wrapper)
         self.right_video_label = PLabel(self.content_wrapper)
-        self.left_video_label.grid(row=VIDEO_FRAMES_ROW, column=0, columnspan=6)
-        self.right_video_label.grid(row=VIDEO_FRAMES_ROW, column=6, columnspan=6)
 
         self.left_offset_label = PLabel(self.content_wrapper)
         self.right_offset_label = PLabel(self.content_wrapper)
-        self.left_offset_label.grid(row=OFFSET_INC_INSTR_ROW, column=0, columnspan=2)
-        self.right_offset_label.grid(row=OFFSET_INC_INSTR_ROW, column=10, columnspan=2)
 
         self.left_offset_inc_instr = PLabel(self.content_wrapper, text="Increase left video offset by:")
         self.right_offset_inc_instr = PLabel(self.content_wrapper, text="Increase right video offset by:")
-        self.left_offset_inc_instr.grid(row=OFFSET_INC_INSTR_ROW, column=3, columnspan=3)
-        self.right_offset_inc_instr.grid(row=OFFSET_INC_INSTR_ROW, column=6, columnspan=3)
 
         self.left_offset_inc_10_button = Button(self.content_wrapper, text="+10",
                                                 command=lambda: self.adjust_left_offset(10))
@@ -74,18 +64,11 @@ class VideoFramePlayer(GuiBaseFrame):
                                                 command=lambda: self.adjust_right_offset(5))
         self.right_offset_inc_10_button = Button(self.content_wrapper, text="+10",
                                                  command=lambda: self.adjust_right_offset(10))
-        self.left_offset_inc_10_button.grid(row=OFFSET_INC_BUTTONS, column=3)
-        self.left_offset_inc_5_button.grid(row=OFFSET_INC_BUTTONS, column=4)
-        self.left_offset_inc_1_button.grid(row=OFFSET_INC_BUTTONS, column=5)
-        self.right_offset_inc_1_button.grid(row=OFFSET_INC_BUTTONS, column=6)
-        self.right_offset_inc_5_button.grid(row=OFFSET_INC_BUTTONS, column=7)
-        self.right_offset_inc_10_button.grid(row=OFFSET_INC_BUTTONS, column=8)
         self.buttons.extend([self.left_offset_inc_10_button, self.left_offset_inc_5_button,
                              self.left_offset_inc_1_button, self.right_offset_inc_1_button,
                              self.right_offset_inc_5_button, self.right_offset_inc_10_button])
 
         self.video_navigation_label = PLabel(self.content_wrapper, text="Video navigation:")
-        self.video_navigation_label.grid(row=VIDEO_NAVIGATION_ROW, column=0, columnspan=12)
 
         self.left_video_frame_inc_10_button = Button(self.content_wrapper, text="-10",
                                                      command=lambda: self.adjust_frame_num(-10))
@@ -99,12 +82,6 @@ class VideoFramePlayer(GuiBaseFrame):
                                                      command=lambda: self.adjust_frame_num(5))
         self.right_video_frame_inc_10_button = Button(self.content_wrapper, text="+10",
                                                       command=lambda: self.adjust_frame_num(10))
-        self.left_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=3)
-        self.left_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=4)
-        self.left_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=5)
-        self.right_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=6)
-        self.right_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=7)
-        self.right_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=8)
         self.buttons.extend([self.left_video_frame_inc_10_button, self.left_video_frame_inc_5_button,
                              self.left_video_frame_inc_1_button, self.right_video_frame_inc_1_button,
                              self.right_video_frame_inc_5_button, self.right_video_frame_inc_10_button])
@@ -121,21 +98,56 @@ class VideoFramePlayer(GuiBaseFrame):
                                                        command=lambda: self.adjust_frame_num(150))
         self.right_video_frame_inc_300_button = Button(self.content_wrapper, text="+300",
                                                        command=lambda: self.adjust_frame_num(300))
-        self.left_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=3)
-        self.left_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=4)
-        self.left_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=5)
-        self.right_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=6)
-        self.right_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=7)
-        self.right_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=8)
         self.buttons.extend([self.left_video_frame_inc_300_button, self.left_video_frame_inc_150_button,
                              self.left_video_frame_inc_30_button, self.right_video_frame_inc_30_button,
                              self.right_video_frame_inc_150_button, self.right_video_frame_inc_300_button])
 
         self.next_button = Button(self.content_wrapper, text="Next",
                                   command=lambda: self.controller.show_next_frame())
+
+    def add_widgets_to_frame(self):
+        self.title_label.grid(row=TITLE_ROW, column=0, columnspan=12)
+        self.subtitle_label.grid(row=SUBTITLE_ROW, column=0, columnspan=12)
+
+        self.left_frame_num_label.grid(row=FRAME_NUM_ROW, column=0, columnspan=6)
+        self.right_frame_num_label.grid(row=FRAME_NUM_ROW, column=6, columnspan=6)
+
+        self.left_video_label.grid(row=VIDEO_FRAMES_ROW, column=0, columnspan=6)
+        self.right_video_label.grid(row=VIDEO_FRAMES_ROW, column=6, columnspan=6)
+
+        self.left_offset_label.grid(row=OFFSET_INC_INSTR_ROW, column=0, columnspan=2)
+        self.right_offset_label.grid(row=OFFSET_INC_INSTR_ROW, column=10, columnspan=2)
+
+        self.left_offset_inc_instr.grid(row=OFFSET_INC_INSTR_ROW, column=3, columnspan=3)
+        self.right_offset_inc_instr.grid(row=OFFSET_INC_INSTR_ROW, column=6, columnspan=3)
+
+        self.left_offset_inc_10_button.grid(row=OFFSET_INC_BUTTONS, column=3)
+        self.left_offset_inc_5_button.grid(row=OFFSET_INC_BUTTONS, column=4)
+        self.left_offset_inc_1_button.grid(row=OFFSET_INC_BUTTONS, column=5)
+        self.right_offset_inc_1_button.grid(row=OFFSET_INC_BUTTONS, column=6)
+        self.right_offset_inc_5_button.grid(row=OFFSET_INC_BUTTONS, column=7)
+        self.right_offset_inc_10_button.grid(row=OFFSET_INC_BUTTONS, column=8)
+
+        self.video_navigation_label.grid(row=VIDEO_NAVIGATION_ROW, column=0, columnspan=12)
+
+        self.left_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=3)
+        self.left_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=4)
+        self.left_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=5)
+        self.right_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=6)
+        self.right_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=7)
+        self.right_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=8)
+
+        self.left_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=3)
+        self.left_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=4)
+        self.left_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=5)
+        self.right_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=6)
+        self.right_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=7)
+        self.right_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=8)
+
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=12)
 
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+
 
     def set_video_frame(self, frame_num, left_offset, right_offset):
         _, left_img = \
@@ -151,13 +163,13 @@ class VideoFramePlayer(GuiBaseFrame):
         self.right_video_label.configure(image=right_img)
         self.right_video_label.image = right_img
 
-    def start(self):
+    def on_show_frame(self):
         self.update_UI()
 
     def update_frame(self, data):
         pass
 
-    def stop(self):
+    def on_hide_frame(self):
         # TODO
         pass
 

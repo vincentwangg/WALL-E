@@ -16,7 +16,7 @@ class SrScanScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
 
-    def setup_widgets(self):
+    def init_widgets(self):
         self.content_wrapper = Frame(self)
         self.content_wrapper.configure(bg="white")
 
@@ -36,6 +36,7 @@ class SrScanScreen(GuiBaseFrame):
         self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
                                   command=lambda: self.controller.show_next_frame())
 
+    def add_widgets_to_frame(self):
         self.screen_title.pack()
         self.progress_bar.pack()
         self.wait_text.pack()
@@ -47,7 +48,7 @@ class SrScanScreen(GuiBaseFrame):
         self.next_button.pack()
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
-    def start(self):
+    def on_show_frame(self):
         self.start_time = time.time()
         self.sr_frame_count_thread = threading.Thread(target=get_list_of_valid_frames_for_sr_tkinter,
                                                       kwargs={"left_offset":
@@ -59,9 +60,9 @@ class SrScanScreen(GuiBaseFrame):
                                                               "controller":
                                                                   self.controller,
                                                               "first_frame":
-                                                                  self.controller.sr_scan_range.first_frame,
+                                                                  self.controller.sr_scan_frame_range.first_frame,
                                                               "last_frame_inclusive":
-                                                                  self.controller.sr_scan_range.last_frame_inclusive
+                                                                  self.controller.sr_scan_frame_range.last_frame_inclusive
                                                               })
         self.sr_frame_count_thread.start()
         self.master.after(50, self.check_thread)
@@ -95,7 +96,7 @@ class SrScanScreen(GuiBaseFrame):
                                          str(datetime.timedelta(seconds=estimated_time_left_seconds))
         self.estimated_time_left_label.configure(text=estimated_time_left_string)
 
-    def stop(self):
+    def on_hide_frame(self):
         self.progress_bar.stop()
 
     def check_thread(self):

@@ -1,0 +1,4 @@
+from gui.pipeline1.utilities.time_selection_end_screen import TimeSelectionEndScreen
+
+
+class ApplySrTimeEndScreen(TimeSelectionEndScreen):

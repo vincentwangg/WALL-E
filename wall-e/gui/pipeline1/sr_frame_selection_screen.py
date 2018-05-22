@@ -16,19 +16,20 @@ class SrFrameSelection(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
 
-    def setup_widgets(self):
+    def init_widgets(self):
         self.content_wrapper = Frame(self)
         self.screen_title = Header1Label(self.content_wrapper, text="Stereo Rectification Frame Selection")
         self.screen_description = PLabel(self.content_wrapper, text="Please select a frame that has a satisfactory "
                                                                     "stereo rectification result.")
 
+    def add_widgets_to_frame(self):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.screen_title.grid(row=0, column=0, columnspan=3)
         self.screen_description.grid(row=1, columnspan=3)
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=0.48, anchor=CENTER)
 
-    def start(self):
+    def on_show_frame(self):
         self.canvas_wrappers = []
         self.canvases = []
         self.page_num = 0
@@ -101,7 +102,7 @@ class SrFrameSelection(GuiBaseFrame):
     def update_frame(self, data):
         pass
 
-    def stop(self):
+    def on_hide_frame(self):
         pass
 
     def on_up_key(self, event):

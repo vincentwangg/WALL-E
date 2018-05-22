@@ -6,16 +6,17 @@ class GuiBaseFrame(Frame):
         Frame.__init__(self, master, **kw)
         self.master = master
         self.controller = controller
-        self.setup_widgets()
+        self.init_widgets()
+        self.add_widgets_to_frame()
 
-    def setup_widgets(self):
+    def init_widgets(self):
         raise NotImplementedError
 
-    def set_dimensions(self, width, height):
-        self.configure(width=width, height=height)
+    def add_widgets_to_frame(self):
+        raise NotImplementedError
 
     # Perform any logic needed when the frame is on top
-    def start(self):
+    def on_show_frame(self):
         raise NotImplementedError
 
     # Main use is for progress bars being updated.
@@ -23,5 +24,8 @@ class GuiBaseFrame(Frame):
         raise NotImplementedError
 
     # Perform any logic needed when frame is no longer in focus
-    def stop(self):
+    def on_hide_frame(self):
         raise NotImplementedError
+
+    def set_dimensions(self, width, height):
+        self.configure(width=width, height=height)

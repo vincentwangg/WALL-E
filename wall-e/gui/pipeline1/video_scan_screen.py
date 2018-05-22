@@ -15,7 +15,7 @@ class VideoScanScreen(GuiBaseFrame):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
         self.counting_left_frames = None
 
-    def setup_widgets(self):
+    def init_widgets(self):
         self.content_wrapper = Frame(self)
         self.content_wrapper.configure(background="white")
         self.screen_title = Header1Label(self.content_wrapper,
@@ -31,6 +31,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
                                   command=lambda: self.controller.show_next_frame())
 
+    def add_widgets_to_frame(self):
         self.screen_title.pack()
         self.progress_bar.pack()
         self.wait_text.pack()
@@ -41,7 +42,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.next_button.pack()
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
-    def start(self):
+    def on_show_frame(self):
         self.start_time = time.time()
         self.progress_bar.start()
         self.frame_count_thread = threading.Thread(target=self.controller.video_frame_loader.count_frames_in_videos,
@@ -58,7 +59,7 @@ class VideoScanScreen(GuiBaseFrame):
         self.elapsed_time_label.configure(text=ELAPSED_TIME_PREFIX +
                                                str(datetime.timedelta(seconds=int(time.time() - self.start_time))))
 
-    def stop(self):
+    def on_hide_frame(self):
         self.progress_bar.stop()
 
     def check_thread(self):

@@ -11,7 +11,7 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
 
-    def setup_widgets(self):
+    def init_widgets(self):
         self.content_wrapper = Frame(self)
 
         self.screen_title = Header1Label(self.content_wrapper, text=SR_FRAME_SELECTION_TITLE)
@@ -27,6 +27,7 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
         self.skip_button = Button(self.button_wrapper, text="Skip",
                                   command=lambda: self.skip_sr_frame_suggestion())
 
+    def add_widgets_to_frame(self):
         self.screen_title.pack()
         self.screen_description_label.pack()
         self.button_wrapper.pack()
@@ -34,15 +35,15 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
         self.skip_button.grid(row=0, column=1)
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
-    def start(self):
+    def on_show_frame(self):
         pass
 
     def update_frame(self, data):
         pass
 
-    def stop(self):
+    def on_hide_frame(self):
         pass
 
     def skip_sr_frame_suggestion(self):
-        self.controller.sr_scan_range.reset_to_default()
+        self.controller.sr_scan_frame_range.reset_to_default()
         self.controller.show_frame(SrScanScreen)

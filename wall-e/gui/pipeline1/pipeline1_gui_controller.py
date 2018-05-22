@@ -1,6 +1,5 @@
 from tkinter import *
 
-from gui.pipeline1.apply_sr_intro_screen import ApplySrIntroScreen
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
@@ -23,7 +22,9 @@ screen_classes_in_order = (WelcomeScreen,
                            SrFrameSuggestionTimeEndScreen,
                            SrScanScreen,
                            SrFrameSelection,
-                           ApplySrIntroScreen
+                           # ApplySrIntroScreen,
+                           # ApplySrTimeStartScreen,
+
                            )
 first_screen = WelcomeScreen
 
@@ -35,14 +36,11 @@ class Pipeline1GuiController(Tk):
         self.video_frame_loader = None
         self.top_frame = None
         self.video_offsets = VideoOffsets()
-        self.sr_scan_range = FrameRange()
-        self.sr_scan_start_seconds = None
+        self.sr_scan_frame_range = FrameRange()
         self.sr_results = None
         self.sr_map = None
 
         self.apply_sr_frame_range = FrameRange()
-        self.apply_sr_start_seconds = None
-
 
         self.title("Video Processing Part 1 (of 2)")
         self.resizable(0, 0)
@@ -71,25 +69,24 @@ class Pipeline1GuiController(Tk):
 
     def show_next_frame(self):
         idx = screen_classes_in_order.index(self.top_frame)
-        next_frame_class = screen_classes_in_order[idx + 1]
-        self.show_frame(next_frame_class)
+        if idx < len(screen_classes_in_order) - 1:
+            next_frame_class = screen_classes_in_order[idx + 1]
+            self.show_frame(next_frame_class)
 
     def show_prev_frame(self):
         idx = screen_classes_in_order.index(self.top_frame)
-        prev_frame_class = screen_classes_in_order[idx - 1]
-        self.show_frame(prev_frame_class)
+        if idx > 0:
+            prev_frame_class = screen_classes_in_order[idx - 1]
+            self.show_frame(prev_frame_class)
 
     def show_frame(self, frame_class):
-        self.stop_top_frame()
+        self.frames[self.top_frame].on_hide_frame()
         self.set_and_start_top_frame(frame_class)
 
     def set_and_start_top_frame(self, frame_class):
         self.top_frame = frame_class
         self.frames[frame_class].tkraise()
-        self.frames[frame_class].start()
-
-    def stop_top_frame(self):
-        self.frames[self.top_frame].stop()
+        self.frames[frame_class].on_show_frame()
 
     def update_frame(self, data):
         self.frames[self.top_frame].update_frame(data)
@@ -130,7 +127,7 @@ class Pipeline1GuiController(Tk):
         else:
             return self.video_frame_loader.right_feed_basename
 
-    def is_frame_num_valid(self, frame_num):
+    def is_frame_num_within_video_bounds(self, frame_num):
         if frame_num < 0:
             return False
 

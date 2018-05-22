@@ -30,11 +30,8 @@ class VideoSelectionScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
 
-    def setup_widgets(self):
+    def init_widgets(self):
         self.content_wrapper = Frame(self)
-
-        self.content_wrapper.grid_columnconfigure(0, weight=1)
-        self.content_wrapper.grid_columnconfigure(1, weight=1)
 
         self.init_video_info()
 
@@ -51,7 +48,11 @@ class VideoSelectionScreen(GuiBaseFrame):
 
         self.add_img_previews()
 
-        self.screen_title_label.grid(row=SCREEN_TITLE_ROW, column = 0, columnspan=CENTER_SCREEN_COLSPAN)
+    def add_widgets_to_frame(self):
+        self.content_wrapper.grid_columnconfigure(0, weight=1)
+        self.content_wrapper.grid_columnconfigure(1, weight=1)
+
+        self.screen_title_label.grid(row=SCREEN_TITLE_ROW, column=0, columnspan=CENTER_SCREEN_COLSPAN)
         self.instruction_label.grid(row=INSTRUCTION_ROW, column=LEFT_VIDEO_THUMBNAIL_COL,
                                     columnspan=CENTER_SCREEN_COLSPAN)
 
@@ -93,14 +94,14 @@ class VideoSelectionScreen(GuiBaseFrame):
         if self.left_video_selected and self.right_video_selected:
             self.next_button.configure(state=NORMAL)
 
-    def start(self):
+    def on_show_frame(self):
         if does_tmp_file_exist_basename(VIDEOS_SELECTED_TMP_FILENAME):
             video_filenames = read_tmp_file(VIDEOS_SELECTED_TMP_FILENAME)
             video_filenames = ast.literal_eval(video_filenames)
             self.set_video_thumbnail_based_on_filename(video_filenames[LEFT], LEFT)
             self.set_video_thumbnail_based_on_filename(video_filenames[RIGHT], RIGHT)
 
-    def stop(self):
+    def on_hide_frame(self):
         video_filenames_used = {LEFT: self.left_video_filename, RIGHT: self.right_video_filename}
         write_to_tmp_file(VIDEOS_SELECTED_TMP_FILENAME, str(video_filenames_used))
 

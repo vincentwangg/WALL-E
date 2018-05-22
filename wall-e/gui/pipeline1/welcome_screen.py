@@ -10,7 +10,7 @@ class WelcomeScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
 
-    def setup_widgets(self):
+    def init_widgets(self):
         self.text_container = Frame(self)
         self.welcome_label = Header1Label(self.text_container,
                                           text="Welcome to the full WALL-E footage processing experience!!")
@@ -24,14 +24,15 @@ class WelcomeScreen(GuiBaseFrame):
         self.next_button = Button(self.text_container, text="Get Started",
                                   command=lambda: self.controller.show_next_frame())
 
+    def add_widgets_to_frame(self):
         self.welcome_label.pack()
         self.description_label.pack()
         self.good_luck_label.pack()
         self.next_button.pack()
         self.text_container.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
-    def start(self):
+    def on_show_frame(self):
         pass
 
-    def stop(self):
+    def on_hide_frame(self):
         pass
