@@ -44,5 +44,5 @@ class ApplySrIntroScreen(GuiBaseFrame):
         pass
 
     def skip_sr_frame_suggestion(self):
-        self.controller.sr_scan_frame_range.reset_to_default()
+        self.controller.apply_sr_frame_range.reset_to_default()
         # self.controller.show_frame()

@@ -1,5 +1,8 @@
 from tkinter import *
 
+from gui.pipeline1.apply_sr_intro_screen import ApplySrIntroScreen
+from gui.pipeline1.apply_sr_time_end_screen import ApplySrTimeEndScreen
+from gui.pipeline1.apply_sr_time_start_screen import ApplySrTimeStartScreen
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
@@ -22,9 +25,9 @@ screen_classes_in_order = (WelcomeScreen,
                            SrFrameSuggestionTimeEndScreen,
                            SrScanScreen,
                            SrFrameSelection,
-                           # ApplySrIntroScreen,
-                           # ApplySrTimeStartScreen,
-
+                           ApplySrIntroScreen,
+                           ApplySrTimeStartScreen,
+                           ApplySrTimeEndScreen
                            )
 first_screen = WelcomeScreen
 
