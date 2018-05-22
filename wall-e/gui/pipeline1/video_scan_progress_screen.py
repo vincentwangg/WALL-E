@@ -10,7 +10,7 @@ from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
 
-class VideoScanScreen(GuiBaseFrame):
+class VideoScanProgressScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
         self.counting_left_frames = None

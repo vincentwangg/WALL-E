@@ -12,7 +12,7 @@ from gui.widgets.p_label import PLabel
 from stereo_rectification.sr_map_gen import get_list_of_valid_frames_for_sr_tkinter
 
 
-class SrScanScreen(GuiBaseFrame):
+class SrScanProgressScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
 
@@ -32,7 +32,7 @@ class SrScanScreen(GuiBaseFrame):
         self.valid_frames_found_label = PLabel(self.content_wrapper, text=VALID_FRAMES_FOUND_PREFIX + "0")
         self.elapsed_time_label = PLabel(self.content_wrapper)
         self.estimated_time_left_label = PLabel(self.content_wrapper)
-        self.empty_space = PLabel(self.content_wrapper, text=" ")
+        self.empty_space = PLabel(self.content_wrapper)
         self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
                                   command=lambda: self.controller.show_next_frame())
 
@@ -76,10 +76,7 @@ class SrScanScreen(GuiBaseFrame):
         total_frames = max([1, total_frames])
         progress_percent = frames_read * 100.0 / total_frames
 
-        # Progress values may come in out of order, so if the value that
-        # comes in is lower than the current progress, ignore it
-        if self.progress_bar.cget("value") < progress_percent:
-            self.progress_bar_control_var.set(progress_percent)
+        self.progress_bar_control_var.set(progress_percent)
 
         elapsed_time_seconds = int(time.time() - self.start_time)
 

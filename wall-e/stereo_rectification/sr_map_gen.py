@@ -151,7 +151,7 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
         frame_num = frame_num + 1
 
 
-# For GUI class VideoScanScreen in sr_scan_screen.py
+# For GUI class VideoScanScreen in sr_scan_progress_screen.py
 def get_list_of_valid_frames_for_sr_tkinter(left_offset, right_offset, video_frame_loader, controller,
                                             first_frame, last_frame_inclusive):
     sr_results = []
@@ -299,7 +299,7 @@ def generate_sr_map(left_img, right_img):
         find_chessboard_corners(left_img, right_img)
 
     if not (img_left_corners_success and img_right_corners_success):
-        return False, None, None
+        return False, None, None, None
 
     # Tuning these parameters does not appear to effect the end result
     max_iterations = 30

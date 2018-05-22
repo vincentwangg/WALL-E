@@ -1,7 +1,7 @@
 from tkinter import *
 
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y, SR_FRAME_SELECTION_TITLE
-from gui.pipeline1.sr_scan_screen import SrScanScreen
+from gui.pipeline1.sr_scan_progress_screen import SrScanProgressScreen
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -46,4 +46,4 @@ class SrFrameSuggestionIntroScreen(GuiBaseFrame):
 
     def skip_sr_frame_suggestion(self):
         self.controller.sr_scan_frame_range.reset_to_default()
-        self.controller.show_frame(SrScanScreen)
+        self.controller.show_frame(SrScanProgressScreen)
