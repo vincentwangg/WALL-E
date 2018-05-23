@@ -18,6 +18,8 @@ class Camera:
 
 
     def get_focal_length(self): # needs video and access to sr_map
+
+        return 10
         load_keycodes()
         checkerboard_shape = (3, 3)
         checkerboard_distance = 5 # how far away the checkerboard is from the camera in mm

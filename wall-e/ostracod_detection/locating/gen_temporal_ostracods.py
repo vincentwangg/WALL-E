@@ -50,9 +50,6 @@ def prune_ostracod_list(temp_ostracods):
 def is_same_ostracod(ost1, ost2):
   return np.sqrt(np.power((ost1.location[0] - ost2.location[0]), 2) \
     + np.power((ost1.location[1] - ost2.location[1]), 2)) < CENTROID_MAX_DIST
-  # is_valid_area = abs(ost1.area - ost2.area) < MAX_AREA_DIFF
-  # return is_valid_area and is_valid_distance
-
 
 def main():
   parser = argparse.ArgumentParser(description='Find Ostracods (Temporal)')
