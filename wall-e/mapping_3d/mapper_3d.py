@@ -49,6 +49,6 @@ def gen_frame_pulse_data(matched_ostracod_list, frame_pulse_data):
         delt_r = (init_r - THRESH_R) / o.num_frames
         num_frames = int(init_r / delt_r)
         for x in range(num_frames):
-        frame_pulse_data.add_pulse_to_frame(o.frame_start + x,
+            frame_pulse_data.add_pulse_to_frame(o.frame_start + x,
                          PulseData(o.location, init_r - (x * delt_r), brightness=1))
 
