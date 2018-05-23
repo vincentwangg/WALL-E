@@ -8,7 +8,7 @@ import os
 from gui.pipeline1.constants import APPLY_SR_SCREEN_PROGRESS_DICT_KEYS
 from stereo_rectification.constants import *
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
-from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
+from stereo_rectification.utilities_sr.frame_calculations import calculate_last_frame_and_num_frames_to_scan
 from utilities.file_checker import check_if_file_exists
 from utilities.yaml_utility import read_from_yml
 from utilities.video_frame_loader import VideoFrameLoader

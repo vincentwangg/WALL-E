@@ -8,7 +8,7 @@ from gui.pipeline1.constants import SR_PROGRESS_DICT_KEYS, LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
-from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
+from stereo_rectification.utilities_sr.frame_calculations import calculate_last_frame_and_num_frames_to_scan
 from utilities.file_checker import check_if_file_exists
 from utilities.image_converter import cv2_gray_image_to_tkinter_with_resize
 from utilities.video_frame_loader import VideoFrameLoader
