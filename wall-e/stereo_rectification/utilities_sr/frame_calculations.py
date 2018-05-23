@@ -13,4 +13,7 @@ def calculate_last_frame_and_num_frames_to_scan(first_frame, last_frame_inclusiv
     num_frames_to_scan = min([last_frame_left - first_frame_left,
                               last_frame_right - first_frame_right])
 
+    if num_frames_to_scan == 0:
+        num_frames_to_scan = 1
+
     return last_frame_left, last_frame_right, num_frames_to_scan

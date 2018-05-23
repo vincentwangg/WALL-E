@@ -2,16 +2,18 @@
 # Undistorts and stereo rectifies videos 2:53,
 
 import argparse
-import cv2
 import os
 
-from gui.pipeline1.constants import APPLY_SR_SCREEN_PROGRESS_DICT_KEYS
+import cv2
+
+from gui.pipeline1.constants import FRAMES_STEREO_RECTIFIED_PREFIX
+from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from stereo_rectification.constants import *
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
 from stereo_rectification.utilities_sr.frame_calculations import calculate_last_frame_and_num_frames_to_scan
 from utilities.file_checker import check_if_file_exists
-from utilities.yaml_utility import read_from_yml
 from utilities.video_frame_loader import VideoFrameLoader
+from utilities.yaml_utility import read_from_yml
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.php
 
@@ -123,6 +125,7 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
           full_filename_l + "\" and \"" + full_filename_r + "\"")
 
 
+# Logic behind Apply Sr GUI screen
 def apply_sr_gui_logic(controller):
     first_frame = controller.apply_sr_frame_range.first_frame
     last_frame_inclusive = controller.apply_sr_frame_range.last_frame_inclusive
@@ -190,7 +193,19 @@ def apply_sr_gui_logic(controller):
 
 
 def create_data_package_for_ui(controller, frames_processed, total_frames):
-    controller.update_frame(dict(zip(APPLY_SR_SCREEN_PROGRESS_DICT_KEYS, [frames_processed, total_frames])))
+    progress_percent = frames_processed * 100.0 / total_frames
+    frames_processed_message = create_frames_stereo_rectified_text(frames_processed, total_frames, progress_percent)
+    controller.update_frame({
+        PROGRESS_SCREEN_PERCENT_DONE: progress_percent,
+        PROGRESS_SCREEN_MESSAGE_LIST: [
+            frames_processed_message
+        ]
+    })
+
+
+def create_frames_stereo_rectified_text(frames_processed, total_frames, progress_percent):
+    return FRAMES_STEREO_RECTIFIED_PREFIX + str(frames_processed) + "/" + str(total_frames) + \
+           " (" + str(round(progress_percent, 2)) + "%)"
 
 
 if __name__ == '__main__':

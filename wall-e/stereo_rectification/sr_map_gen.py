@@ -1,11 +1,12 @@
 # Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
 
 import argparse
-import json
 
 from config.keycode_setup import *
-from gui.pipeline1.constants import SR_PROGRESS_DICT_KEYS, LEFT, RIGHT, \
-    VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL
+from gui.pipeline1.constants import LEFT, RIGHT, \
+    VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL, FRAMES_READ_PREFIX, \
+    VALID_FRAMES_FOUND_PREFIX
+from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
 from stereo_rectification.utilities_sr.frame_calculations import calculate_last_frame_and_num_frames_to_scan
@@ -215,7 +216,21 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
 
 
 def create_data_package_for_ui(controller, valid_frames, num_frames_scanned, num_frames_to_scan):
-    controller.update_frame(dict(zip(SR_PROGRESS_DICT_KEYS, [valid_frames, num_frames_scanned, num_frames_to_scan])))
+    progress_percent = num_frames_scanned * 100.0 / num_frames_to_scan
+    frames_processed_message = create_frames_read_text(num_frames_scanned, num_frames_to_scan, progress_percent)
+    valid_frames_found_message = VALID_FRAMES_FOUND_PREFIX + str(valid_frames)
+    controller.update_frame({
+        PROGRESS_SCREEN_PERCENT_DONE: progress_percent,
+        PROGRESS_SCREEN_MESSAGE_LIST: [
+            frames_processed_message,
+            valid_frames_found_message
+        ]
+    })
+
+
+def create_frames_read_text(frames_read, total_frames, progress_percent):
+    return FRAMES_READ_PREFIX + str(frames_read) + "/" + str(total_frames) + \
+           " (" + str(round(progress_percent, 2)) + "%)"
 
 
 def display_no_frames_left_message(frames):
