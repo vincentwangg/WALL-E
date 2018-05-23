@@ -17,11 +17,15 @@ def main():
     parser.add_argument("left_video", help="filename of the left video feed", type=str)
     parser.add_argument("right_video", help="filename of the right video feed", type=str)
     parser.add_argument("baseline", help="The distance between the two stereo cameras", type=float)
+    parser.add_argument("-y", "--yaml_file", default=None, type=str,
+                        help="Filename of the yaml file that contains the stereo rectification maps. Default is None")
+
     args = parser.parse_args()
 
     left_file_name = args.left_video
     right_file_name = args.right_video
     baseline = args.baseline
+    sr_yml_file_name = args.yaml_file
 
     check_if_file_exists(left_file_name)
     check_if_file_exists(right_file_name)
@@ -40,7 +44,7 @@ def main():
     ostracod_matches = get_ostracod_matches(ostracods_l, ostracods_r)
     match_time = time.time() - match_start
 
-    camera = Camera(baseline=baseline)
+    camera = Camera(baseline=baseline, sr_yml_filename=sr_yml_file_name)
     fpd = FramePulseData()
 
     depth_map_start = time.time()

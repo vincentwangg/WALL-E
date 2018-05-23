@@ -1,23 +1,21 @@
 from stereo_rectification.apply_sr import undistort
 from stereo_rectification.apply_sr import generate_maps
 from stereo_rectification.apply_sr import apply_rectify_maps
-from stereo_rectification.sr_map_gen import SR_MAP_GENERATED_FILENAME
-from definitions import PROJECT_ROOT_PATH, SRC_PATH
+from definitions import PROJECT_ROOT_PATH
 from config.keycode_setup import *
 from utilities.file_checker import check_if_file_exists
 
-# TODO: Take a video of a checkerboard at a known distance
 
 class Camera:
-    def __init__(self, baseline, focal_length=None):
+    def __init__(self, baseline, focal_length=None, sr_yml_filename=None):
         if focal_length is None:
-            self.focal_length = self.get_focal_length()
+            self.focal_length = self.get_focal_length(sr_yml_filename)
         else:
             self.focal_length = focal_length
         self.baseline = baseline
 
 
-    def get_focal_length(self): # needs video and access to sr_map
+    def get_focal_length(self, sr_yml_filename): # needs video and access to sr_map
         load_keycodes()
         checkerboard_shape = (3, 3)
         checkerboard_distance = 383 # how far away the checkerboard is from the camera in mm
@@ -28,11 +26,11 @@ class Camera:
         check_if_file_exists(vid_filename)
 
         calibration_video = cv2.VideoCapture(vid_filename)
-        sr_yml_filename = SRC_PATH + "/stereo_rectification/" + "wes_14246_csfl_cffl_cztd.yml"
 
-        check_if_file_exists(sr_yml_filename)
+        if sr_yml_filename is not None:
+            check_if_file_exists(sr_yml_filename)
+            (l_map, r_map) = generate_maps(sr_yml_filename)
 
-        (l_map, r_map) = generate_maps(sr_yml_filename)
         if start_frame_num > 0:
             calibration_video.set(cv2.CAP_PROP_POS_FRAMES, start_frame_num-1)
 
@@ -45,7 +43,10 @@ class Camera:
 
         while success:
             image = undistort(image)
-            image = apply_rectify_maps(image, r_map[0], r_map[1])
+
+            if sr_yml_filename is not None:
+                image = apply_rectify_maps(image, r_map[0], r_map[1])
+
             found_check, img_coords = cv2.findChessboardCorners(image, checkerboard_shape,
                                                             cv2.CALIB_CB_ADAPTIVE_THRESH +
                                                             cv2.CALIB_CB_FILTER_QUADS)
