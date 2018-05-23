@@ -1,9 +1,9 @@
 from tkinter import Frame, Button
 
-from gui.pipeline1.utilities.inputs import setup_hms_input
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
+from gui.widgets.utilities import setup_hms_input
 
 
 class TimeSelectionBaseScreen(GuiBaseFrame):

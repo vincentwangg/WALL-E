@@ -1,7 +1,8 @@
+from gui.pipeline1.utilities.inputs import frame_input_within_video_bounds_check, calculate_frame_num_from_inputs, \
+    apply_sr_frame_range_valid_check
+
 from gui.pipeline1.constants import APPLY_SR_SCREEN_TITLE
-from gui.pipeline1.utilities.inputs import frame_input_within_video_bounds_check, sr_scan_frame_range_valid_check, \
-    calculate_frame_num_from_inputs, apply_sr_frame_range_valid_check
-from gui.pipeline1.utilities.time_selection_end_screen import TimeSelectionEndScreen
+from gui.widgets.utilities.time_selection_end_screen import TimeSelectionEndScreen
 
 
 class ApplySrTimeEndScreen(TimeSelectionEndScreen):

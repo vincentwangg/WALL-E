@@ -1,7 +1,7 @@
 from tkinter import CENTER
 
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
-from gui.pipeline1.utilities.time_selection_base_screen import TimeSelectionBaseScreen
+from gui.widgets.utilities import TimeSelectionBaseScreen
 
 
 class TimeSelectionEndScreen(TimeSelectionBaseScreen):

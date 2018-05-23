@@ -1,6 +1,8 @@
+from gui.pipeline1.utilities.inputs import calculate_frame_num_from_inputs, frame_input_within_video_bounds_check, \
+    sr_scan_frame_range_valid_check
+
 from gui.pipeline1.constants import SR_FRAME_SELECTION_TITLE
-from gui.pipeline1.utilities.inputs import calculate_frame_num_from_inputs, frame_input_within_video_bounds_check, sr_scan_frame_range_valid_check
-from gui.pipeline1.utilities.time_selection_end_screen import TimeSelectionEndScreen
+from gui.widgets.utilities.time_selection_end_screen import TimeSelectionEndScreen
 
 ENTRY_WIDTH = 5
 

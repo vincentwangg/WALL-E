@@ -1,6 +1,6 @@
 from gui.pipeline1.constants import APPLY_SR_SCREEN_TITLE
-from gui.pipeline1.utilities.inputs import calculate_frame_num_from_inputs, frame_input_within_video_bounds_check
-from gui.pipeline1.utilities.time_selection_start_screen import TimeSelectionStartScreen
+from gui.widgets.utilities import TimeSelectionStartScreen
+from gui.widgets.utilities import calculate_frame_num_from_inputs, frame_input_within_video_bounds_check
 
 
 class ApplySrTimeStartScreen(TimeSelectionStartScreen):
