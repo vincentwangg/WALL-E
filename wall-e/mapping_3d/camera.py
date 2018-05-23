@@ -18,19 +18,17 @@ class Camera:
 
 
     def get_focal_length(self): # needs video and access to sr_map
-
-        return 10
         load_keycodes()
         checkerboard_shape = (3, 3)
-        checkerboard_distance = 5 # how far away the checkerboard is from the camera in mm
-        width_of_one_square = 2.6 # mm
+        checkerboard_distance = 383 # how far away the checkerboard is from the camera in mm
+        width_of_one_square = 26 # mm
         start_frame_num = 1
-        vid_filename = PROJECT_ROOT_PATH + "/videos/45_r_check.mkv"
+        vid_filename = PROJECT_ROOT_PATH + "/videos/focal_length_calib.mkv"
 
         check_if_file_exists(vid_filename)
 
         calibration_video = cv2.VideoCapture(vid_filename)
-        sr_yml_filename = SRC_PATH + "/stereo_rectification/" + SR_MAP_GENERATED_FILENAME
+        sr_yml_filename = SRC_PATH + "/stereo_rectification/" + "wes_14246_csfl_cffl_cztd.yml"
 
         check_if_file_exists(sr_yml_filename)
 
@@ -51,9 +49,11 @@ class Camera:
             found_check, img_coords = cv2.findChessboardCorners(image, checkerboard_shape,
                                                             cv2.CALIB_CB_ADAPTIVE_THRESH +
                                                             cv2.CALIB_CB_FILTER_QUADS)
+
             if found_check:
                 print "Frame num: ", frame_num
-                image_2 = cv2.drawChessboardCorners(image, checkerboard_shape, img_coords, success)
+                image_2 = cv2.drawChessboardCorners(image.copy(), checkerboard_shape, img_coords, success)
+
                 cv2.imshow("focal_length_calibration_checkerboard", image_2)
                 print "Accept Frame? (Y/N)"
                 print "Quit the program. CAUTION!! (Q)"
@@ -78,10 +78,41 @@ class Camera:
         imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         img_points = [cv2.cornerSubPix(imgray, img_coords, (11, 11), (-1, -1), criteria)]
 
-        pixel_distance = img_points[0][0][0][0] - img_points[0][1][0][0]
+        print "On to the next round!!!"
+        x_1 = None
+        x_2 = None
+        while (x_1 is None or x_2 is None):
+            for i in xrange(1, 9):
+                loc1 = (int(img_points[0][0][0][0]), int(img_points[0][0][0][1]))
+                loc2 = (int(img_points[0][i][0][0]), int(img_points[0][i][0][1]))
+
+                copy = image_2.copy()
+
+                cv2.circle(copy, loc1, 8, (255, 0, 0), thickness=3, lineType=8, shift=0)
+                cv2.circle(copy, loc2, 8, (255, 0, 0), thickness=3, lineType=8, shift=0)
+
+                cv2.imshow("image", copy)
+                print ""
+                print "Select points that are 1 square away in the x direction."
+                print "Accept Frame? (Y/N)"
+                print "Quit the program. CAUTION!! (Q)"
+                key = cv2.waitKey(0)
+                cv2.destroyAllWindows()
+
+                if key == get_keycode_from_key_code_entry(Q_KEY):
+                    sys.exit("Quiting program... GOODBYE")
+                elif key == get_keycode_from_key_code_entry(Y_KEY):
+                    x_1 = loc1[0]
+                    x_2 = loc2[0]
+                    break
+                elif key == get_keycode_from_key_code_entry(N_KEY):
+                    continue
+
+
+        pixel_distance = abs(x_1 - x_2)
 
         focal_length = checkerboard_distance*pixel_distance/width_of_one_square
-
+        print "focal length: ", focal_length
         return focal_length
 
 def main():
