@@ -15,8 +15,8 @@ from utilities.video_frame_player import play_video
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("left_video", help="filename of the left video feed")
-    parser.add_argument("right_video", help="filename of the right video feed")
+    parser.add_argument("-lv", "--left_video", help="filename of the left video feed")
+    parser.add_argument("-rv", "--right_video", help="filename of the right video feed")
     parser.add_argument("-lc", "--left_cb_video", help="filename of the left video feed's chessboard video (if the "
                                                        "main left video doesn't have a chessboard for stereo "
                                                        "rectification")
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     # ~frame matching logic~
     # can pass in start and end timstamp if you know where LED flashes occur!
-    left_offset, right_offset, _, _ = frame_match_(args.left_video, args.right_video, None, None)
+    left_offset, right_offset, _, _ = frame_match(args.left_video, args.right_video, None, None)
 
     # Show video frame player to verify offset
     left_offset, right_offset = play_video(args.left_video, args.right_video, left_offset, right_offset, 0)

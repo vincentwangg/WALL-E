@@ -4,7 +4,9 @@ import math
 import sys
 import cv2
 import argparse
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib import pyplot as plt
 
 def get_gradient_diff(l_gradient, r_gradient, gradient_len, offset):
   diff = abs(l_gradient - np.roll(r_gradient, offset))[max(0, offset):min(gradient_len, gradient_len + offset)]
@@ -91,9 +93,9 @@ def frame_match(left_file_name, right_file_name, start_timestamp, end_timestamp)
   start_frame = start_timestamp * 30 if start_timestamp else 0
   end_frame =   end_timestamp * 30 if end_timestamp else -1
 
-  print 'left feed gradient calculating...'
+  print('left feed gradient calculating...')
   l_gradient = calculate_gradient(left_file_name, start_frame, end_frame) if end_timestamp else calculate_gradient(args.left_feed, start_frame)
-  print 'right feed gradient calculating...'
+  print('right feed gradient calculating...')
   r_gradient = calculate_gradient(right_file_name, start_frame, end_frame) if end_timestamp else calculate_gradient(args.right_feed, start_frame)
 
   opt = get_optimal_offset(l_gradient, r_gradient, 50)
