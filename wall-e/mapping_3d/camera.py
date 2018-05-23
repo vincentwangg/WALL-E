@@ -42,6 +42,7 @@ class Camera:
             sys.exit("video failed to load in function get_focal_length() of camera.py!")
 
         while success:
+            cv2.imshow("original image", image)
             image = undistort(image)
 
             if sr_yml_filename is not None:
@@ -64,8 +65,7 @@ class Camera:
                     sys.exit("Quiting program... GOODBYE")
                 elif key == get_keycode_from_key_code_entry(Y_KEY):
                     break
-                elif key == get_keycode_from_key_code_entry(N_KEY):
-                    continue
+
             success, image = calibration_video.read()
             frame_num += 1
 
@@ -117,7 +117,7 @@ class Camera:
         return focal_length
 
 def main():
-    camera = Camera(baseline=500)
+    camera = Camera(baseline=215.9)
     print "baseline:", camera.baseline, "focal length: ", camera.focal_length
 
 if __name__ == '__main__':
