@@ -1,4 +1,4 @@
-from tkinter import Label
+from Tkinter import Label
 
 
 class Header1Label(Label):

@@ -1,8 +1,8 @@
 import datetime
 import threading
 import time
-from tkinter import Frame, DoubleVar, HORIZONTAL, Button, DISABLED, CENTER, NORMAL
-from tkinter.ttk import Progressbar
+from Tkinter import Frame, DoubleVar, HORIZONTAL, Button, DISABLED, CENTER, NORMAL
+from ttk import Progressbar
 
 from gui.pipeline1.constants import WINDOW_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
 from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST, ELAPSED_TIME_PREFIX, \

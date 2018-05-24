@@ -1,10 +1,10 @@
-from tkinter import *
+from Tkinter import Label
 
 import cv2
 
 from definitions import *
 from gui.widgets.gui_base_frame import GuiBaseFrame
-from utilities.image_converter import cv2_bgr_image_to_tkinter_with_resize
+from utils_general.image_converter import cv2_bgr_image_to_tkinter_with_resize
 
 WALLE_ICON_WIDTH = 292
 WALLE_ICON_HEIGHT = 103

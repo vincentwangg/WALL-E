@@ -1,6 +1,6 @@
 import ast
-from tkinter import *
-from tkinter import filedialog
+from Tkinter import Frame, Button, DISABLED, Label, NORMAL, CENTER
+from tkFileDialog import askopenfilename
 
 import cv2
 
@@ -10,8 +10,8 @@ from gui.pipeline1.constants import VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT, S
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
-from utilities.image_converter import cv2_bgr_image_to_tkinter_with_resize
-from utilities.tmp_file_writer import write_to_tmp_file, read_tmp_file, does_tmp_file_exist_basename
+from utils_general.image_converter import cv2_bgr_image_to_tkinter_with_resize
+from utils_general.tmp_file_writer import write_to_tmp_file, read_tmp_file, does_tmp_file_exist_basename
 
 SCREEN_TITLE_ROW = 0
 INSTRUCTION_ROW = SCREEN_TITLE_ROW + 1
@@ -79,7 +79,8 @@ class VideoSelectionScreen(GuiBaseFrame):
 
     def add_img_previews(self):
         img_not_available = cv2.imread(get_asset_filename(IMG_NOT_AVAILABLE_FILENAME))
-        img_not_available = cv2_bgr_image_to_tkinter_with_resize(img_not_available, VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT)
+        img_not_available = cv2_bgr_image_to_tkinter_with_resize(img_not_available, VIDEO_PREVIEW_WIDTH,
+                                                                 VIDEO_PREVIEW_HEIGHT)
 
         self.left_video_thumbnail = Label(self.content_wrapper, image=img_not_available)
         self.left_video_thumbnail.image = img_not_available
@@ -134,8 +135,8 @@ class VideoSelectionScreen(GuiBaseFrame):
 
 
 def select_video_filename():
-    filename = filedialog.askopenfilename(initialdir=os.path.dirname(ROOT_DIR), title="Select left video",
-                                          filetypes=[("MKV files", "*.mkv"),
-                                                     ("AVI files", "*.avi"),
-                                                     ("MP4 files", "*mp4")])
+    filename = askopenfilename(initialdir=os.path.dirname(ROOT_DIR), title="Select left video",
+                               filetypes=[("MKV files", "*.mkv"),
+                                          ("AVI files", "*.avi"),
+                                          ("MP4 files", "*mp4")])
     return filename

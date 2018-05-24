@@ -1,6 +1,6 @@
-from tkinter import Frame, Button
+from Tkinter import Frame, Button
 
-from gui.pipeline1.utilities.inputs import setup_hms_input
+from gui.abstract_screens.utilities.time_input_util_methods import setup_hms_input
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel

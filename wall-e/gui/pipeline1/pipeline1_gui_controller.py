@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import Tk, Frame
 
 from gui.pipeline1.apply_sr_intro_screen import ApplySrIntroScreen
 from gui.pipeline1.apply_sr_progress_screen import ApplySrProgressScreen
@@ -15,7 +15,7 @@ from gui.pipeline1.video_scan_progress_screen import VideoScanProgressScreen
 from gui.pipeline1.video_selection_screen import VideoSelectionScreen
 from gui.pipeline1.welcome_screen import WelcomeScreen
 from gui.widgets.walle_header import WalleHeader
-from utilities.video_frame_loader import VideoFrameLoader
+from utils_general.video_frame_loader import VideoFrameLoader
 
 screen_classes_in_order = (WelcomeScreen,
                            VideoSelectionScreen,

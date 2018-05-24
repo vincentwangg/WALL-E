@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import Frame, Button, CENTER
 
 from gui.pipeline1.constants import VIDEO_PREVIEW_HEIGHT, VIDEO_PREVIEW_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.gui_base_frame import GuiBaseFrame

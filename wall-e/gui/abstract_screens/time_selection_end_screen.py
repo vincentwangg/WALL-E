@@ -1,4 +1,4 @@
-from tkinter import CENTER
+from Tkinter import CENTER
 
 from gui.abstract_screens.time_selection_base_screen import TimeSelectionBaseScreen
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
@@ -9,7 +9,7 @@ class TimeSelectionEndScreen(TimeSelectionBaseScreen):
         TimeSelectionBaseScreen.__init__(self, parent, controller, **kw)
 
     def init_widgets(self):
-        super(TimeSelectionEndScreen, self).init_widgets()
+        TimeSelectionBaseScreen.init_widgets(self)
 
     def add_widgets_to_frame(self):
         self.pack_title_and_instruction_widgets()
@@ -17,25 +17,25 @@ class TimeSelectionEndScreen(TimeSelectionBaseScreen):
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def on_show_frame(self):
-        super(TimeSelectionEndScreen, self).on_show_frame()
+        TimeSelectionBaseScreen.on_show_frame(self)
 
     def update_frame(self, data):
-        super(TimeSelectionEndScreen, self).update_frame(data)
+        TimeSelectionBaseScreen.update_frame(self, data)
 
     def on_hide_frame(self):
         pass
 
     def set_input_checks(self):
-        super(TimeSelectionEndScreen, self).set_input_checks()
+        TimeSelectionBaseScreen.set_input_checks(self)
 
     def on_input_check_success(self):
-        super(TimeSelectionEndScreen, self).on_input_check_success()
+        TimeSelectionBaseScreen.on_input_check_success(self)
 
     def prev_button_command(self):
-        super(TimeSelectionEndScreen, self).prev_button_command()
+        TimeSelectionBaseScreen.prev_button_command(self)
 
     def next_button_command(self):
-        super(TimeSelectionEndScreen, self).next_button_command()
+        TimeSelectionBaseScreen.next_button_command(self)
 
     def pack_title_and_instruction_widgets(self):
         self.screen_title.pack()

@@ -1,5 +1,5 @@
 # Button that holds data to use for later
-from tkinter import Button
+from Tkinter import Button
 
 from stereo_rectification.sr_map_gen import write_sr_map_to_file
 

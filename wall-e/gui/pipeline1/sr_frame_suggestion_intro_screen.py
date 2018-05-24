@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import Frame, Button, CENTER
 
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y, SR_FRAME_SELECTION_TITLE
 from gui.pipeline1.sr_scan_progress_screen import SrScanProgressScreen

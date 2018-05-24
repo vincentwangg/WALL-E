@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkconstants import CENTER
 
 from gui.abstract_screens.time_selection_base_screen import TimeSelectionBaseScreen
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
@@ -11,7 +11,7 @@ class TimeSelectionStartScreen(TimeSelectionBaseScreen):
         TimeSelectionBaseScreen.__init__(self, parent, controller, **kw)
 
     def init_widgets(self):
-        super(TimeSelectionStartScreen, self).init_widgets()
+        TimeSelectionBaseScreen.init_widgets(self)
 
         self.screen_instruction_1_filename_label = PLabel(self.content_wrapper)
         self.screen_instruction_2_label = PLabel(self.content_wrapper)
@@ -24,25 +24,25 @@ class TimeSelectionStartScreen(TimeSelectionBaseScreen):
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def on_show_frame(self):
-        super(TimeSelectionStartScreen, self).on_show_frame()
+        TimeSelectionBaseScreen.on_show_frame(self)
 
     def update_frame(self, data):
-        super(TimeSelectionStartScreen, self).update_frame(data)
+        TimeSelectionBaseScreen.update_frame(self, data)
 
     def on_hide_frame(self):
-        super(TimeSelectionStartScreen, self).on_hide_frame()
+        TimeSelectionBaseScreen.on_hide_frame(self)
 
     def set_input_checks(self):
-        super(TimeSelectionStartScreen, self).set_input_checks()
+        TimeSelectionBaseScreen.set_input_checks(self)
 
     def on_input_check_success(self):
-        super(TimeSelectionStartScreen, self).on_input_check_success()
+        TimeSelectionBaseScreen.on_input_check_success(self)
 
     def prev_button_command(self):
-        super(TimeSelectionStartScreen, self).prev_button_command()
+        TimeSelectionBaseScreen.prev_button_command(self)
 
     def next_button_command(self):
-        super(TimeSelectionStartScreen, self).next_button_command()
+        TimeSelectionBaseScreen.next_button_command(self)
 
     def set_instruction_1_filename(self, file_of_video_to_open):
         self.screen_instruction_1_filename_label.configure(text=file_of_video_to_open)

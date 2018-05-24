@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import Frame, LEFT, Button, CENTER
 
 from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.gui_base_frame import GuiBaseFrame

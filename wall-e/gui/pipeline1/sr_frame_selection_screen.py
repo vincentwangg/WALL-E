@@ -1,6 +1,6 @@
 import datetime
 from math import ceil
-from tkinter import Canvas, Frame, Scrollbar, Label, VERTICAL, CENTER, Button
+from Tkinter import Canvas, Frame, Scrollbar, Label, VERTICAL, CENTER, Button
 
 from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT, SCREENS_REL_X, LEFT, RIGHT, \
     FRAME_NUM_LABEL, SR_MAP_LABEL
@@ -34,7 +34,7 @@ class SrFrameSelection(GuiBaseFrame):
         self.canvases = []
         self.page_num = 0
 
-        pages = int(ceil(len(self.controller.sr_results) / 10))
+        pages = int(ceil(len(self.controller.sr_results) / 10.0))
         for page in range(0, pages):
             canvas_wrapper = Frame(self.content_wrapper, borderwidth="1", relief="solid")
             canvas = Canvas(canvas_wrapper, width=int(WINDOW_WIDTH * 7 / 8), height=(WINDOW_HEIGHT * 2 / 3))

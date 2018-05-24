@@ -10,10 +10,10 @@ from gui.pipeline1.constants import FRAMES_STEREO_RECTIFIED_PREFIX
 from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from stereo_rectification.constants import *
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
-from stereo_rectification.utilities_sr.frame_calculations import calculate_last_frame_and_num_frames_to_scan
-from utilities.file_checker import check_if_file_exists
-from utilities.video_frame_loader import VideoFrameLoader
-from utilities.yaml_utility import read_from_yml
+from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
+from utils_general.file_checker import check_if_file_exists
+from utils_general.video_frame_loader import VideoFrameLoader
+from utils_general.yaml_utility import read_from_yml
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.php
 

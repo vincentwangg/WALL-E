@@ -9,11 +9,11 @@ from gui.pipeline1.constants import LEFT, RIGHT, \
 from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
-from stereo_rectification.utilities_sr.frame_calculations import calculate_last_frame_and_num_frames_to_scan
-from utilities.file_checker import check_if_file_exists
-from utilities.image_converter import cv2_gray_image_to_tkinter_with_resize
-from utilities.video_frame_loader import VideoFrameLoader
-from utilities.yaml_utility import save_to_yml
+from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
+from utils_general.file_checker import check_if_file_exists
+from utils_general.image_converter import cv2_gray_image_to_tkinter_with_resize
+from utils_general.video_frame_loader import VideoFrameLoader
+from utils_general.yaml_utility import save_to_yml
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)

@@ -1,4 +1,4 @@
-from tkinter import Frame
+from Tkinter import Frame
 
 
 class GuiBaseFrame(Frame):
