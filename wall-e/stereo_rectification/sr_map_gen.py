@@ -3,10 +3,10 @@
 import argparse
 
 from config.keycode_setup import *
-from gui.pipeline1.constants import LEFT, RIGHT, \
+from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
+from gui.pipeline1.utilities.constants import LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL, FRAMES_READ_PREFIX, \
     VALID_FRAMES_FOUND_PREFIX
-from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
 from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
@@ -177,15 +177,19 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
     create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
 
     while True:
+        left_frame_num = video_frame_loader.get_left_current_frame_num()
+        right_frame_num = video_frame_loader.get_right_current_frame_num()
+
+        # If one of the videos reach their last frame to scan
+        if left_frame_num >= last_frame_left or right_frame_num >= last_frame_right:
+            break
+
         l_success, left_img = video_frame_loader.get_next_left_frame()
         r_success, right_img = video_frame_loader.get_next_right_frame()
 
         # If one of the videos reach the end of video
         if not l_success or not r_success:
             break
-
-        left_frame_num = video_frame_loader.get_left_current_frame_num()
-        right_frame_num = video_frame_loader.get_right_current_frame_num()
 
         if is_valid_sr_frame(left_img, right_img):
             img_left_undistorted = convert_to_gray(undistort(left_img))
@@ -206,10 +210,6 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
 
         if num_frames_scanned % 10 == 0:
             create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
-
-        # If one of the videos reach their last frame to scan
-        if left_frame_num >= last_frame_left or right_frame_num >= last_frame_right:
-            break
 
     controller.sr_results = sr_results
     create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)

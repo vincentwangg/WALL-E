@@ -1,15 +1,15 @@
-from gui.abstract_screens.time_selection_start_screen import TimeSelectionStartScreen
+from gui.abstract_screens.abstract_time_selection_start_screen import AbstractTimeSelectionStartScreen
 from gui.abstract_screens.utilities.input_checks import frame_input_within_video_bounds_check
 from gui.abstract_screens.utilities.time_input_util_methods import calculate_frame_num_from_inputs
-from gui.pipeline1.constants import SR_FRAME_SELECTION_TITLE
+from gui.pipeline1.utilities.constants import SR_FRAME_SELECTION_TITLE
 
 
-class SrFrameSuggestionTimeStartScreen(object, TimeSelectionStartScreen):
+class SrFrameSuggestionTimeStartScreen(object, AbstractTimeSelectionStartScreen):
     def __init__(self, parent, controller, **kw):
-        TimeSelectionStartScreen.__init__(self, parent, controller, **kw)
+        AbstractTimeSelectionStartScreen.__init__(self, parent, controller, **kw)
 
     def init_widgets(self):
-        TimeSelectionStartScreen.init_widgets(self)
+        AbstractTimeSelectionStartScreen.init_widgets(self)
         self.set_title(SR_FRAME_SELECTION_TITLE)
         self.set_instruction_1_text("Please open the following video and\n"
                                     "find the first timestamp where a chessboard appears.\n")

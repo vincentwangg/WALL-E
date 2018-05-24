@@ -1,49 +1,28 @@
-from Tkinter import Frame, Button, CENTER
-
+from gui.abstract_screens.abstract_process_intro_screen import AbstractProcessIntroScreen
 from gui.pipeline1.apply_sr_progress_screen import ApplySrProgressScreen
-from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y, APPLY_SR_SCREEN_TITLE
-from gui.widgets.gui_base_frame import GuiBaseFrame
-from gui.widgets.header1_label import Header1Label
-from gui.widgets.p_label import PLabel
+from gui.pipeline1.utilities.constants import APPLY_SR_SCREEN_TITLE
 
 
-class ApplySrIntroScreen(GuiBaseFrame):
+class ApplySrIntroScreen(AbstractProcessIntroScreen):
     def __init__(self, parent, controller, **kw):
-        GuiBaseFrame.__init__(self, parent, controller, **kw)
+        AbstractProcessIntroScreen.__init__(self, parent, controller,
+                                            APPLY_SR_SCREEN_TITLE,
+                                            [
+                                        "For long videos, it may take hours to create\n"
+                                        "a new stereo rectified video.",
 
-    def init_widgets(self):
-        self.content_wrapper = Frame(self)
+                                        "In the next few screens, you may enter timestamps to\n"
+                                        "crop the video to save time on\n"
+                                        "creating the stereo rectified footage.",
 
-        self.screen_title = Header1Label(self.content_wrapper, text=APPLY_SR_SCREEN_TITLE)
-        self.screen_description_label = PLabel(self.content_wrapper,
-                                               text="\nFor long videos, it may take hours to create\na new stereo "
-                                                    "rectified video.\n\nIn the next few screens, you may enter "
-                                                    "timestamps to\ncrop the video to save time on\ncreating the "
-                                                    "stereo rectified footage.\n\nIf you feel that this step isn't "
-                                                    "necessary,\nfeel free to press skip.\n")
-        self.button_wrapper = Frame(self.content_wrapper)
-        self.next_button = Button(self.button_wrapper, text="Next",
-                                  command=lambda: self.controller.show_next_frame())
-        self.skip_button = Button(self.button_wrapper, text="Skip",
-                                  command=lambda: self.skip_sr_frame_suggestion())
+                                        "If you feel that this step isn't necessary,\n"
+                                        "feel free to press skip."
+                                    ],
+                                            **kw)
 
-    def add_widgets_to_frame(self):
-        self.screen_title.pack()
-        self.screen_description_label.pack()
-        self.button_wrapper.pack()
-        self.next_button.grid(row=0, column=0)
-        self.skip_button.grid(row=0, column=1)
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+    def on_next_button(self):
+        self.controller.show_next_frame()
 
-    def on_show_frame(self):
-        pass
-
-    def update_frame(self, data):
-        pass
-
-    def on_hide_frame(self):
-        pass
-
-    def skip_sr_frame_suggestion(self):
+    def on_skip_button(self):
         self.controller.apply_sr_frame_range.reset_to_default()
         self.controller.show_frame(ApplySrProgressScreen)

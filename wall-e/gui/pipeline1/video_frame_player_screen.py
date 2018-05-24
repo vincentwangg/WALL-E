@@ -1,6 +1,7 @@
 from Tkinter import Frame, Button, CENTER
 
-from gui.pipeline1.constants import VIDEO_PREVIEW_HEIGHT, VIDEO_PREVIEW_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.utilities.constants import VIDEO_PREVIEW_HEIGHT, VIDEO_PREVIEW_WIDTH, SCREENS_REL_X, \
+    VIDEO_FRAME_PLAYER_SCREEN_REL_Y
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -146,7 +147,7 @@ class VideoFramePlayer(GuiBaseFrame):
 
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=12)
 
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=VIDEO_FRAME_PLAYER_SCREEN_REL_Y, anchor=CENTER)
 
 
     def set_video_frame(self, frame_num, left_offset, right_offset):

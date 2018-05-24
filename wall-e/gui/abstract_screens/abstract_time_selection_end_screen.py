@@ -1,15 +1,15 @@
 from Tkinter import CENTER
 
-from gui.abstract_screens.time_selection_base_screen import TimeSelectionBaseScreen
-from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.abstract_screens.abstract_time_selection_base_screen import AbstractTimeSelectionBaseScreen
+from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREENS_REL_Y
 
 
-class TimeSelectionEndScreen(TimeSelectionBaseScreen):
+class AbstractTimeSelectionEndScreen(AbstractTimeSelectionBaseScreen):
     def __init__(self, parent, controller, **kw):
-        TimeSelectionBaseScreen.__init__(self, parent, controller, **kw)
+        AbstractTimeSelectionBaseScreen.__init__(self, parent, controller, **kw)
 
     def init_widgets(self):
-        TimeSelectionBaseScreen.init_widgets(self)
+        AbstractTimeSelectionBaseScreen.init_widgets(self)
 
     def add_widgets_to_frame(self):
         self.pack_title_and_instruction_widgets()
@@ -17,25 +17,25 @@ class TimeSelectionEndScreen(TimeSelectionBaseScreen):
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def on_show_frame(self):
-        TimeSelectionBaseScreen.on_show_frame(self)
+        AbstractTimeSelectionBaseScreen.on_show_frame(self)
 
     def update_frame(self, data):
-        TimeSelectionBaseScreen.update_frame(self, data)
+        AbstractTimeSelectionBaseScreen.update_frame(self, data)
 
     def on_hide_frame(self):
         pass
 
     def set_input_checks(self):
-        TimeSelectionBaseScreen.set_input_checks(self)
+        AbstractTimeSelectionBaseScreen.set_input_checks(self)
 
     def on_input_check_success(self):
-        TimeSelectionBaseScreen.on_input_check_success(self)
+        AbstractTimeSelectionBaseScreen.on_input_check_success(self)
 
     def prev_button_command(self):
-        TimeSelectionBaseScreen.prev_button_command(self)
+        AbstractTimeSelectionBaseScreen.prev_button_command(self)
 
     def next_button_command(self):
-        TimeSelectionBaseScreen.next_button_command(self)
+        AbstractTimeSelectionBaseScreen.next_button_command(self)
 
     def pack_title_and_instruction_widgets(self):
         self.screen_title.pack()

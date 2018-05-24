@@ -4,9 +4,10 @@ import time
 from Tkinter import Frame, DoubleVar, HORIZONTAL, Button, DISABLED, CENTER, NORMAL
 from ttk import Progressbar
 
-from gui.pipeline1.constants import WINDOW_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
-from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST, ELAPSED_TIME_PREFIX, \
+from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST, \
+    ELAPSED_TIME_PREFIX, \
     ESTIMATED_TIME_LEFT_PREFIX
+from gui.pipeline1.utilities.constants import WINDOW_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -14,7 +15,7 @@ from gui.widgets.p_label import PLabel
 THREAD_CHECK_ALIVE_INTERVAL_MS = 50
 
 
-class ProgressScreen(GuiBaseFrame):
+class AbstractProgressScreen(GuiBaseFrame):
     # Backend logic thread should be making calls to controller.update_frame() to update the UI while logic runs.
     def __init__(self, parent, controller, backend_logic_function, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)

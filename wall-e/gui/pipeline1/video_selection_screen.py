@@ -5,7 +5,8 @@ from tkFileDialog import askopenfilename
 import cv2
 
 from definitions import *
-from gui.pipeline1.constants import VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT, SCREENS_REL_X, VIDEO_SELECT_SCREEN_REL_Y, \
+from gui.pipeline1.utilities.constants import VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT, SCREENS_REL_X, \
+    VIDEO_SELECT_SCREEN_REL_Y, \
     VIDEOS_SELECTED_TMP_FILENAME, LEFT, RIGHT
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label

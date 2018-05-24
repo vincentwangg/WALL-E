@@ -1,18 +1,18 @@
-from gui.abstract_screens.time_selection_end_screen import TimeSelectionEndScreen
+from gui.abstract_screens.abstract_time_selection_end_screen import AbstractTimeSelectionEndScreen
 from gui.abstract_screens.utilities.input_checks import frame_input_within_video_bounds_check, \
     sr_scan_frame_range_valid_check
 from gui.abstract_screens.utilities.time_input_util_methods import calculate_frame_num_from_inputs
-from gui.pipeline1.constants import SR_FRAME_SELECTION_TITLE
+from gui.pipeline1.utilities.constants import SR_FRAME_SELECTION_TITLE
 
 ENTRY_WIDTH = 5
 
 
-class SrFrameSuggestionTimeEndScreen(TimeSelectionEndScreen):
+class SrFrameSuggestionTimeEndScreen(AbstractTimeSelectionEndScreen):
     def __init__(self, parent, controller, **kw):
-        TimeSelectionEndScreen.__init__(self, parent, controller, **kw)
+        AbstractTimeSelectionEndScreen.__init__(self, parent, controller, **kw)
 
     def init_widgets(self):
-        TimeSelectionEndScreen.init_widgets(self)
+        AbstractTimeSelectionEndScreen.init_widgets(self)
         self.set_title(SR_FRAME_SELECTION_TITLE)
         self.set_instruction_1_text("What was the time stamp when the chessboard went out of view?")
 

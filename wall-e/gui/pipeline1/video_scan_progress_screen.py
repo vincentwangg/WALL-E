@@ -4,9 +4,10 @@ import time
 from Tkinter import Frame, HORIZONTAL, DISABLED, CENTER, NORMAL, Button
 from ttk import Progressbar
 
-from gui.pipeline1.constants import WINDOW_WIDTH, LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX, SCREENS_REL_X, \
+from gui.abstract_screens.utilities.constants import ELAPSED_TIME_PREFIX
+from gui.pipeline1.utilities.constants import WINDOW_WIDTH, LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX, \
+    SCREENS_REL_X, \
     SCREENS_REL_Y
-from gui.utilities.constants import ELAPSED_TIME_PREFIX
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel

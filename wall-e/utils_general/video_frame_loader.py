@@ -2,7 +2,7 @@ import os
 
 import cv2
 
-from gui.pipeline1.constants import LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX
+from gui.pipeline1.utilities.constants import LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX
 from utils_general.image_converter import cv2_bgr_image_to_tkinter, cv2_bgr_image_to_tkinter_with_resize
 
 

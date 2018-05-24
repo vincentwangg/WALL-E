@@ -1,17 +1,17 @@
 from Tkconstants import CENTER
 
-from gui.abstract_screens.time_selection_base_screen import TimeSelectionBaseScreen
-from gui.pipeline1.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.abstract_screens.abstract_time_selection_base_screen import AbstractTimeSelectionBaseScreen
+from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREENS_REL_Y
 from gui.widgets.p_label import PLabel
 
 
 # To use this class, have the new class inherit this class and add widgets to self.content_wrapper
-class TimeSelectionStartScreen(TimeSelectionBaseScreen):
+class AbstractTimeSelectionStartScreen(AbstractTimeSelectionBaseScreen):
     def __init__(self, parent, controller, **kw):
-        TimeSelectionBaseScreen.__init__(self, parent, controller, **kw)
+        AbstractTimeSelectionBaseScreen.__init__(self, parent, controller, **kw)
 
     def init_widgets(self):
-        TimeSelectionBaseScreen.init_widgets(self)
+        AbstractTimeSelectionBaseScreen.init_widgets(self)
 
         self.screen_instruction_1_filename_label = PLabel(self.content_wrapper)
         self.screen_instruction_2_label = PLabel(self.content_wrapper)
@@ -24,25 +24,25 @@ class TimeSelectionStartScreen(TimeSelectionBaseScreen):
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def on_show_frame(self):
-        TimeSelectionBaseScreen.on_show_frame(self)
+        AbstractTimeSelectionBaseScreen.on_show_frame(self)
 
     def update_frame(self, data):
-        TimeSelectionBaseScreen.update_frame(self, data)
+        AbstractTimeSelectionBaseScreen.update_frame(self, data)
 
     def on_hide_frame(self):
-        TimeSelectionBaseScreen.on_hide_frame(self)
+        AbstractTimeSelectionBaseScreen.on_hide_frame(self)
 
     def set_input_checks(self):
-        TimeSelectionBaseScreen.set_input_checks(self)
+        AbstractTimeSelectionBaseScreen.set_input_checks(self)
 
     def on_input_check_success(self):
-        TimeSelectionBaseScreen.on_input_check_success(self)
+        AbstractTimeSelectionBaseScreen.on_input_check_success(self)
 
     def prev_button_command(self):
-        TimeSelectionBaseScreen.prev_button_command(self)
+        AbstractTimeSelectionBaseScreen.prev_button_command(self)
 
     def next_button_command(self):
-        TimeSelectionBaseScreen.next_button_command(self)
+        AbstractTimeSelectionBaseScreen.next_button_command(self)
 
     def set_instruction_1_filename(self, file_of_video_to_open):
         self.screen_instruction_1_filename_label.configure(text=file_of_video_to_open)

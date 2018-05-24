@@ -6,8 +6,8 @@ import os
 
 import cv2
 
-from gui.pipeline1.constants import FRAMES_STEREO_RECTIFIED_PREFIX
-from gui.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
+from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
+from gui.pipeline1.utilities.constants import FRAMES_STEREO_RECTIFIED_PREFIX
 from stereo_rectification.constants import *
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
 from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan

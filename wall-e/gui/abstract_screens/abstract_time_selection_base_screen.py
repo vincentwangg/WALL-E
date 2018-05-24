@@ -6,7 +6,7 @@ from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
 
-class TimeSelectionBaseScreen(GuiBaseFrame):
+class AbstractTimeSelectionBaseScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
         self.input_checks = []
@@ -29,16 +29,16 @@ class TimeSelectionBaseScreen(GuiBaseFrame):
                                   command=lambda: self.next_button_command())
 
     def add_widgets_to_frame(self):
-        super(TimeSelectionBaseScreen, self).add_widgets_to_frame()
+        GuiBaseFrame.add_widgets_to_frame(self)
 
     def on_show_frame(self):
-        super(TimeSelectionBaseScreen, self).on_show_frame()
+        GuiBaseFrame.on_show_frame(self)
 
     def update_frame(self, data):
-        super(TimeSelectionBaseScreen, self).update_frame(data)
+        GuiBaseFrame.update_frame(self, data)
 
     def on_hide_frame(self):
-        super(TimeSelectionBaseScreen, self).on_hide_frame()
+        GuiBaseFrame.on_hide_frame(self)
 
     def set_input_checks(self):
         raise NotImplementedError

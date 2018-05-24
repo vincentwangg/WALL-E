@@ -1,8 +1,8 @@
 import datetime
-from math import ceil
 from Tkinter import Canvas, Frame, Scrollbar, Label, VERTICAL, CENTER, Button
+from math import ceil
 
-from gui.pipeline1.constants import WINDOW_WIDTH, WINDOW_HEIGHT, SCREENS_REL_X, LEFT, RIGHT, \
+from gui.pipeline1.utilities.constants import WINDOW_WIDTH, WINDOW_HEIGHT, SCREENS_REL_X, LEFT, RIGHT, \
     FRAME_NUM_LABEL, SR_MAP_LABEL
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
