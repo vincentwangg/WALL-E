@@ -17,7 +17,7 @@ class AbstractTimeSelectionEndScreen(AbstractTimeSelectionBaseScreen):
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def on_show_frame(self):
-        AbstractTimeSelectionBaseScreen.on_show_frame(self)
+        self.set_error_message("")
 
     def update_frame(self, data):
         AbstractTimeSelectionBaseScreen.update_frame(self, data)

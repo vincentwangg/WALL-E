@@ -15,22 +15,25 @@ class AbstractTimeSelectionStartScreen(AbstractTimeSelectionBaseScreen):
 
         self.screen_instruction_1_filename_label = PLabel(self.content_wrapper)
         self.screen_instruction_2_label = PLabel(self.content_wrapper)
+        self.empty_label_1 = PLabel(self.content_wrapper)
 
     def add_widgets_to_frame(self):
         self.pack_title_and_instruction_widgets()
+        self.empty_label_1.pack()
         self.screen_instruction_1_filename_label.pack()
         self.screen_instruction_2_label.pack()
         self.pack_lower_half_widgets()
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
 
     def on_show_frame(self):
-        AbstractTimeSelectionBaseScreen.on_show_frame(self)
+        self.set_instruction_1_filename(self.controller.get_filename_of_video_with_0_offset() + "\n")
+        self.set_error_message("")
 
     def update_frame(self, data):
         AbstractTimeSelectionBaseScreen.update_frame(self, data)
 
     def on_hide_frame(self):
-        AbstractTimeSelectionBaseScreen.on_hide_frame(self)
+        pass
 
     def set_input_checks(self):
         AbstractTimeSelectionBaseScreen.set_input_checks(self)

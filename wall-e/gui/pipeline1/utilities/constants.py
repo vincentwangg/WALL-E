@@ -24,6 +24,13 @@ VIDEOS_SELECTED_TMP_FILENAME = "videos_selected.cache"
 LEFT_FRAMES_COUNT_PREFIX = "Frames read for left video: "
 RIGHT_FRAMES_COUNT_PREFIX = "Frames read for right video: "
 
+# Frame matching screen
+FRAME_MATCHING_SCREEN_TITLE = "Frame Matching"
+LEFT_OFFSET_KEY = "left_offset"
+RIGHT_OFFSET_KEY = "right_offset"
+TOTAL_FRAMES_KEY = "total_frames"
+FOUND_OPTIMAL_OFFSET_KEY = "offset_found"
+
 # SR Frame Selection
 SR_FRAME_SELECTION_TITLE = "Chessboard Frame Suggestion"
 

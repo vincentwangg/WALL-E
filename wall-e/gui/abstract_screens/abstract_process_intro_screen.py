@@ -18,11 +18,7 @@ class AbstractProcessIntroScreen(GuiBaseFrame):
         self.screen_title = Header1Label(self.content_wrapper, text=self.screen_title)
         self.empty_label_1 = PLabel(self.content_wrapper)
         self.screen_description_label = PLabel(self.content_wrapper,
-                                               text="For long videos, it may take hours to create\na new stereo "
-                                                    "rectified video.\n\nIn the next few screens, you may enter "
-                                                    "timestamps to\ncrop the video to save time on\ncreating the "
-                                                    "stereo rectified footage.\n\nIf you feel that this step isn't "
-                                                    "necessary,\nfeel free to press skip.")
+                                               text=("\n\n".join(self.process_description_message_list)))
         self.empty_label_2 = PLabel(self.content_wrapper)
         self.button_wrapper = Frame(self.content_wrapper)
         self.next_button = Button(self.button_wrapper, text="Next",

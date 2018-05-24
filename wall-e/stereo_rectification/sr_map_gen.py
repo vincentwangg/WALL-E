@@ -9,8 +9,8 @@ from gui.pipeline1.utilities.constants import LEFT, RIGHT, \
     VALID_FRAMES_FOUND_PREFIX
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
-from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
 from utils_general.file_checker import check_if_file_exists
+from utils_general.frame_calculations import calculate_video_scan_frame_information
 from utils_general.image_converter import cv2_gray_image_to_tkinter_with_resize
 from utils_general.video_frame_loader import VideoFrameLoader
 from utils_general.yaml_utility import save_to_yml
@@ -163,14 +163,16 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
     right_offset = controller.video_offsets.right_offset
     video_frame_loader = controller.video_frame_loader
 
-    last_frame_left, last_frame_right, num_frames_to_scan = calculate_last_frame_and_num_frames_to_scan(first_frame,
-                                                                                                        last_frame_inclusive,
-                                                                                                        left_offset,
-                                                                                                        right_offset,
-                                                                                                        video_frame_loader)
+    first_frame_left, last_frame_left, first_frame_right, last_frame_right, num_frames_to_scan = \
+        calculate_video_scan_frame_information(
+            first_frame,
+            last_frame_inclusive,
+            left_offset,
+            right_offset,
+            video_frame_loader)
 
-    video_frame_loader.set_left_current_frame_num(first_frame + left_offset)
-    video_frame_loader.set_right_current_frame_num(first_frame + right_offset)
+    video_frame_loader.set_left_current_frame_num(first_frame_left)
+    video_frame_loader.set_right_current_frame_num(first_frame_right)
 
     num_frames_scanned = 0
 

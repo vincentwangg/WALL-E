@@ -10,8 +10,8 @@ from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DON
 from gui.pipeline1.utilities.constants import FRAMES_STEREO_RECTIFIED_PREFIX
 from stereo_rectification.constants import *
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
-from stereo_rectification.utilities.frame_calculations import calculate_last_frame_and_num_frames_to_scan
 from utils_general.file_checker import check_if_file_exists
+from utils_general.frame_calculations import calculate_video_scan_frame_information
 from utils_general.video_frame_loader import VideoFrameLoader
 from utils_general.yaml_utility import read_from_yml
 
@@ -143,14 +143,15 @@ def apply_sr_gui_logic(controller):
 
     l_map, r_map = create_maps_from_sr_map_dict(controller.sr_map)
 
-    last_frame_left, last_frame_right, num_frames_to_scan = calculate_last_frame_and_num_frames_to_scan(first_frame,
-                                                                                                        last_frame_inclusive,
-                                                                                                        left_offset,
-                                                                                                        right_offset,
-                                                                                                        video_frame_loader)
+    first_frame_left, last_frame_left, first_frame_right, last_frame_right, num_frames_to_scan = \
+        calculate_video_scan_frame_information(first_frame,
+                                               last_frame_inclusive,
+                                               left_offset,
+                                               right_offset,
+                                               video_frame_loader)
 
-    video_frame_loader.set_left_current_frame_num(first_frame + left_offset)
-    video_frame_loader.set_right_current_frame_num(first_frame + right_offset)
+    video_frame_loader.set_left_current_frame_num(first_frame_left)
+    video_frame_loader.set_right_current_frame_num(first_frame_right)
 
     num_frames_processed = 0
 

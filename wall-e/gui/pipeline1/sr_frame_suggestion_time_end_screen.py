@@ -16,12 +16,6 @@ class SrFrameSuggestionTimeEndScreen(AbstractTimeSelectionEndScreen):
         self.set_title(SR_FRAME_SELECTION_TITLE)
         self.set_instruction_1_text("What was the time stamp when the chessboard went out of view?")
 
-    def on_show_frame(self):
-        self.set_error_message("")
-
-    def on_hide_frame(self):
-        pass
-
     def set_input_checks(self):
         self.add_input_check(lambda screen: frame_input_within_video_bounds_check(self))
         self.add_input_check(lambda screen: sr_scan_frame_range_valid_check(self))

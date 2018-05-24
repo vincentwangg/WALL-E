@@ -4,6 +4,10 @@ from gui.pipeline1.apply_sr_intro_screen import ApplySrIntroScreen
 from gui.pipeline1.apply_sr_progress_screen import ApplySrProgressScreen
 from gui.pipeline1.apply_sr_time_end_screen import ApplySrTimeEndScreen
 from gui.pipeline1.apply_sr_time_start_screen import ApplySrTimeStartScreen
+from gui.pipeline1.frame_matching_intro_screen import FrameMatchingIntroScreen
+from gui.pipeline1.frame_matching_progress_screen import FrameMatchingProgressScreen
+from gui.pipeline1.frame_matching_time_end_screen import FrameMatchingTimeEndScreen
+from gui.pipeline1.frame_matching_time_start_screen import FrameMatchingTimeStartScreen
 from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from gui.pipeline1.sr_frame_suggestion_time_end_screen import SrFrameSuggestionTimeEndScreen
@@ -20,6 +24,10 @@ from utils_general.video_frame_loader import VideoFrameLoader
 screen_classes_in_order = (WelcomeScreen,
                            VideoSelectionScreen,
                            VideoScanProgressScreen,
+                           FrameMatchingIntroScreen,
+                           FrameMatchingTimeStartScreen,
+                           FrameMatchingTimeEndScreen,
+                           FrameMatchingProgressScreen,
                            VideoFramePlayer,
                            SrFrameSuggestionIntroScreen,
                            SrFrameSuggestionTimeStartScreen,
@@ -41,10 +49,11 @@ class Pipeline1GuiController(Tk):
         self.video_frame_loader = None
         self.top_frame = None
         self.video_offsets = VideoOffsets()
-        self.sr_scan_frame_range = FrameRange()
         self.sr_results = None
         self.sr_map = None
 
+        self.frame_matching_frame_range = FrameRange()
+        self.sr_scan_frame_range = FrameRange()
         self.apply_sr_frame_range = FrameRange()
 
         self.left_video_filename_sr = None

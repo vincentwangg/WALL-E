@@ -8,16 +8,16 @@ class ApplySrIntroScreen(AbstractProcessIntroScreen):
         AbstractProcessIntroScreen.__init__(self, parent, controller,
                                             APPLY_SR_SCREEN_TITLE,
                                             [
-                                        "For long videos, it may take hours to create\n"
-                                        "a new stereo rectified video.",
+                                                "For long videos, it may take hours to create\n"
+                                                "a new stereo rectified video.",
 
-                                        "In the next few screens, you may enter timestamps to\n"
-                                        "crop the video to save time on\n"
-                                        "creating the stereo rectified footage.",
+                                                "In the next few screens, you may enter timestamps to\n"
+                                                "crop the video to save time on\n"
+                                                "creating the stereo rectified footage.",
 
-                                        "If you feel that this step isn't necessary,\n"
-                                        "feel free to press skip."
-                                    ],
+                                                "If you feel that this step isn't necessary,\n"
+                                                "feel free to press skip."
+                                            ],
                                             **kw)
 
     def on_next_button(self):

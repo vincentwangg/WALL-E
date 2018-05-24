@@ -15,8 +15,8 @@ from utils_general.video_frame_player import play_video
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-lv", "--left_video", help="filename of the left video feed")
-    parser.add_argument("-rv", "--right_video", help="filename of the right video feed")
+    parser.add_argument("left_video", help="filename of the left video feed")
+    parser.add_argument("right_video", help="filename of the right video feed")
     parser.add_argument("-lc", "--left_cb_video", help="filename of the left video feed's chessboard video (if the "
                                                        "main left video doesn't have a chessboard for stereo "
                                                        "rectification")
@@ -24,9 +24,6 @@ if __name__ == '__main__':
                                                         "main right video doesn't have a chessboard for stereo "
                                                         "rectification")
     args = parser.parse_args()
-
-    gui = Pipeline1GuiController()
-    gui.mainloop()
 
     load_keycodes()
 

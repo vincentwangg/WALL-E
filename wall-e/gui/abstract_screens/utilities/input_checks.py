@@ -22,7 +22,9 @@ def frame_input_within_video_bounds_check(time_selection_base_screen):
     return True
 
 
-def perform_frame_range_check(first_frame, frame_num_inputted, time_selection_base_screen):
+def perform_frame_range_check(first_frame, time_selection_base_screen):
+    frame_num_inputted = calculate_frame_num_from_inputs(time_selection_base_screen)
+
     if not is_frame_range_valid(first_frame, frame_num_inputted):
         error_message_string = "".join([
             "The provided timestamp must be greater than or equal to the provided timestamp earlier.\n",
@@ -38,14 +40,18 @@ def perform_frame_range_check(first_frame, frame_num_inputted, time_selection_ba
 
 
 def sr_scan_frame_range_valid_check(time_selection_base_screen):
-    frame_num_inputted = calculate_frame_num_from_inputs(time_selection_base_screen)
     first_frame = time_selection_base_screen.controller.sr_scan_frame_range.first_frame
 
-    return perform_frame_range_check(first_frame, frame_num_inputted, time_selection_base_screen)
+    return perform_frame_range_check(first_frame, time_selection_base_screen)
 
 
 def apply_sr_frame_range_valid_check(time_selection_base_screen):
-    frame_num_inputted = calculate_frame_num_from_inputs(time_selection_base_screen)
     first_frame = time_selection_base_screen.controller.apply_sr_frame_range.first_frame
 
-    return perform_frame_range_check(first_frame, frame_num_inputted, time_selection_base_screen)
+    return perform_frame_range_check(first_frame, time_selection_base_screen)
+
+
+def frame_matching_frame_range_valid_check(time_selection_base_screen):
+    first_frame = time_selection_base_screen.controller.frame_matching_frame_range.first_frame
+
+    return perform_frame_range_check(first_frame, time_selection_base_screen)
