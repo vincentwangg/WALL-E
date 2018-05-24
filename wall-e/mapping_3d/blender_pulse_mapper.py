@@ -4,7 +4,6 @@ import argparse
 import os
 import math
 
-
 fps_value = 30
 rotation_toward_pos_z = (0, math.radians(180), math.radians(270))
 RGB_MAX_VAL = 255
@@ -18,9 +17,15 @@ def map_points_on_blender(points_filename):
     # Plot ostracod points
     fpd = read_frame_pulse_data_from_file(points_filename)
 
+    frames_written = 0
+    num_frames_to_write = len(fpd.frame_pulse_data)
+
     for frame_num in fpd.frame_pulse_data.keys():
         for pulse_data in fpd.frame_pulse_data[frame_num]:
             plot_pulse(pulse_data, frame_num)
+        frames_written += 1
+        print("Frames written to Blender: " + str(frames_written) + "/" + str(num_frames_to_write) + ". (" + str(
+            round(frames_written * 100.0 / num_frames_to_write, 2)) + "%)")
 
     # Add camera
     bpy.ops.object.camera_add(rotation=rotation_toward_pos_z)
