@@ -18,12 +18,13 @@ def generate_corrected(left_video_filename, right_video_filename, left_offset, r
     left_succ, left_img = vfl.get_left_frame(left_offset)
     right_succ, right_img = vfl.get_right_frame(right_offset)
 
-    while(left_succ and right_succ):
+    while left_succ and right_succ:
         fc_left_video.write(left_img)
         fc_right_video.write(right_img)
 
         left_succ, left_img = vfl.get_next_left_frame()
         right_succ, right_img = vfl.get_next_right_frame()
+
     print("Done! Your videos have been placed in the paths \"" +
           new_filename_l + "\" and \"" + new_filename_r + "\"")
 

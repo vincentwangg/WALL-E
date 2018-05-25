@@ -21,7 +21,7 @@ def generate_clip(left_video_filename, right_video_filename, start_frame, end_fr
 
     frame = start_frame
 
-    while(left_succ and right_succ and frame <= end_frame):
+    while left_succ and right_succ and frame <= end_frame:
         cp_left_video.write(left_img)
         # right_img = cv2.flip(right_img, -1)
         cp_right_video.write(right_img)
