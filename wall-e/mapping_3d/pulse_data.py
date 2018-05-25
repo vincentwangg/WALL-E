@@ -80,19 +80,28 @@ class FramePulseData:
 
 
 # pulse_data_by_frame should be a dictionary with frame # (key) -> list of pulse data (value)
+# Format for writing to file
+#   {3: [list of pulses]}
+#   {5: [list of pulses]} and so on, so reading from file can be a line by line thing
+#                         instead of reading in a huge string
 def write_frame_pulse_data_to_file(frame_pulse_data, filename=FRAME_PULSE_DATA_FILENAME):
     with open(filename, 'w') as frame_pulse_data_file:
-        frame_pulse_data_file.write(str(frame_pulse_data))
+        for frame_num in frame_pulse_data.frame_pulse_data.keys():
+            frame_pulse_data_file.write(str({frame_num: frame_pulse_data.frame_pulse_data[frame_num]}) + "\n")
 
 
 def read_frame_pulse_data_from_file(filename=FRAME_PULSE_DATA_FILENAME):
     with open(filename, 'r') as fpd_file:
-        fpd_dict = ast.literal_eval(fpd_file.read())
+        fpd_list = fpd_file.readlines()
 
         fpd = FramePulseData()
-        for frame_num in fpd_dict.keys():
-            for pulse_data in fpd_dict[frame_num]:
-                fpd.add_pulse_to_frame(frame_num, PulseData(pulse_data[XYZ_COORD_LABEL],
-                                                            pulse_data[RADIUS_LABEL],
-                                                            pulse_data[BRIGHTNESS_LABEL]))
+        for data in fpd_list:
+            fpd_dict = ast.literal_eval(data)
+            for frame_num in fpd_dict.keys():
+                pulse_list = fpd_dict[frame_num]
+                for pulse in pulse_list:
+                    fpd.add_pulse_to_frame(frame_num, PulseData(pulse[XYZ_COORD_LABEL],
+                                                                pulse[RADIUS_LABEL],
+                                                                pulse[BRIGHTNESS_LABEL]))
+
         return fpd
