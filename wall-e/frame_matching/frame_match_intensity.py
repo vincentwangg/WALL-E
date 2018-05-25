@@ -131,18 +131,23 @@ def frame_match_gui_backend_logic(controller):
                                                controller.video_offsets.right_offset,
                                                controller.video_frame_loader)
 
-    progress_dict = {LEFT: 0, RIGHT: 0, LEFT_OFFSET_KEY: 0, RIGHT_OFFSET_KEY: 0, TOTAL_FRAMES_KEY: num_frames_to_scan,
+    progress_dict = {LEFT: 0, RIGHT: 0, LEFT_OFFSET_KEY: 0, RIGHT_OFFSET_KEY: 0,
+                     TOTAL_FRAMES_KEY: num_frames_to_scan - 2,
                      FOUND_OPTIMAL_OFFSET_KEY: False}
+
+    update_ui(progress_dict, controller)
 
     l_gradient = calculate_gradient_gui_version(controller,
                                                 controller.video_frame_loader.vc_left,
                                                 first_frame_left,
+                                                last_frame_left,
                                                 num_frames_to_scan,
                                                 LEFT,
                                                 progress_dict)
     r_gradient = calculate_gradient_gui_version(controller,
                                                 controller.video_frame_loader.vc_right,
                                                 first_frame_right,
+                                                last_frame_right,
                                                 num_frames_to_scan,
                                                 RIGHT,
                                                 progress_dict)
@@ -212,17 +217,21 @@ def update_ui(progress_dict, controller):
     controller.update_frame({PROGRESS_SCREEN_PERCENT_DONE: percent_done, PROGRESS_SCREEN_MESSAGE_LIST: message_list})
 
 
-def calculate_gradient_gui_version(controller, video_capture_object, start_frame, num_frames_to_scan,
-                                   video_side, progress_dict):
+def calculate_gradient_gui_version(controller, video_capture_object, start_frame, end_frame_inclusive,
+                                   num_frames_to_scan, video_side, progress_dict):
     feed = video_capture_object
-    feed.set(1, start_frame)
+    feed.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
 
     prev_frame = cv2.cvtColor(feed.read()[1], cv2.COLOR_BGR2GRAY)
     _, prev_frame = cv2.threshold(prev_frame, 150, 255, cv2.THRESH_TOZERO)
     idx = 0
-    gradient = np.empty(num_frames_to_scan)
+    gradient = np.empty(num_frames_to_scan - 1)
 
-    while idx < num_frames_to_scan:
+    while True:
+        frame_num = feed.get(cv2.CAP_PROP_POS_FRAMES)
+
+        if frame_num > end_frame_inclusive - 1:
+            break
 
         success, frame = feed.read()
         if not success:
@@ -233,14 +242,11 @@ def calculate_gradient_gui_version(controller, video_capture_object, start_frame
 
         gradient[idx] = np.sum(abs(frame - prev_frame))
 
-        if idx == 0 or idx % 10 == 0:
+        idx += 1
+
+        if idx == 0 or idx % 500 == 0:
             progress_dict[video_side] = idx
             update_ui(progress_dict, controller)
-
-        if not idx < num_frames_to_scan:
-            break
-
-        idx = idx + 1
 
     progress_dict[video_side] = idx
     update_ui(progress_dict, controller)

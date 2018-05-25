@@ -23,4 +23,7 @@ def calculate_video_scan_frame_information(first_frame, last_frame_inclusive, le
     num_frames_to_scan = min([last_frame_left - first_frame_left + 1,
                               last_frame_right - first_frame_right + 1])
 
+    last_frame_left = first_frame_left + num_frames_to_scan - 1
+    last_frame_right = first_frame_right + num_frames_to_scan - 1
+
     return first_frame_left, last_frame_left, first_frame_right, last_frame_right, num_frames_to_scan

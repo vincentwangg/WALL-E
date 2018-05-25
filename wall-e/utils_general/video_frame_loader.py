@@ -117,6 +117,7 @@ def count_frames_in_vc_object(vc_obj, controller, message_prefix):
     vc_obj.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
     count = 0
+    controller.update_frame(message_prefix + str(count))
     while True:
         success, _ = vc_obj.read()
 

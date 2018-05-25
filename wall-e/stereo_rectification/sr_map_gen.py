@@ -183,7 +183,7 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
         right_frame_num = video_frame_loader.get_right_current_frame_num()
 
         # If one of the videos reach their last frame to scan
-        if left_frame_num >= last_frame_left or right_frame_num >= last_frame_right:
+        if left_frame_num > last_frame_left or right_frame_num > last_frame_right:
             break
 
         l_success, left_img = video_frame_loader.get_next_left_frame()

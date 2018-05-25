@@ -158,15 +158,19 @@ def apply_sr_gui_logic(controller):
     create_data_package_for_ui(controller, num_frames_processed, num_frames_to_scan)
 
     while True:
+        left_frame_num = video_frame_loader.get_left_current_frame_num()
+        right_frame_num = video_frame_loader.get_right_current_frame_num()
+
+        # If one of the videos reach their last frame to scan
+        if left_frame_num > last_frame_left or right_frame_num > last_frame_right:
+            break
+
         l_success, left_img = video_frame_loader.get_next_left_frame()
         r_success, right_img = video_frame_loader.get_next_right_frame()
 
         # If one of the videos reach the end of video
         if not l_success or not r_success:
             break
-
-        left_frame_num = video_frame_loader.get_left_current_frame_num()
-        right_frame_num = video_frame_loader.get_right_current_frame_num()
 
         sr_l_image = apply_rectify_maps(undistort(left_img), l_map[0], l_map[1])
         sr_r_image = apply_rectify_maps(undistort(right_img), r_map[0], r_map[1])
@@ -178,10 +182,6 @@ def apply_sr_gui_logic(controller):
 
         if num_frames_processed % 10 == 0:
             create_data_package_for_ui(controller, num_frames_processed, num_frames_to_scan)
-
-        # If one of the videos reach their last frame to scan
-        if left_frame_num >= last_frame_left or right_frame_num >= last_frame_right:
-            break
 
     sr_left_video.release()
     sr_right_video.release()
