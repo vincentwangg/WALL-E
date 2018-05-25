@@ -30,6 +30,8 @@ def generate_clip(left_video_filename, right_video_filename, start_frame, end_fr
         right_succ, right_img = vfl.get_next_right_frame()
         frame += 1
 
+    print("Done! Your videos have been placed in the paths \"" +
+          new_filename_l + "\" and \"" + new_filename_r + "\"")
 
 def main():
     parser = argparse.ArgumentParser()

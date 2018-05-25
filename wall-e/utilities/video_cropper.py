@@ -37,6 +37,9 @@ def generate_cropped(left_video_filename, right_video_filename, crop_val):
         left_succ, left_img = vfl.get_next_left_frame()
         right_succ, right_img = vfl.get_next_right_frame()
 
+    print("Done! Your videos have been placed in the paths \"" +
+          new_filename_l + "\" and \"" + new_filename_r + "\"")
+
 
 def main():
     parser = argparse.ArgumentParser()
