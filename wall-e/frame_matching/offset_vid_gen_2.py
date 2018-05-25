@@ -6,7 +6,7 @@ import sys
 
 
 def generate_corrected(left_video_filename, right_video_filename, left_offset, right_offset):
-    fourcc = cv2.VideoWriter_fourcc(*'FFV1')
+    fourcc = cv2.VideoWriter_fourcc(*'FMP4')
     vfl = VideoFrameLoader(left_video_filename, right_video_filename)
 
     new_filename_l = left_video_filename[:-4] + "_frame_corrected.mkv"
