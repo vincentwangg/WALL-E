@@ -4,6 +4,7 @@ from gui.pipeline1.apply_sr_intro_screen import ApplySrIntroScreen
 from gui.pipeline1.apply_sr_progress_screen import ApplySrProgressScreen
 from gui.pipeline1.apply_sr_time_end_screen import ApplySrTimeEndScreen
 from gui.pipeline1.apply_sr_time_start_screen import ApplySrTimeStartScreen
+from gui.pipeline1.final_screen import FinalScreen
 from gui.pipeline1.frame_matching_intro_screen import FrameMatchingIntroScreen
 from gui.pipeline1.frame_matching_progress_screen import FrameMatchingProgressScreen
 from gui.pipeline1.frame_matching_time_end_screen import FrameMatchingTimeEndScreen
@@ -37,7 +38,8 @@ screen_classes_in_order = (WelcomeScreen,
                            ApplySrIntroScreen,
                            ApplySrTimeStartScreen,
                            ApplySrTimeEndScreen,
-                           ApplySrProgressScreen
+                           ApplySrProgressScreen,
+                           FinalScreen
                            )
 first_screen = WelcomeScreen
 
