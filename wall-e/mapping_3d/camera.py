@@ -1,9 +1,9 @@
 from stereo_rectification.apply_sr import undistort
 from stereo_rectification.apply_sr import generate_maps
 from stereo_rectification.apply_sr import apply_rectify_maps
-from definitions import PROJECT_ROOT_PATH
+from definitions import PROJECT_DIR
 from config.keycode_setup import *
-from utilities.file_checker import check_if_file_exists
+from utils_general.file_checker import check_if_file_exists
 
 
 class Camera:
@@ -21,7 +21,7 @@ class Camera:
         checkerboard_distance = 383 # how far away the checkerboard is from the camera in mm
         width_of_one_square = 26 # mm
         start_frame_num = 1
-        vid_filename = PROJECT_ROOT_PATH + "/videos/focal_length_calib.mkv"
+        vid_filename = PROJECT_DIR + "/videos/focal_length_calib.mkv"
 
         check_if_file_exists(vid_filename)
 
@@ -114,6 +114,7 @@ class Camera:
 
         focal_length = checkerboard_distance*pixel_distance/width_of_one_square
         print "focal length: ", focal_length
+        print ""
         return focal_length
 
 def main():

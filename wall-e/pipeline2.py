@@ -1,7 +1,6 @@
 # This pipeline is responsible for matching ostracods between two frames, 3d mapping, and writing
 # the blender information to a text file from an FramePulseData object
 
-from utilities.video_frame_loader import VideoFrameLoader
 from mapping_3d.mapper_3d import depth_map
 from mapping_3d.pulse_data import FramePulseData
 from mapping_3d.pulse_data import write_frame_pulse_data_to_file
@@ -10,7 +9,7 @@ from ostracod_detection.locating.gen_temporal_ostracods import gen_ostracods
 from ostracod_detection.matching.match_temporal import get_ostracod_matches
 import time
 import argparse
-from utilities.file_checker import check_if_file_exists
+from utils_general.file_checker import check_if_file_exists
 
 def main():
     parser = argparse.ArgumentParser(description="Reads in left and right videos as well as the camera baseline.")

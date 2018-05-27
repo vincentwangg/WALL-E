@@ -1,7 +1,7 @@
 import cv2
 import argparse
-from utilities.video_frame_loader import VideoFrameLoader
-from utilities.file_checker import check_if_file_exists
+from utils_general.video_frame_loader import VideoFrameLoader
+from utils_general.file_checker import check_if_file_exists
 
 def crop_left_image(image, crop_val):
     h, w, _ = image.shape
