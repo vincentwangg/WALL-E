@@ -40,33 +40,31 @@ def get_ostracods(image):
     # compute brightness of each contour
     # compute x, y location of each contour
     # return list of ostracods
-    print "Ostracods: "
+    # print "Ostracods: "
     if image is None:
         sys.exit("unable to load image")
-    imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if len(image[0][0]) == 3:
+        imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        imgray = image
     threshold = filter_image(imgray, 90)
     contours = find_contours(threshold)
     ostracod_list = []
-    x_cor = []
     for c in contours:
         mask = np.zeros(imgray.shape, np.uint8)
         cv2.drawContours(mask, [c], 0, 255, -1)
         brightness = calculate_brightness(imgray, mask)
         area = calculate_area(c)
         location = calculate_location(imgray, mask)
-        if area >= 5:
-            x_cor.append(location[0])
+        if area >= 50:
             loc_list = [location[0], location[1], 0]
             ostracod = Ostracod(loc_list, area, brightness)
             ostracod_list.append(ostracod)
 
-    mean_x_cor = np.mean(x_cor)
-    for o in ostracod_list:
-        o.distance_from_mean = o.location[0] - mean_x_cor
 
-    print "Brightness", "\tArea", "\tLocation", "\tdistance_from_mean"
-    for o in ostracod_list:
-        print round(o.brightness, 2), "\t\t", o.area, "\t", o.location, "\t", o.distance_from_mean
+    # print "Brightness", "\tArea", "\tLocation"
+    # for o in ostracod_list:
+    #     print round(o.brightness, 2), "\t\t", o.area, "\t", o.location
     return ostracod_list
 
 

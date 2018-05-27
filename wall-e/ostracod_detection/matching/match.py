@@ -9,10 +9,6 @@ from cv2 import imread
 
 # match up the corresponding ostracods in each list
 
-# TODO: Maybe take out distance from the mean as an attribute(need to test)
-# TODO: Maybe add shape as an attribute
-
-
 class Variance:
     def __init__(self, ostracod_list1, ostracod_list2):
         self.brightness = None
@@ -114,18 +110,31 @@ def get_matching_pairs(ostracod_list1, ostracod_list2): # ostracod_list1 must be
         indexes_list1, indexes_list2 = build_new_index_lists(ostracod_list1, ostracod_list2, indexes_list2)
 
 
-def match(image_l, image_r):
-    ostracod_list_l = locator.get_ostracods(image_l)
-    ostracod_list_r = locator.get_ostracods(image_r)
+# removes matches if they have a distance value of greater than the threshold value
+# a match is a list of tuples (match_index, match_value)
+# this should only be called if each ostracod only has one match, it does not handle multiple matches per ostracod
+
+def threshold_matches(ostracod_list_l, ostracod_list_r, threshold_value):
+    for o in ostracod_list_l:
+        for m in o.matches:
+            if m[1] > threshold_value:
+                ostracod_list_r[m[0]].matches = []
+                o.matches = []
+                break
+
+
+def match(ostracod_list_l, ostracod_list_r, threshold):
     if len(ostracod_list_r) < len(ostracod_list_l):
         get_matching_pairs(ostracod_list_r, ostracod_list_l)
     else:
         get_matching_pairs(ostracod_list_l, ostracod_list_r)
 
-    print "matches of left: "
-    print_matches(ostracod_list_l)
-    print "matches of right: "
-    print_matches(ostracod_list_r)
+    threshold_matches(ostracod_list_l, ostracod_list_r, threshold)
+
+    # print "matches of left: "
+    # print_matches(ostracod_list_l)
+    # print "matches of right: "
+    # print_matches(ostracod_list_r)
 
     return ostracod_list_l, ostracod_list_r
 

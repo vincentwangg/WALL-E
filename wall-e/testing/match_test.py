@@ -1,5 +1,6 @@
 import ostracod_detection.matching.match as match
 from stereo_rectification.sr_map_gen import undistort
+from ostracod_detection.locating import locator
 import random
 import cv2
 
@@ -26,7 +27,11 @@ def main():
     image_l = undistort(image_l)
     image_r = cv2.imread(right_filename)
     image_r = undistort(image_r)
-    l_list, r_list = match.match(image_l, image_r)
+
+    ostracod_list_l = locator.get_ostracods(image_l)
+    ostracod_list_r = locator.get_ostracods(image_r)
+
+    l_list, r_list = match.match(ostracod_list_l, ostracod_list_r, threshold=5)
     for o in l_list:
         if len(o.matches) > 0:
             color = random_color()
