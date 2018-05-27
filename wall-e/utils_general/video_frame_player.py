@@ -16,13 +16,14 @@
 
 import argparse
 from config.keycode_setup import *
-from utilities.video_frame_loader import VideoFrameLoader
+from utils_general.video_frame_loader import VideoFrameLoader
 
 frame_actions = {}
 left_offset_actions = {}
 right_offset_actions = {}
 
 
+# Normalize offsets so that at least one of the offsets is always 0.
 def normalize_offsets(left_offset, right_offset):
     smaller_offset = min([left_offset, right_offset])
     return (left_offset - smaller_offset), (right_offset - smaller_offset)

@@ -10,3 +10,4 @@ sr_map.yml
 wall-e/blender/points.txt
 __pycache__/
 *.pyc
+tmp/

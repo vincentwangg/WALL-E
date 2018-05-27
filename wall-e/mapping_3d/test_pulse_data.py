@@ -147,5 +147,19 @@ class TestPulseData(TestCase):
         fpd.add_pulse_to_frame(3,
                                PulseData(xyz_coord=[0, 0, 5], radius=0.2, brightness=1),
                                PulseData(xyz_coord=[2, 3, 10], radius=0.2, brightness=1))
-        self.assertEquals(str(fpd.frame_pulse_data), "{3: [{'xyz_coord': [0, 0, 5], 'radius': 0.2, 'brightness': 1}, "
-                                                     "{'xyz_coord': [2, 3, 10], 'radius': 0.2, 'brightness': 1}]}")
+        self.assertEquals(str(fpd.frame_pulse_data), "{3: [{'c': [0, 0, 5], 'r': 0.2, 'b': 1}, "
+                                                     "{'c': [2, 3, 10], 'r': 0.2, 'b': 1}]}")
+
+    def test_fpd_add_pulse_and_none_is_correct(self):
+        fpd = FramePulseData()
+        fpd.add_pulse_to_frame(3,
+                               None,
+                               PulseData(xyz_coord=[2, 3, 10], radius=0.2, brightness=1))
+        self.assertEquals(str(fpd.frame_pulse_data), "{3: [{'c': [2, 3, 10], 'r': 0.2, 'b': 1}]}")
+
+    def test_fpd_add_none_pulse_is_correct(self):
+        fpd = FramePulseData()
+        fpd.add_pulse_to_frame(3,
+                               None,
+                               None)
+        self.assertEquals(str(fpd.frame_pulse_data), "{}")
