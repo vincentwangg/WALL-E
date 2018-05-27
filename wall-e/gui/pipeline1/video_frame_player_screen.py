@@ -171,7 +171,6 @@ class VideoFramePlayer(GuiBaseFrame):
         pass
 
     def on_hide_frame(self):
-        # TODO
         pass
 
     def update_UI(self):

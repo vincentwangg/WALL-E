@@ -3,6 +3,7 @@
 import argparse
 
 from config.keycode_setup import *
+from definitions import STEREO_RECTIFICATION_DIR
 from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from gui.pipeline1.utilities.constants import LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL, FRAMES_READ_PREFIX, \
@@ -24,7 +25,7 @@ D = np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568
 
 map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_32F)
 
-SR_MAP_GENERATED_FILENAME = "sr_map.yml"
+SR_MAP_GENERATED_FILENAME = os.path.join(STEREO_RECTIFICATION_DIR, "sr_map.yml")
 SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_GENERATED_FILENAME + "\" has been generated with the SR " \
                                                                              "map!\nFor future use, this file is " \
                                                                              "recommended to be copied somewhere and " \

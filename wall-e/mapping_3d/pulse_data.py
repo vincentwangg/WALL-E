@@ -1,7 +1,10 @@
 # pulse_data.py contains classes that help store pulse data and write that information to a text file for
 # blender_pulse_mapper.py to read.
 import ast
+import os
 from numbers import Number
+
+from definitions import MAPPING_3D_DIR
 
 XYZ_COORD_LABEL = "c"
 RADIUS_LABEL = "r"
@@ -9,7 +12,7 @@ BRIGHTNESS_LABEL = "b"
 
 Z_COORD_IDX = 2
 
-FRAME_PULSE_DATA_FILENAME = "frame_pulse_data.txt"
+FRAME_PULSE_DATA_FILENAME = os.path.join(MAPPING_3D_DIR, "frame_pulse_data.txt")
 
 
 def verify_xyz_coord_type(xyz_coord):
