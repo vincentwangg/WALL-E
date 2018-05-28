@@ -1,20 +1,22 @@
 # This pipeline is responsible for matching ostracods between two frames, 3d mapping, and writing
 # the blender information to a text file from an FramePulseData object
 
-from stereo_rectification.sr_map_gen import undistort
-from ostracod_detection.matching import match
+import random
+
+import cv2
+
+import blender_script
+from mapping_3d.camera import Camera
 from mapping_3d.mapper_3d import depth_map_frame
 from mapping_3d.pulse_data import FramePulseData
 from mapping_3d.pulse_data import write_frame_pulse_data_to_file
-from mapping_3d.camera import Camera
 from ostracod_detection.locating import locator
-from utilities.video_cropper import crop_right_image
-from utilities.video_cropper import crop_left_image
+from ostracod_detection.matching import match
+from stereo_rectification.sr_map_gen import undistort
 from utils_general.file_checker import check_if_file_exists
+from utils_general.video_cropper import crop_left_image
+from utils_general.video_cropper import crop_right_image
 from utils_general.video_frame_loader import VideoFrameLoader
-import cv2
-import random
-import blender_script
 
 
 def component():
