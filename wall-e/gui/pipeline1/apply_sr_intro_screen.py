@@ -12,12 +12,8 @@ class ApplySrIntroScreen(AbstractTitleDescriptionMultipleButtonsScreen):
             "For long videos, it may take hours to create\n"
             "a new stereo rectified video.",
 
-            "In the next few screens, you may enter timestamps to\n"
-            "crop the video to save time on\n"
-            "creating the stereo rectified footage.",
-
-            "If you feel that this step isn't necessary,\n"
-            "feel free to press skip."
+            "Choose one of the options below as your\n"
+            "choice of stereo rectification."
         ]
         button_text_list = [
             "Choose custom time range to crop video",

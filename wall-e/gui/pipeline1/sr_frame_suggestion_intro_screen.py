@@ -16,13 +16,12 @@ class SrFrameSuggestionIntroScreen(AbstractTitleDescriptionMultipleButtonsScreen
             "For long videos, it may take hours to search\n"
             "for frames that contain a chessboard.",
 
-            "As an option, you can help us save time by\n"
-            "choosing a range of frames that is likely to have\n"
+            "As an option, you can save time by choosing\n"
+            "a time range that is likely to have\n"
             "a chessboard in view.",
 
-            "If you feel that this step isn't necessary,\n"
-            "feel free to press skip\n"
-            "(or select your own .yml SR map)."
+            "Choose one of the options below as your\n"
+            "choice of finding a SR map."
         ]
         button_text_list = [
             "Choose custom time range",

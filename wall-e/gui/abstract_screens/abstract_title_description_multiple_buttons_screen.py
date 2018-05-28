@@ -21,7 +21,6 @@ class AbstractTitleDescriptionMultipleButtonsScreen(GuiBaseFrame):
         self.screen_title = Header1Label(self.content_wrapper, text=self.screen_title)
         self.screen_description_label = PLabel(self.content_wrapper,
                                                text=("\n\n".join(self.process_description_message_list)))
-        self.empty_label = PLabel(self.content_wrapper)
         self.button_wrapper = Frame(self.content_wrapper)
 
         if len(self.button_text_list) != len(self.button_command_list):
@@ -37,7 +36,6 @@ class AbstractTitleDescriptionMultipleButtonsScreen(GuiBaseFrame):
     def add_widgets_to_frame(self):
         self.screen_title.pack()
         self.screen_description_label.pack()
-        self.empty_label.pack()
         self.button_wrapper.pack()
         for button in self.buttons:
             button.pack()
