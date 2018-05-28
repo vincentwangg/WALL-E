@@ -14,6 +14,7 @@ from utils_general.file_checker import check_if_file_exists
 from utils_general.video_frame_loader import VideoFrameLoader
 import cv2
 import random
+import blender_script
 
 
 def component():
@@ -126,10 +127,9 @@ def main():
     cv2.destroyAllWindows()
 
     # 3D mapping
-    depth_map_frame(ostracod_list_l, ostracod_list_r, framepulsedata=fpd, framenum=1, camera=camera)
+    depth_map_frame(ostracod_list_l, ostracod_list_r, framepulsedata=fpd, framenum=0, camera=camera)
     write_frame_pulse_data_to_file(frame_pulse_data=fpd)
-
-    # blender - -python[filename] - - [arguments]
+    blender_script.main()
 
 
 if __name__ == '__main__':
