@@ -1,7 +1,7 @@
 from Tkinter import CENTER
 
 from gui.abstract_screens.abstract_time_selection_base_screen import AbstractTimeSelectionBaseScreen
-from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREEN_REL_Y_45
 
 
 class AbstractTimeSelectionEndScreen(AbstractTimeSelectionBaseScreen):
@@ -14,7 +14,7 @@ class AbstractTimeSelectionEndScreen(AbstractTimeSelectionBaseScreen):
     def add_widgets_to_frame(self):
         self.pack_title_and_instruction_widgets()
         self.pack_lower_half_widgets()
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
         self.set_error_message("")

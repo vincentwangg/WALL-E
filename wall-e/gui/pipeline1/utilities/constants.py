@@ -8,10 +8,9 @@ VIDEO_SR_SELECT_PREVIEW_WIDTH = int(640 * 0.625)
 VIDEO_SR_SELECT_PREVIEW_HEIGHT = int(480 * 0.625)
 
 SCREENS_REL_X = 0.5
-SCREENS_REL_Y = 0.45
-
-VIDEO_FRAME_PLAYER_SCREEN_REL_Y = 0.5
-VIDEO_SELECT_SCREEN_REL_Y = 0.47
+SCREEN_REL_Y_45 = 0.45
+SCREEN_REL_Y_47 = 0.47
+SCREEN_REL_Y_50 = 0.5
 
 LEFT = "left"
 RIGHT = "right"
@@ -32,7 +31,8 @@ TOTAL_FRAMES_KEY = "total_frames"
 FOUND_OPTIMAL_OFFSET_KEY = "offset_found"
 
 # SR Frame Selection
-SR_FRAME_SELECTION_TITLE = "Stereo Rectification Map Generation"
+SR_MAP_GEN_TITLE = "Stereo Rectification Map Generation"
+SR_FRAME_SELECTION_TITLE = "Stereo Rectification Frame Selection"
 
 # SR Progress Screen
 SR_PROGRESS_SCREEN_TITLE = "Finding frames valid for stereo rectification..."

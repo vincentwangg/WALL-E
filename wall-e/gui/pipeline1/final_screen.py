@@ -2,7 +2,7 @@ from Tkinter import Frame, Button, CENTER
 
 import sys
 
-from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREEN_REL_Y_45
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -30,7 +30,7 @@ class FinalScreen(GuiBaseFrame):
         self.filenames.pack()
         self.thanks_label.pack()
         self.finish_button.pack()
-        self.text_container.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.text_container.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
         self.filenames.configure(text=("\n".join([

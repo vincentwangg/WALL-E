@@ -1,6 +1,6 @@
 from Tkinter import Frame, LEFT, Button, CENTER
 
-from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREEN_REL_Y_45
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -29,7 +29,7 @@ class WelcomeScreen(GuiBaseFrame):
         self.description_label.pack()
         self.good_luck_label.pack()
         self.next_button.pack()
-        self.text_container.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.text_container.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
         pass

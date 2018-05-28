@@ -1,7 +1,7 @@
 from Tkconstants import CENTER
 
 from gui.abstract_screens.abstract_time_selection_base_screen import AbstractTimeSelectionBaseScreen
-from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREEN_REL_Y_45
 from gui.widgets.p_label import PLabel
 
 
@@ -23,7 +23,7 @@ class AbstractTimeSelectionStartScreen(AbstractTimeSelectionBaseScreen):
         self.screen_instruction_1_filename_label.pack()
         self.screen_instruction_2_label.pack()
         self.pack_lower_half_widgets()
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
         self.set_instruction_1_filename(self.controller.get_filename_of_video_with_0_offset() + "\n")

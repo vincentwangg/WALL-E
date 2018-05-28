@@ -14,6 +14,7 @@ from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from gui.pipeline1.sr_frame_suggestion_time_end_screen import SrFrameSuggestionTimeEndScreen
 from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
+from gui.pipeline1.sr_no_frames_found_screen import SrNoFramesFoundScreen
 from gui.pipeline1.sr_scan_progress_screen import SrScanProgressScreen
 from gui.pipeline1.utilities.constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from gui.pipeline1.video_scan_progress_screen import VideoScanProgressScreen
@@ -22,25 +23,29 @@ from gui.pipeline1.welcome_screen import WelcomeScreen
 from gui.widgets.walle_header import WalleHeader
 from utils_general.video_frame_loader import VideoFrameLoader
 
-screen_classes_in_order = (WelcomeScreen,
-                           VideoSelectionScreen,
-                           VideoScanProgressScreen,
-                           FrameMatchingIntroScreen,
-                           FrameMatchingTimeStartScreen,
-                           FrameMatchingTimeEndScreen,
-                           FrameMatchingProgressScreen,
-                           FrameMatchingValidationScreen,
-                           SrFrameSuggestionIntroScreen,
-                           SrFrameSuggestionTimeStartScreen,
-                           SrFrameSuggestionTimeEndScreen,
-                           SrScanProgressScreen,
-                           SrFrameSelection,
-                           ApplySrIntroScreen,
-                           ApplySrTimeStartScreen,
-                           ApplySrTimeEndScreen,
-                           ApplySrProgressScreen,
-                           FinalScreen
-                           )
+screen_classes_in_order = [
+    WelcomeScreen,
+    VideoSelectionScreen,
+    VideoScanProgressScreen,
+    FrameMatchingIntroScreen,
+    FrameMatchingTimeStartScreen,
+    FrameMatchingTimeEndScreen,
+    FrameMatchingProgressScreen,
+    FrameMatchingValidationScreen,
+    SrFrameSuggestionIntroScreen,
+    SrFrameSuggestionTimeStartScreen,
+    SrFrameSuggestionTimeEndScreen,
+    SrScanProgressScreen,
+    SrFrameSelection,
+    ApplySrIntroScreen,
+    ApplySrTimeStartScreen,
+    ApplySrTimeEndScreen,
+    ApplySrProgressScreen,
+    FinalScreen
+]
+other_screens_to_render = [
+    SrNoFramesFoundScreen
+]
 first_screen = WelcomeScreen
 
 
@@ -68,23 +73,27 @@ class Pipeline1GuiController(Tk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        container = Frame(self)
-        container.pack(fill="both", expand=True)
+        self.screen_container = Frame(self)
+        self.screen_container.pack(fill="both", expand=True)
 
-        self.walle_header = WalleHeader(parent=container, controller=self)
+        self.walle_header = WalleHeader(parent=self.screen_container, controller=self)
         self.walle_header.grid(row=0, column=0, sticky="w")
 
         self.frames = {}
-        for frame_class in screen_classes_in_order:
-            frame = frame_class(parent=container, controller=self, borderwidth=2, relief="groove")
-            frame.grid(row=1, column=0, sticky="nsew")
-
-            self.frames[frame_class] = frame
+        self.prepare_screens(screen_classes_in_order)
+        self.prepare_screens(other_screens_to_render)
 
         self.adjust_frame_content_dimensions()
         self.center_in_computer_screen(self.winfo_width(), self.winfo_height())
 
         self.set_and_start_top_frame(first_screen)
+
+    def prepare_screens(self, screen_frames):
+        for frame_class in screen_frames:
+            frame = frame_class(parent=self.screen_container, controller=self, borderwidth=2, relief="groove")
+            frame.grid(row=1, column=0, sticky="nsew")
+
+            self.frames[frame_class] = frame
 
     def show_next_frame(self):
         idx = screen_classes_in_order.index(self.top_frame)

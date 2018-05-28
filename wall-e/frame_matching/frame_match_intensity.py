@@ -174,9 +174,9 @@ def update_ui(progress_dict, controller):
     else:
         optimal_offset_percent_done = 0
 
-    percent_done = 0.4 * left_video_percent_done / 100.0 + \
-                   0.4 * right_video_percent_done / 100.0 + \
-                   0.2 * optimal_offset_percent_done
+    percent_done = 0.475 * left_video_percent_done / 100.0 + \
+                   0.475 * right_video_percent_done / 100.0 + \
+                   0.05 * optimal_offset_percent_done
     percent_done = percent_done * 100.0
 
     # Message: Frames processed for left video: frames_processed/total_frames (percent%)

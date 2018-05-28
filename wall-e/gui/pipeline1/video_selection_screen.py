@@ -6,7 +6,7 @@ import cv2
 
 from definitions import *
 from gui.pipeline1.utilities.constants import VIDEO_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT, SCREENS_REL_X, \
-    VIDEO_SELECT_SCREEN_REL_Y, \
+    SCREEN_REL_Y_47, \
     VIDEOS_SELECTED_TMP_FILENAME, LEFT, RIGHT
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
@@ -66,7 +66,7 @@ class VideoSelectionScreen(GuiBaseFrame):
         self.right_video_button.grid(row=CHOOSE_VIDEO_BUTTON_ROW, column=RIGHT_VIDEO_THUMBNAIL_COL)
 
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=CENTER_SCREEN_COLSPAN)
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=VIDEO_SELECT_SCREEN_REL_Y, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_47, anchor=CENTER)
 
     def init_video_info(self):
         self.left_video_selected = False

@@ -1,12 +1,12 @@
 from Tkinter import Frame, Button, CENTER
 
-from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.utilities.constants import SCREENS_REL_X, SCREEN_REL_Y_45
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
 
 
-class AbstractProcessIntroScreen(GuiBaseFrame):
+class AbstractTitleDescriptionTwoButtonsScreen(GuiBaseFrame):
     def __init__(self, parent, controller, title, process_description_message_list, **kw):
         self.screen_title = title
         self.process_description_message_list = process_description_message_list
@@ -34,7 +34,7 @@ class AbstractProcessIntroScreen(GuiBaseFrame):
         self.button_wrapper.pack()
         self.next_button.grid(row=0, column=0)
         self.skip_button.grid(row=0, column=1)
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
         pass

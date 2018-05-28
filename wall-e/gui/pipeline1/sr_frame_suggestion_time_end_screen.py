@@ -2,7 +2,7 @@ from gui.abstract_screens.abstract_time_selection_end_screen import AbstractTime
 from gui.abstract_screens.utilities.input_checks import frame_input_within_video_bounds_check, \
     sr_scan_frame_range_chronologically_valid_check
 from gui.abstract_screens.utilities.time_input_util_methods import calculate_frame_num_from_inputs
-from gui.pipeline1.utilities.constants import SR_FRAME_SELECTION_TITLE
+from gui.pipeline1.utilities.constants import SR_MAP_GEN_TITLE
 
 ENTRY_WIDTH = 5
 
@@ -13,7 +13,7 @@ class SrFrameSuggestionTimeEndScreen(AbstractTimeSelectionEndScreen):
 
     def init_widgets(self):
         AbstractTimeSelectionEndScreen.init_widgets(self)
-        self.set_title(SR_FRAME_SELECTION_TITLE)
+        self.set_title(SR_MAP_GEN_TITLE)
         self.set_instruction_1_text("What was the time stamp when the chessboard went out of view?")
 
     def set_input_checks(self):

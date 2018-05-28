@@ -2,8 +2,9 @@ import datetime
 from Tkinter import Canvas, Frame, Scrollbar, Label, VERTICAL, CENTER, Button
 from math import ceil
 
+from gui.pipeline1.sr_no_frames_found_screen import SrNoFramesFoundScreen
 from gui.pipeline1.utilities.constants import WINDOW_WIDTH, WINDOW_HEIGHT, SCREENS_REL_X, LEFT, RIGHT, \
-    FRAME_NUM_LABEL, SR_MAP_LABEL
+    FRAME_NUM_LABEL, SR_MAP_LABEL, SR_FRAME_SELECTION_TITLE
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -18,7 +19,7 @@ class SrFrameSelection(GuiBaseFrame):
 
     def init_widgets(self):
         self.content_wrapper = Frame(self)
-        self.screen_title = Header1Label(self.content_wrapper, text="Stereo Rectification Frame Selection")
+        self.screen_title = Header1Label(self.content_wrapper, text=SR_FRAME_SELECTION_TITLE)
         self.screen_description = PLabel(self.content_wrapper, text="Please select a frame that has a satisfactory "
                                                                     "stereo rectification result.")
 
@@ -34,72 +35,75 @@ class SrFrameSelection(GuiBaseFrame):
         self.canvases = []
         self.page_num = 0
 
-        pages = int(ceil(len(self.controller.sr_results) / 10.0))
-        for page in range(0, pages):
-            canvas_wrapper = Frame(self.content_wrapper, borderwidth="1", relief="solid")
-            canvas = Canvas(canvas_wrapper, width=int(WINDOW_WIDTH * 7 / 8), height=(WINDOW_HEIGHT * 2 / 3))
-            scroll_bar = Scrollbar(canvas_wrapper, orient=VERTICAL, command=canvas.yview)
-            results_list_frame = Frame(canvas)
+        if len(self.controller.sr_results) == 0:
+            self.controller.show_frame(SrNoFramesFoundScreen)
+        else:
+            pages = int(ceil(len(self.controller.sr_results) / 10.0))
+            for page in range(0, pages):
+                canvas_wrapper = Frame(self.content_wrapper, borderwidth="1", relief="solid")
+                canvas = Canvas(canvas_wrapper, width=int(WINDOW_WIDTH * 7 / 8), height=(WINDOW_HEIGHT * 2 / 3))
+                scroll_bar = Scrollbar(canvas_wrapper, orient=VERTICAL, command=canvas.yview)
+                results_list_frame = Frame(canvas)
 
-            canvas.configure(yscrollcommand=scroll_bar.set)
-            canvas.create_window(0, 0, window=results_list_frame)
-            canvas.bind_all("<Up>", self.on_up_key)
-            canvas.bind_all("<Down>", self.on_down_key)
-            canvas.bind_all("<Left>", self.on_left_key)
-            canvas.bind_all("<Right>", self.on_right_key)
+                canvas.configure(yscrollcommand=scroll_bar.set)
+                canvas.create_window(0, 0, window=results_list_frame)
+                canvas.bind_all("<Up>", self.on_up_key)
+                canvas.bind_all("<Down>", self.on_down_key)
+                canvas.bind_all("<Left>", self.on_left_key)
+                canvas.bind_all("<Right>", self.on_right_key)
 
-            canvas.grid(row=0, column=0, sticky="nsew")
-            scroll_bar.grid(row=0, column=1, sticky="ns")
-            canvas_wrapper.grid(row=2, column=0, columnspan=3, sticky="nsew")
+                canvas.grid(row=0, column=0, sticky="nsew")
+                scroll_bar.grid(row=0, column=1, sticky="ns")
+                canvas_wrapper.grid(row=2, column=0, columnspan=3, sticky="nsew")
 
-            select_buttons_on_page = []
+                select_buttons_on_page = []
 
-            for row in range(0, RESULTS_PER_PAGE):
-                result_num = page * RESULTS_PER_PAGE + row
-                if result_num < len(self.controller.sr_results):
-                    frame_num = self.controller.sr_results[result_num][FRAME_NUM_LABEL]
+                for row in range(0, RESULTS_PER_PAGE):
+                    result_num = page * RESULTS_PER_PAGE + row
+                    if result_num < len(self.controller.sr_results):
+                        frame_num = self.controller.sr_results[result_num][FRAME_NUM_LABEL]
 
-                    result_entry = Frame(results_list_frame, borderwidth="1", relief="solid")
-                    description = PLabel(result_entry, text="Frame #" + str(int(frame_num)) +
-                                                            ", Time: " +
-                                                            str(datetime.timedelta(seconds=frame_num / 30)))
-                    preview_wrapper = Frame(result_entry)
-                    left_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][LEFT])
-                    right_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][RIGHT])
-                    select_button = SrSelectButton(preview_wrapper, self.controller,
-                                                   self.controller.sr_results[result_num][SR_MAP_LABEL], text="Select")
+                        result_entry = Frame(results_list_frame, borderwidth="1", relief="solid")
+                        description = PLabel(result_entry, text="Frame #" + str(int(frame_num)) +
+                                                                ", Time: " +
+                                                                str(datetime.timedelta(seconds=frame_num / 30)))
+                        preview_wrapper = Frame(result_entry)
+                        left_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][LEFT])
+                        right_video_preview = Label(preview_wrapper, image=self.controller.sr_results[result_num][RIGHT])
+                        select_button = SrSelectButton(preview_wrapper, self.controller,
+                                                       self.controller.sr_results[result_num][SR_MAP_LABEL], text="Select")
 
-                    select_buttons_on_page.append(select_button)
+                        select_buttons_on_page.append(select_button)
 
-                    description.pack()
-                    left_video_preview.grid(row=row, column=0)
-                    right_video_preview.grid(row=row, column=1)
-                    select_button.grid(row=row, column=2)
-                    preview_wrapper.pack()
-                    result_entry.pack()
+                        description.pack()
+                        left_video_preview.grid(row=row, column=0)
+                        right_video_preview.grid(row=row, column=1)
+                        select_button.grid(row=row, column=2)
+                        preview_wrapper.pack()
+                        result_entry.pack()
 
-            for i in range(0, len(select_buttons_on_page)):
-                select_buttons_on_page[i].configure(command=select_buttons_on_page[i].use_sr_map)
+                for i in range(0, len(select_buttons_on_page)):
+                    select_buttons_on_page[i].configure(command=select_buttons_on_page[i].use_sr_map)
 
-            self.master.update_idletasks()
-            canvas.config(scrollregion=canvas.bbox("all"))
-            canvas.yview_moveto(0)
-            self.canvas_wrappers.append(canvas_wrapper)
-            self.canvases.append(canvas)
+                self.master.update_idletasks()
+                canvas.config(scrollregion=canvas.bbox("all"))
+                canvas.yview_moveto(0)
+                self.canvas_wrappers.append(canvas_wrapper)
+                self.canvases.append(canvas)
 
-        self.prev_result_page = Button(self.content_wrapper, text="<",
-                                       command=lambda: self.prev_page_command())
-        self.page_info_label = PLabel(self.content_wrapper,
-                                      text=get_page_info_label_message(self.page_num,
-                                                                       len(self.canvases),
-                                                                       RESULTS_PER_PAGE))
-        self.next_result_page = Button(self.content_wrapper, text=">",
-                                       command=lambda: self.next_page_command())
+            self.prev_result_page = Button(self.content_wrapper, text="<",
+                                           command=lambda: self.prev_page_command())
+            self.page_info_label = PLabel(self.content_wrapper,
+                                          text=get_page_info_label_message(self.page_num,
+                                                                           len(self.canvases),
+                                                                           RESULTS_PER_PAGE))
+            self.next_result_page = Button(self.content_wrapper, text=">",
+                                           command=lambda: self.next_page_command())
 
-        self.prev_result_page.grid(row=3, column=0)
-        self.page_info_label.grid(row=3, column=1)
-        self.next_result_page.grid(row=3, column=2)
-        self.canvas_wrappers[self.page_num].tkraise()
+            self.prev_result_page.grid(row=3, column=0)
+            self.page_info_label.grid(row=3, column=1)
+            self.next_result_page.grid(row=3, column=2)
+            self.canvas_wrappers[self.page_num].tkraise()
 
     def update_frame(self, data):
         pass

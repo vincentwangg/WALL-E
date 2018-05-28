@@ -7,7 +7,7 @@ from ttk import Progressbar
 from gui.abstract_screens.utilities.constants import ELAPSED_TIME_PREFIX
 from gui.pipeline1.utilities.constants import WINDOW_WIDTH, LEFT_FRAMES_COUNT_PREFIX, RIGHT_FRAMES_COUNT_PREFIX, \
     SCREENS_REL_X, \
-    SCREENS_REL_Y
+    SCREEN_REL_Y_45
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -43,7 +43,7 @@ class VideoScanProgressScreen(GuiBaseFrame):
         self.elapsed_time_label.pack()
         self.empty_space.pack()
         self.next_button.pack()
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
         self.start_time = time.time()

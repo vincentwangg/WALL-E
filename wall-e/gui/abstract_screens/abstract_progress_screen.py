@@ -7,7 +7,7 @@ from ttk import Progressbar
 from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST, \
     ELAPSED_TIME_PREFIX, \
     ESTIMATED_TIME_LEFT_PREFIX
-from gui.pipeline1.utilities.constants import WINDOW_WIDTH, SCREENS_REL_X, SCREENS_REL_Y
+from gui.pipeline1.utilities.constants import WINDOW_WIDTH, SCREENS_REL_X, SCREEN_REL_Y_45
 from gui.widgets.gui_base_frame import GuiBaseFrame
 from gui.widgets.header1_label import Header1Label
 from gui.widgets.p_label import PLabel
@@ -46,7 +46,7 @@ class AbstractProgressScreen(GuiBaseFrame):
         self.information_display.pack()
         self.empty_space_2.pack()
         self.next_button.pack()
-        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREENS_REL_Y, anchor=CENTER)
+        self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
         self.start_time = time.time()
