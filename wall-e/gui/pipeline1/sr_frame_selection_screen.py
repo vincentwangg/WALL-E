@@ -45,6 +45,8 @@ class SrFrameSelection(GuiBaseFrame):
             canvas.create_window(0, 0, window=results_list_frame)
             canvas.bind_all("<Up>", self.on_up_key)
             canvas.bind_all("<Down>", self.on_down_key)
+            canvas.bind_all("<Left>", self.on_left_key)
+            canvas.bind_all("<Right>", self.on_right_key)
 
             canvas.grid(row=0, column=0, sticky="nsew")
             scroll_bar.grid(row=0, column=1, sticky="ns")
@@ -110,6 +112,12 @@ class SrFrameSelection(GuiBaseFrame):
 
     def on_down_key(self, event):
         self.canvases[self.page_num].yview_scroll(7, 'units')
+
+    def on_left_key(self, event):
+        self.prev_page_command()
+
+    def on_right_key(self, event):
+        self.next_page_command()
 
     def prev_page_command(self):
         if self.page_num > 0:
