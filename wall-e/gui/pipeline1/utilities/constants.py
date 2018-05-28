@@ -32,7 +32,7 @@ TOTAL_FRAMES_KEY = "total_frames"
 FOUND_OPTIMAL_OFFSET_KEY = "offset_found"
 
 # SR Frame Selection
-SR_FRAME_SELECTION_TITLE = "Chessboard Frame Suggestion"
+SR_FRAME_SELECTION_TITLE = "Stereo Rectification Map Generation"
 
 # SR Progress Screen
 SR_PROGRESS_SCREEN_TITLE = "Finding frames valid for stereo rectification..."

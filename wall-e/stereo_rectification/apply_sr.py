@@ -49,6 +49,33 @@ def generate_maps(yml_filename):
     return map_l, map_r
 
 
+def generate_sr_map_dict_from_file(filename):
+    fs = cv2.FileStorage(filename, cv2.FILE_STORAGE_READ)
+    cam_mtx_l = read_from_yml(fs, CAM_MTX_L_LABEL)
+    dist_l = read_from_yml(fs, DIST_L_LABEL)
+    R1 = read_from_yml(fs, R1_LABEL)
+    P1 = read_from_yml(fs, P1_LABEL)
+
+    cam_mtx_r = read_from_yml(fs, CAM_MTX_R_LABEL)
+    dist_r = read_from_yml(fs, DIST_R_LABEL)
+    R2 = read_from_yml(fs, R2_LABEL)
+    P2 = read_from_yml(fs, P2_LABEL)
+
+    sr_map_dict = {}
+
+    sr_map_dict[CAM_MTX_L_LABEL] = cam_mtx_l
+    sr_map_dict[DIST_L_LABEL] = dist_l
+    sr_map_dict[R1_LABEL] = R1
+    sr_map_dict[P1_LABEL] = P1
+
+    sr_map_dict[CAM_MTX_R_LABEL] = cam_mtx_r
+    sr_map_dict[DIST_R_LABEL] = dist_r
+    sr_map_dict[R2_LABEL] = R2
+    sr_map_dict[P2_LABEL] = P2
+
+    return sr_map_dict
+
+
 def create_maps_from_sr_map_dict(sr_map_dict):
     cam_mtx_l = sr_map_dict[CAM_MTX_L_LABEL]
     dist_l = sr_map_dict[DIST_L_LABEL]
