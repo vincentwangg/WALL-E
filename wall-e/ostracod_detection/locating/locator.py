@@ -56,7 +56,7 @@ def get_ostracods(image):
         brightness = calculate_brightness(imgray, mask)
         area = calculate_area(c)
         location = calculate_location(imgray, mask)
-        if area >= 50:
+        if area >= 5:
             loc_list = [location[0], location[1], 0]
             ostracod = Ostracod(loc_list, area, brightness)
             ostracod_list.append(ostracod)
