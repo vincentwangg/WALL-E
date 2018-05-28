@@ -9,13 +9,13 @@ from gui.pipeline1.frame_matching_intro_screen import FrameMatchingIntroScreen
 from gui.pipeline1.frame_matching_progress_screen import FrameMatchingProgressScreen
 from gui.pipeline1.frame_matching_time_end_screen import FrameMatchingTimeEndScreen
 from gui.pipeline1.frame_matching_time_start_screen import FrameMatchingTimeStartScreen
+from gui.pipeline1.frame_matching_validation_screen import FrameMatchingValidationScreen
 from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from gui.pipeline1.sr_frame_suggestion_time_end_screen import SrFrameSuggestionTimeEndScreen
 from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
 from gui.pipeline1.sr_scan_progress_screen import SrScanProgressScreen
 from gui.pipeline1.utilities.constants import WINDOW_WIDTH, WINDOW_HEIGHT
-from gui.pipeline1.video_frame_player_screen import VideoFramePlayer
 from gui.pipeline1.video_scan_progress_screen import VideoScanProgressScreen
 from gui.pipeline1.video_selection_screen import VideoSelectionScreen
 from gui.pipeline1.welcome_screen import WelcomeScreen
@@ -29,7 +29,7 @@ screen_classes_in_order = (WelcomeScreen,
                            FrameMatchingTimeStartScreen,
                            FrameMatchingTimeEndScreen,
                            FrameMatchingProgressScreen,
-                           VideoFramePlayer,
+                           FrameMatchingValidationScreen,
                            SrFrameSuggestionIntroScreen,
                            SrFrameSuggestionTimeStartScreen,
                            SrFrameSuggestionTimeEndScreen,

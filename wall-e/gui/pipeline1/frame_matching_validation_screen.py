@@ -24,7 +24,7 @@ LEFT_OFFSET_PREFIX = "Left Offset: "
 RIGHT_OFFSET_PREFIX = "Right Offset: "
 
 
-class VideoFramePlayer(GuiBaseFrame):
+class FrameMatchingValidationScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
         GuiBaseFrame.__init__(self, parent, controller, **kw)
         self.left_video_filename = None

@@ -1,6 +1,9 @@
+from Tkinter import Button
+
 from gui.abstract_screens.abstract_process_intro_screen import AbstractProcessIntroScreen
 from gui.pipeline1.frame_matching_progress_screen import FrameMatchingProgressScreen
 from gui.pipeline1.utilities.constants import FRAME_MATCHING_SCREEN_TITLE
+from gui.pipeline1.frame_matching_validation_screen import FrameMatchingValidationScreen
 
 
 class FrameMatchingIntroScreen(AbstractProcessIntroScreen):
@@ -17,10 +20,21 @@ class FrameMatchingIntroScreen(AbstractProcessIntroScreen):
                                                 "find an offset that will most effectively\n"
                                                 "line up the videos.",
                                                 
-                                                "If you would like to manually find the offset,\n"
-                                                "feel free to press skip."
+                                                "Choose one of the options below\n"
+                                                "for frame matching."
                                             ],
                                             **kwargs)
+
+    def init_widgets(self):
+        AbstractProcessIntroScreen.init_widgets(self)
+        self.next_button.configure(text="Use custom time range")
+        self.skip_button.configure(text="Loop through full video")
+        self.custom_sr_map_button = Button(self.content_wrapper, text="Manually choose video offsets",
+                                           command=lambda: self.controller.show_frame(FrameMatchingValidationScreen))
+
+    def add_widgets_to_frame(self):
+        AbstractProcessIntroScreen.add_widgets_to_frame(self)
+        self.custom_sr_map_button.pack()
 
     def on_next_button(self):
         self.controller.show_next_frame()
