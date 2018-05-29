@@ -41,7 +41,7 @@ def calculate_gradient(file_name, start_frame, end_frame):
     feed = cv2.VideoCapture(file_name)
     feed.set(1, start_frame)
 
-    num_frames = end_frame - start_frame
+    num_frames = int(feed.get(cv2.CAP_PROP_FRAME_COUNT)) if end_frame == -1 else end_frame - start_frame
 
     prev_frame = cv2.cvtColor(feed.read()[1], cv2.COLOR_BGR2GRAY)
     _, prev_frame = cv2.threshold(prev_frame, 150, 255, cv2.THRESH_TOZERO)
@@ -105,11 +105,9 @@ def frame_match(left_file_name, right_file_name, start_timestamp, end_timestamp)
     end_frame = end_timestamp * 30 if end_timestamp else -1
 
     print('left feed gradient calculating...')
-    l_gradient = calculate_gradient(left_file_name, start_frame, end_frame) if end_timestamp else calculate_gradient(
-        args.left_feed, start_frame)
+    l_gradient = calculate_gradient(left_file_name, start_frame, end_frame)
     print('right feed gradient calculating...')
-    r_gradient = calculate_gradient(right_file_name, start_frame, end_frame) if end_timestamp else calculate_gradient(
-        args.right_feed, start_frame)
+    r_gradient = calculate_gradient(right_file_name, start_frame, end_frame)
 
     opt = get_optimal_offset(l_gradient, r_gradient, 50)
     l_offset = 0 if opt > 0 else -opt
