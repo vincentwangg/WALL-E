@@ -9,7 +9,7 @@ import cv2
 from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from gui.pipeline1.utilities.constants import FRAMES_STEREO_RECTIFIED_PREFIX
 from stereo_rectification.sr_map import get_sr_map_from_yml_file
-from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
+from stereo_rectification.sr_map_gen import undistort, SR_MAP_FILENAME
 from utils_general.file_checker import check_if_file_exists
 from utils_general.frame_calculations import calculate_video_scan_frame_information
 from utils_general.video_frame_loader import VideoFrameLoader
@@ -163,9 +163,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("left_video", help="filename of the left video feed")
     parser.add_argument("right_video", help="filename of the right video feed")
-    parser.add_argument("-y", "--yaml_file", default=SR_MAP_GENERATED_FILENAME,
+    parser.add_argument("-y", "--yaml_file", default=SR_MAP_FILENAME,
                         help="filename of the yaml file that contains the stereo rectification maps. default is a "
-                             "file named \"" + SR_MAP_GENERATED_FILENAME + "\" in the same directory as this script.")
+                             "file named \"" + SR_MAP_FILENAME + "\" in the same directory as this script.")
     parser.add_argument("-w", "--show_lines", type=bool, default=False,
                         help="True if white lines to help show results of stereo rectification are wanted. False if not")
 

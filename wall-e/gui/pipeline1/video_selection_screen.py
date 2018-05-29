@@ -136,7 +136,7 @@ class VideoSelectionScreen(GuiBaseFrame):
 
 
 def select_video_filename():
-    filename = askopenfilename(initialdir=os.path.dirname(ROOT_DIR), title="Select left video",
+    filename = askopenfilename(initialdir=os.path.dirname(PROJECT_DIR), title="Select left video",
                                filetypes=[("MKV files", "*.mkv"),
                                           ("AVI files", "*.avi"),
                                           ("MP4 files", "*mp4")])

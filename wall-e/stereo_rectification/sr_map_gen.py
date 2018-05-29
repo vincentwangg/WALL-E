@@ -8,7 +8,7 @@ from gui.pipeline1.utilities.constants import LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL, FRAMES_READ_PREFIX, \
     VALID_FRAMES_FOUND_PREFIX
 from stereo_rectification.grayscale_converter import convert_to_gray
-from stereo_rectification.sr_map import SR_MAP_GENERATED_FILENAME, SrMap
+from stereo_rectification.sr_map import SR_MAP_FILENAME, SrMap
 from utils_general.file_checker import check_if_file_exists
 from utils_general.frame_calculations import calculate_video_scan_frame_information
 from utils_general.image_converter import cv2_gray_image_to_tkinter_with_resize
@@ -23,7 +23,7 @@ D = np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568
 
 map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_32F)
 
-SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_GENERATED_FILENAME + "\" has been generated with the SR " \
+SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_FILENAME + "\" has been generated with the SR " \
                                                                              "map!\nFor future use, this file is " \
                                                                              "recommended to be copied somewhere and " \
                                                                              "renamed. "
@@ -208,7 +208,6 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
                                    })
 
         num_frames_scanned += 1
-        print("Scan:  " + str(left_frame_num))
 
         if num_frames_scanned % 10 == 0:
             create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
@@ -291,7 +290,7 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
                 frame_tracker.reset_frames()
                 break
             elif key == get_keycode_from_key_code_entry(S_KEY):
-                print("\nA file named \"" + SR_MAP_GENERATED_FILENAME + "\" has been generated with the SR map.\nFor "
+                print("\nA file named \"" + SR_MAP_FILENAME + "\" has been generated with the SR map.\nFor "
                                                                         "future use, this file is recommended to be "
                                                                         "copied somewhere and renamed.")
                 return current_frame

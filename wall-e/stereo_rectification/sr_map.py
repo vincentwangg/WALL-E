@@ -14,7 +14,7 @@ DIST_R_LABEL = "dist_r"
 R2_LABEL = "R2"
 P2_LABEL = "P2"
 
-SR_MAP_GENERATED_FILENAME = os.path.join(STEREO_RECTIFICATION_DIR, "sr_map.yml")
+SR_MAP_FILENAME = os.path.join(STEREO_RECTIFICATION_DIR, "sr_map.yml")
 
 
 class SrMap:
@@ -42,7 +42,7 @@ class SrMap:
                                                  cv2.CV_32F)
         return map_l, map_r
 
-    def write_to_yml_file(self, filename=SR_MAP_GENERATED_FILENAME):
+    def write_to_yml_file(self, filename=SR_MAP_FILENAME):
         sr_map_dict = {CAM_MTX_L_LABEL: self.cam_mtx_l,
                        DIST_L_LABEL: self.dist_l,
                        R1_LABEL: self.R1,

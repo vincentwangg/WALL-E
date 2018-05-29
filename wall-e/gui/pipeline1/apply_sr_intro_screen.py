@@ -1,6 +1,5 @@
 from gui.abstract_screens.abstract_title_description_multiple_buttons_screen import \
     AbstractTitleDescriptionMultipleButtonsScreen
-from gui.abstract_screens.abstract_title_description_two_buttons_screen import AbstractTitleDescriptionTwoButtonsScreen
 from gui.pipeline1.apply_sr_progress_screen import ApplySrProgressScreen
 from gui.pipeline1.apply_sr_time_start_screen import ApplySrTimeStartScreen
 from gui.pipeline1.utilities.constants import APPLY_SR_SCREEN_TITLE

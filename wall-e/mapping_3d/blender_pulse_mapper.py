@@ -24,8 +24,9 @@ def map_points_on_blender(points_filename):
         for pulse_data in fpd.frame_pulse_data[frame_num]:
             plot_pulse(pulse_data, frame_num)
         frames_written += 1
-        print("Frames written to Blender: " + str(frames_written) + "/" + str(num_frames_to_write) + ". (" + str(
-            round(frames_written * 100.0 / num_frames_to_write, 2)) + "%)")
+        sys.stdout.write("\rFrames written to Blender: " + str(frames_written) + "/" + str(num_frames_to_write) +
+                         ". (" + str(round(frames_written * 100.0 / num_frames_to_write, 2)) + "%)")
+        sys.stdout.flush()
 
     # Add camera
     bpy.ops.object.camera_add(rotation=rotation_toward_pos_z)

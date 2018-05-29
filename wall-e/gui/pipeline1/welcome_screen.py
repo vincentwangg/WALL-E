@@ -20,6 +20,8 @@ class WelcomeScreen(GuiBaseFrame):
                                              "\t2) Finding and generating the best SR map\n"
                                              "\t3) Stereo rectifying the videos",
                                         justify=LEFT)
+        self.advisory_label = PLabel(self.text_container,
+                                     text="(Note: the GUI experience looks best on a Mac)")
         self.good_luck_label = PLabel(self.text_container, text="Good Luck!")
         self.next_button = Button(self.text_container, text="Get Started",
                                   command=lambda: self.controller.show_next_frame())
@@ -27,6 +29,7 @@ class WelcomeScreen(GuiBaseFrame):
     def add_widgets_to_frame(self):
         self.welcome_label.pack()
         self.description_label.pack()
+        self.advisory_label.pack()
         self.good_luck_label.pack()
         self.next_button.pack()
         self.text_container.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
