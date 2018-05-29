@@ -7,7 +7,6 @@ from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DON
 from gui.pipeline1.utilities.constants import LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL, FRAMES_READ_PREFIX, \
     VALID_FRAMES_FOUND_PREFIX
-from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
 from stereo_rectification.sr_map import SR_MAP_GENERATED_FILENAME, SrMap
 from utils_general.file_checker import check_if_file_exists
@@ -209,6 +208,7 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
                                    })
 
         num_frames_scanned += 1
+        print("Scan:  " + str(left_frame_num))
 
         if num_frames_scanned % 10 == 0:
             create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
