@@ -7,8 +7,6 @@ import argparse
 
 from config.keycode_setup import load_keycodes
 from frame_matching.frame_match_intensity import frame_match
-from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
-from gui.pipeline1.pipeline1_gui_controller import Pipeline1GuiController
 from stereo_rectification.apply_sr import undistort_and_stereo_rectify_videos
 from stereo_rectification.sr_map_gen import find_and_generate_best_sr_map, SR_MAP_GENERATED_FILENAME
 from utils_general.video_frame_player import play_video

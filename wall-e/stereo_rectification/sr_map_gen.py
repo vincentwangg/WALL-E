@@ -3,18 +3,17 @@
 import argparse
 
 from config.keycode_setup import *
-from definitions import STEREO_RECTIFICATION_DIR
 from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from gui.pipeline1.utilities.constants import LEFT, RIGHT, \
     VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL, FRAMES_READ_PREFIX, \
     VALID_FRAMES_FOUND_PREFIX
 from stereo_rectification.constants import *
 from stereo_rectification.grayscale_converter import convert_to_gray
+from stereo_rectification.sr_map import SR_MAP_GENERATED_FILENAME, SrMap
 from utils_general.file_checker import check_if_file_exists
 from utils_general.frame_calculations import calculate_video_scan_frame_information
 from utils_general.image_converter import cv2_gray_image_to_tkinter_with_resize
 from utils_general.video_frame_loader import VideoFrameLoader
-from utils_general.yaml_utility import save_to_yml
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
 CHECKERBOARD = (8, 6)
@@ -25,7 +24,6 @@ D = np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568
 
 map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_32F)
 
-SR_MAP_GENERATED_FILENAME = os.path.join(STEREO_RECTIFICATION_DIR, "sr_map.yml")
 SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_GENERATED_FILENAME + "\" has been generated with the SR " \
                                                                              "map!\nFor future use, this file is " \
                                                                              "recommended to be copied somewhere and " \
@@ -112,7 +110,8 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
         img_right_undistorted = convert_to_gray(undistort(img_right))
 
         while True:
-            valid_frame_found, left_img_sr, right_img_sr = generate_sr_map(img_left_undistorted, img_right_undistorted)
+            valid_frame_found, left_img_sr, right_img_sr, sr_map = \
+                generate_sr_map(img_left_undistorted, img_right_undistorted)
             if valid_frame_found:
                 if show_original_frame:
                     cv2.imshow("Original Left", img_left)
@@ -372,27 +371,9 @@ def generate_sr_map(left_img, right_img):
                                                                       right_img.shape[::-1],
                                                                       R, T, alpha=a)
 
-    map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
-                                        dist_l,
-                                        R1, P1,
-                                        left_img.shape[::-1],
-                                        cv2.CV_32F)
-    map_r = cv2.initUndistortRectifyMap(cam_mtx_r,
-                                        dist_r,
-                                        R2, P2,
-                                        right_img.shape[::-1],
-                                        cv2.CV_32F)
+    sr_map = SrMap(cam_mtx_l, dist_l, R1, P1, cam_mtx_r, dist_r, R2, P2)
 
-    sr_map = {}
-    sr_map[CAM_MTX_L_LABEL] = cam_mtx_l
-    sr_map[DIST_L_LABEL] = dist_l
-    sr_map[R1_LABEL] = R1
-    sr_map[P1_LABEL] = P1
-
-    sr_map[CAM_MTX_R_LABEL] = cam_mtx_r
-    sr_map[DIST_R_LABEL] = dist_r
-    sr_map[R2_LABEL] = R2
-    sr_map[P2_LABEL] = P2
+    map_l, map_r = sr_map.generate_maps()
 
     new_img_left = cv2.remap(left_img,
                              map_l[0],
@@ -434,13 +415,6 @@ def show_sr_images(valid_sr_frame, img_left, img_right):
 def undistort(img):
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     return undistorted_img
-
-
-def write_sr_map_to_file(sr_map):
-    write = 1
-    for key in sr_map.keys():
-        save_to_yml(SR_MAP_GENERATED_FILENAME, key, sr_map[key], w=write)
-        write = 0
 
 
 class FrameTracker:

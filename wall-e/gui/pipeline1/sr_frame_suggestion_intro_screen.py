@@ -7,7 +7,7 @@ from gui.abstract_screens.abstract_title_description_multiple_buttons_screen imp
 from gui.pipeline1.apply_sr_intro_screen import ApplySrIntroScreen
 from gui.pipeline1.sr_scan_progress_screen import SrScanProgressScreen
 from gui.pipeline1.utilities.constants import SR_MAP_GEN_TITLE
-from stereo_rectification.apply_sr import generate_sr_map_dict_from_file
+from stereo_rectification.sr_map import get_sr_map_from_yml_file
 
 
 class SrFrameSuggestionIntroScreen(AbstractTitleDescriptionMultipleButtonsScreen):
@@ -59,5 +59,5 @@ class SrFrameSuggestionIntroScreen(AbstractTitleDescriptionMultipleButtonsScreen
                                    filetypes=[("YML files", "*.yml")])
 
         if os.path.isfile(filename):
-            self.controller.sr_map = generate_sr_map_dict_from_file(filename)
+            self.controller.sr_map = get_sr_map_from_yml_file(filename)
             self.controller.show_frame(ApplySrIntroScreen)

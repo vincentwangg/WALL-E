@@ -8,12 +8,11 @@ import cv2
 
 from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
 from gui.pipeline1.utilities.constants import FRAMES_STEREO_RECTIFIED_PREFIX
-from stereo_rectification.constants import *
+from stereo_rectification.sr_map import get_sr_map_from_yml_file
 from stereo_rectification.sr_map_gen import undistort, SR_MAP_GENERATED_FILENAME
 from utils_general.file_checker import check_if_file_exists
 from utils_general.frame_calculations import calculate_video_scan_frame_information
 from utils_general.video_frame_loader import VideoFrameLoader
-from utils_general.yaml_utility import read_from_yml
 
 fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.php
 
@@ -22,82 +21,6 @@ fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.
 def apply_rectify_maps(image, map_0, map_1):
     sr_image = cv2.remap(image, map_0, map_1, cv2.INTER_LANCZOS4)
     return sr_image
-
-
-# returns left map and right map
-def generate_maps(yml_filename):
-    fs = cv2.FileStorage(yml_filename, cv2.FILE_STORAGE_READ)
-    cam_mtx_l = read_from_yml(fs, CAM_MTX_L_LABEL)
-    dist_l = read_from_yml(fs, DIST_L_LABEL)
-    R1 = read_from_yml(fs, R1_LABEL)
-    P1 = read_from_yml(fs, P1_LABEL)
-
-    cam_mtx_r = read_from_yml(fs, CAM_MTX_R_LABEL)
-    dist_r = read_from_yml(fs, DIST_R_LABEL)
-    R2 = read_from_yml(fs, R2_LABEL)
-    P2 = read_from_yml(fs, P2_LABEL)
-    map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
-                                        dist_l,
-                                        R1, P1,
-                                        (640, 478),
-                                        cv2.CV_32F)
-    map_r = cv2.initUndistortRectifyMap(cam_mtx_r,
-                                        dist_r,
-                                        R2, P2,
-                                        (640, 478),
-                                        cv2.CV_32F)
-    return map_l, map_r
-
-
-def generate_sr_map_dict_from_file(filename):
-    fs = cv2.FileStorage(filename, cv2.FILE_STORAGE_READ)
-    cam_mtx_l = read_from_yml(fs, CAM_MTX_L_LABEL)
-    dist_l = read_from_yml(fs, DIST_L_LABEL)
-    R1 = read_from_yml(fs, R1_LABEL)
-    P1 = read_from_yml(fs, P1_LABEL)
-
-    cam_mtx_r = read_from_yml(fs, CAM_MTX_R_LABEL)
-    dist_r = read_from_yml(fs, DIST_R_LABEL)
-    R2 = read_from_yml(fs, R2_LABEL)
-    P2 = read_from_yml(fs, P2_LABEL)
-
-    sr_map_dict = {}
-
-    sr_map_dict[CAM_MTX_L_LABEL] = cam_mtx_l
-    sr_map_dict[DIST_L_LABEL] = dist_l
-    sr_map_dict[R1_LABEL] = R1
-    sr_map_dict[P1_LABEL] = P1
-
-    sr_map_dict[CAM_MTX_R_LABEL] = cam_mtx_r
-    sr_map_dict[DIST_R_LABEL] = dist_r
-    sr_map_dict[R2_LABEL] = R2
-    sr_map_dict[P2_LABEL] = P2
-
-    return sr_map_dict
-
-
-def create_maps_from_sr_map_dict(sr_map_dict):
-    cam_mtx_l = sr_map_dict[CAM_MTX_L_LABEL]
-    dist_l = sr_map_dict[DIST_L_LABEL]
-    R1 = sr_map_dict[R1_LABEL]
-    P1 = sr_map_dict[P1_LABEL]
-
-    cam_mtx_r = sr_map_dict[CAM_MTX_R_LABEL]
-    dist_r = sr_map_dict[DIST_R_LABEL]
-    R2 = sr_map_dict[R2_LABEL]
-    P2 = sr_map_dict[P2_LABEL]
-
-    map_l = cv2.initUndistortRectifyMap(cam_mtx_l,
-                                        dist_l,
-                                        R1, P1,
-                                        (640, 478),
-                                        cv2.CV_32F)
-    map_r = cv2.initUndistortRectifyMap(cam_mtx_r,
-                                        dist_r,
-                                        R2, P2,
-                                        (640, 478),
-                                        cv2.CV_32F)
-    return map_l, map_r
 
 
 def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filename,
@@ -110,7 +33,7 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
     sr_left_video = cv2.VideoWriter(new_filename_l, fourcc, 30, (640, 478))
     sr_right_video = cv2.VideoWriter(new_filename_r, fourcc, 30, (640, 478))
 
-    (l_map, r_map) = generate_maps(yml_filename)
+    l_map, r_map = get_sr_map_from_yml_file(yml_filename).generate_maps()
 
     # Loop over video footage
     print("Rectifying footage.... This could take a while.")
@@ -168,7 +91,7 @@ def apply_sr_gui_logic(controller):
     sr_left_video = cv2.VideoWriter(new_filename_l, fourcc, 30, (640, 478))
     sr_right_video = cv2.VideoWriter(new_filename_r, fourcc, 30, (640, 478))
 
-    l_map, r_map = create_maps_from_sr_map_dict(controller.sr_map)
+    l_map, r_map = controller.sr_map.generate_maps()
 
     first_frame_left, last_frame_left, first_frame_right, last_frame_right, num_frames_to_scan = \
         calculate_video_scan_frame_information(first_frame,
