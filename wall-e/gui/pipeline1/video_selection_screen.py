@@ -37,7 +37,8 @@ class VideoSelectionScreen(GuiBaseFrame):
         self.init_video_info()
 
         self.screen_title_label = Header1Label(self.content_wrapper, text="Video Selection")
-        self.instruction_label = PLabel(self.content_wrapper, text="Please choose your left and right video files.")
+        self.instruction_label = PLabel(self.content_wrapper, text="Please choose your left and right video files\n"
+                                                                   "(Files must be in MKV format).")
         self.left_video_filename_preview_label = PLabel(self.content_wrapper, text="No Video Selected")
         self.left_video_button = Button(self.content_wrapper, text="Choose Left Video",
                                         command=lambda: self.select_video_through_button_press(LEFT))
@@ -137,7 +138,5 @@ class VideoSelectionScreen(GuiBaseFrame):
 
 def select_video_filename():
     filename = askopenfilename(initialdir=os.path.dirname(PROJECT_DIR), title="Select left video",
-                               filetypes=[("MKV files", "*.mkv"),
-                                          ("AVI files", "*.avi"),
-                                          ("MP4 files", "*mp4")])
+                               filetypes=[("MKV files", "*.mkv")])
     return filename
