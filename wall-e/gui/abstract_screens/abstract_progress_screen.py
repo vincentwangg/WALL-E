@@ -30,9 +30,7 @@ class AbstractProgressScreen(GuiBaseFrame):
         self.progress_bar_control_var = DoubleVar()
         self.progress_bar = Progressbar(self.content_wrapper, orient=HORIZONTAL, mode="determinate",
                                         length=WINDOW_WIDTH / 2, variable=self.progress_bar_control_var)
-        self.wait_text = PLabel(self.content_wrapper, text="\nThis might take a few minutes."
-                                                           "\nPlease do not change the video files while this is "
-                                                           "running.\n")
+        self.wait_text = PLabel(self.content_wrapper)
         self.information_display = PLabel(self.content_wrapper)
         self.empty_space_2 = PLabel(self.content_wrapper)
         self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
@@ -49,9 +47,12 @@ class AbstractProgressScreen(GuiBaseFrame):
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=SCREEN_REL_Y_45, anchor=CENTER)
 
     def on_show_frame(self):
+        self.wait_text.configure(text="\nThis might take a few minutes."
+                                      "\nPlease do not change the video files while this is "
+                                      "running.\n")
         self.start_time = time.time()
         self.backend_logic_thread = threading.Thread(target=self.backend_logic_function,
-                                                kwargs={"controller": self.controller})
+                                                     kwargs={"controller": self.controller})
         self.backend_logic_thread.start()
         self.master.after(THREAD_CHECK_ALIVE_INTERVAL_MS, self.check_thread)
 
