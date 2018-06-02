@@ -1,5 +1,5 @@
 from stereo_rectification.apply_sr import undistort
-from stereo_rectification.apply_sr import generate_maps
+from stereo_rectification.sr_map import generate_maps
 from stereo_rectification.apply_sr import apply_rectify_maps
 from definitions import PROJECT_DIR
 from config.keycode_setup import *

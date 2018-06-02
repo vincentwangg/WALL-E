@@ -72,6 +72,9 @@ def get_sr_map_from_yml_file(filename):
 
     return SrMap(cam_mtx_l, dist_l, R1, P1, cam_mtx_r, dist_r, R2, P2)
 
+def generate_maps(filename):
+    return get_sr_map_from_yml_file(filename).generate_maps()
+
 
 # Helper function, use write_to_yml_file() in SrMap object
 def save_to_yml(file, name, object, w=0):
