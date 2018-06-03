@@ -60,7 +60,7 @@ def generate_pulse_data(ostracod_l, ostracod_r, camera):
 
     z = location[2]
 
-    if z < 0:
+    if z <= 0:
         return
 
     brightness = avg_brightness/255
