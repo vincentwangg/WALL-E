@@ -23,7 +23,7 @@ def get_mapped_ostracod(ostracod_l, ostracod_r, camera):
 
     z = location[2]
 
-    if z < 0:
+    if z <= 0:
         return
 
     return TemporalOstracod(location, avg_area, ostracod_l.frame_start, num_frames \
