@@ -67,6 +67,9 @@ def generate_pulse_data(ostracod_l, ostracod_r, camera):
     radius = (avg_area/math.pi)**0.5
     radius = radius * z/camera.focal_length
 
+    if radius > 50:
+        return
+
     return PulseData(xyz_coord=location, radius=radius, brightness=brightness)
 
 # If you want to do a depth_map frame by frame without using temporal data
