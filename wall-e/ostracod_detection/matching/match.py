@@ -39,9 +39,17 @@ def compute_dist(ostracod1, ostracod2, variance):
     a_sq = np.power(ostracod1.area - ostracod2.area, 2)
     l_sq = np.power(ostracod1.location[1] - ostracod2.location[1], 4)
 
-    b_normalized = b_sq/variance.brightness
-    a_normalized = a_sq/variance.area
-    l_normalized = l_sq/variance.location
+    b_normalized = 0
+    a_normalized = 0
+    l_normalized = 0
+
+    if variance.brightness != 0:
+        b_normalized = b_sq/variance.brightness
+    if variance.area != 0:
+        a_normalized = a_sq/variance.area
+    if variance.location != 0:
+        l_normalized = l_sq/variance.location
+
 
     sum = a_normalized + b_normalized + l_normalized
     dist = np.power(sum, 0.5)
@@ -124,6 +132,9 @@ def threshold_matches(ostracod_list_l, ostracod_list_r, threshold_value):
 
 
 def match(ostracod_list_l, ostracod_list_r, threshold):
+    if len(ostracod_list_r) < 1 or len(ostracod_list_l) < 1:
+        return
+
     if len(ostracod_list_r) < len(ostracod_list_l):
         get_matching_pairs(ostracod_list_r, ostracod_list_l)
     else:
