@@ -35,7 +35,9 @@ def main():
     reading_vid_time = 0
 
     ostracod_loc_start = time.time()
+    print('Left Feed')
     ostracods_l = gen_ostracods(left_file_name)
+    print('Right Feed')
     ostracods_r = gen_ostracods(right_file_name)
     ostracod_loc_time = time.time() - ostracod_loc_start
 

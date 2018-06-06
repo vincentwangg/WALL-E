@@ -3,6 +3,7 @@ import cv2
 import argparse
 from locator import get_ostracods
 from temporal_ostracod import TemporalOstracod
+from utils_general.text_progress_bar import print_progress
 
 CENTROID_MAX_DIST = 15
 
@@ -12,6 +13,10 @@ def gen_ostracods(feed_file_name):
   success, frame = feed.read()
   prev_frame_ostracods = {}  # all the ostracods in the previous frame
   frame_no = 0
+
+  num_frames = int(feed.get(cv2.CAP_PROP_FRAME_COUNT))
+  print_progress(0, num_frames, 'Generating Ostracods: ', 'Complete', 1, 50) 
+  ind = 0
   while (success):   
     curr_ostracods = get_ostracods(frame)
     if frame_no == 0:
@@ -37,6 +42,9 @@ def gen_ostracods(feed_file_name):
     frame_no = frame_no + 1
     prev_frame_ostracods = curr_frame_ostracods
     success, frame = feed.read()
+    ind = ind + 1
+    print_progress(ind, num_frames, 'Generating Ostracods: ', 'Complete', 1, 50)
+
   feed.release()
   return prune_ostracod_list(temp_ostracods.values())
 
