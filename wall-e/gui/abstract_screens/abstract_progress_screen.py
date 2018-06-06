@@ -34,7 +34,7 @@ class AbstractProgressScreen(GuiBaseFrame):
         self.information_display = PLabel(self.content_wrapper)
         self.empty_space_2 = PLabel(self.content_wrapper)
         self.next_button = Button(self.content_wrapper, text="Next", state=DISABLED,
-                                  command=lambda: self.controller.show_next_frame())
+                                  command=lambda: self.on_next_button())
 
     def add_widgets_to_frame(self):
         self.screen_title.pack()
@@ -94,3 +94,6 @@ class AbstractProgressScreen(GuiBaseFrame):
             self.progress_bar.stop()
             self.wait_text.configure(text="\nDone!\n\n")
             self.next_button.configure(state=NORMAL)
+
+    def on_next_button(self):
+        self.controller.show_next_frame()

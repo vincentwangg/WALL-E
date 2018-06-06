@@ -11,7 +11,6 @@ from gui.pipeline1.frame_matching_time_end_screen import FrameMatchingTimeEndScr
 from gui.pipeline1.frame_matching_time_start_screen import FrameMatchingTimeStartScreen
 from gui.pipeline1.frame_matching_validation_screen import FrameMatchingValidationScreen
 from gui.pipeline1.sr_frame_selected_screen import SrFrameSelectedScreen
-from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from gui.pipeline1.sr_frame_suggestion_time_end_screen import SrFrameSuggestionTimeEndScreen
 from gui.pipeline1.sr_frame_suggestion_time_start_screen import SrFrameSuggestionTimeStartScreen
@@ -37,7 +36,7 @@ screen_classes_in_order = [
     SrFrameSuggestionTimeStartScreen,
     SrFrameSuggestionTimeEndScreen,
     SrScanProgressScreen,
-    SrFrameSelection,
+    # SrFrameSelection,
     SrFrameSelectedScreen,
     ApplySrIntroScreen,
     ApplySrTimeStartScreen,

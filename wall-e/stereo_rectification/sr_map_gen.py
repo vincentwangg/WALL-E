@@ -4,14 +4,13 @@ import argparse
 
 from config.keycode_setup import *
 from gui.abstract_screens.utilities.constants import PROGRESS_SCREEN_PERCENT_DONE, PROGRESS_SCREEN_MESSAGE_LIST
-from gui.pipeline1.utilities.constants import LEFT, RIGHT, \
-    VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_SR_SELECT_PREVIEW_HEIGHT, FRAME_NUM_LABEL, SR_MAP_LABEL, FRAMES_READ_PREFIX, \
+from gui.pipeline1.utilities.constants import FRAME_NUM_LABEL, FRAMES_READ_PREFIX, \
     VALID_FRAMES_FOUND_PREFIX
+from stereo_rectification.constants import SR_COLLECTING_SAMPLES, SR_CALCULATING_MAP, SR_FINISHED_CALCULATING, SR_FAILED
 from stereo_rectification.grayscale_converter import convert_to_gray
 from stereo_rectification.sr_map import SR_MAP_FILENAME, SrMap
 from utils_general.file_checker import check_if_file_exists
 from utils_general.frame_calculations import calculate_video_scan_frame_information
-from utils_general.image_converter import cv2_gray_image_to_tkinter_with_resize
 from utils_general.video_frame_loader import VideoFrameLoader
 
 # You should replace these 3 lines with the output in calibration step (calibrate.py)
@@ -24,9 +23,175 @@ D = np.array([[-0.07527166402108293], [0.006777363197177597], [-0.32231954249568
 map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_32F)
 
 SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_FILENAME + "\" has been generated with the SR " \
-                                                                             "map!\nFor future use, this file is " \
-                                                                             "recommended to be copied somewhere and " \
-                                                                             "renamed. "
+                                                                   "map!\nFor future use, this file is " \
+                                                                   "recommended to be copied somewhere and " \
+                                                                   "renamed. "
+
+
+# GUI METHODS START #
+
+
+# For GUI class VideoScanScreen in sr_scan_progress_screen.py
+def get_list_of_valid_frames_for_sr_tkinter(controller):
+    sr_results = []
+
+    first_frame = controller.sr_scan_frame_range.first_frame
+    last_frame_inclusive = controller.sr_scan_frame_range.last_frame_inclusive
+    left_offset = controller.video_offsets.left_offset
+    right_offset = controller.video_offsets.right_offset
+    video_frame_loader = controller.video_frame_loader
+
+    first_frame_left, last_frame_left, first_frame_right, last_frame_right, num_frames_to_scan = \
+        calculate_video_scan_frame_information(
+            first_frame,
+            last_frame_inclusive,
+            left_offset,
+            right_offset,
+            video_frame_loader)
+
+    video_frame_loader.set_left_current_frame_num(first_frame_left)
+    video_frame_loader.set_right_current_frame_num(first_frame_right)
+
+    num_frames_scanned = 0
+    objpoints = []
+    img_points_left = []
+    img_points_right = []
+
+    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                               SR_COLLECTING_SAMPLES)
+
+    while True:
+        left_frame_num = video_frame_loader.get_left_current_frame_num()
+        right_frame_num = video_frame_loader.get_right_current_frame_num()
+
+        # If one of the videos reach their last frame to scan
+        if left_frame_num > last_frame_left or right_frame_num > last_frame_right:
+            break
+
+        l_success, left_img = video_frame_loader.get_next_left_frame()
+        r_success, right_img = video_frame_loader.get_next_right_frame()
+
+        # If one of the videos reach the end of video
+        if not l_success or not r_success:
+            break
+
+        if is_valid_sr_frame(left_img, right_img):
+            img_left_undistorted = convert_to_gray(undistort(left_img))
+            img_right_undistorted = convert_to_gray(undistort(right_img))
+            success = add_obj_point(img_left_undistorted, img_right_undistorted,
+                                    objpoints, img_points_left, img_points_right)
+            if success:
+                sr_results.append({FRAME_NUM_LABEL: min([left_frame_num, right_frame_num])})
+
+        num_frames_scanned += 1
+
+        if num_frames_scanned % 10 == 0:
+            create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                                       SR_COLLECTING_SAMPLES)
+
+    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan, SR_CALCULATING_MAP)
+
+    if len(sr_results) > 0:
+        controller.sr_map = generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_points_right)
+    else:
+        create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                                   SR_FAILED, sr_map_phase_finished=True)
+        return
+
+    controller.sr_results = sr_results
+    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                               SR_FINISHED_CALCULATING, sr_map_phase_finished=True)
+
+
+def add_obj_point(left_img, right_img, objpoints, img_points_left, img_points_right):
+    img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords = \
+        find_chessboard_corners(left_img, right_img)
+
+    if not (img_left_corners_success and img_right_corners_success):
+        return False
+
+    # Tuning these parameters does not appear to effect the end result
+    max_iterations = 30
+    epsilon = 0.0001
+    criteria = (cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, max_iterations, epsilon)
+
+    # Create (x,y,z) object points for all intersections on checkerboard grid
+    objp = np.zeros((CHECKERBOARD[0] * CHECKERBOARD[1], 3), np.float32)
+    objp[:, :2] = np.mgrid[0:CHECKERBOARD[0], 0:CHECKERBOARD[1]].T.reshape(-1, 2)
+
+    # If found, add object points to objpoints array, and add image points (after refining them) to imgpoints array
+    if img_left_corners_success and img_right_corners_success:
+        objpoints.append(objp)
+
+        # cornerSubPix refines the corner coordinates. (tuning these params does nothing)
+        img_points_left.append(cv2.cornerSubPix(left_img, img_left_corner_coords, (11, 11), (-1, -1), criteria))
+        img_points_right.append(cv2.cornerSubPix(right_img, img_right_corner_coords, (11, 11), (-1, -1), criteria))
+
+    return True
+
+
+def generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_points_right):
+    reprojection_error_left, cam_mtx_l, dist_l, rotation_vec_left, translation_vec_left = cv2.calibrateCamera(
+        objpoints,
+        img_points_left,
+        DIM,
+        None, None)
+    reprojection_error_right, cam_mtx_r, dist_r, rotation_vec_right, translation_vec_right = cv2.calibrateCamera(
+        objpoints,
+        img_points_right,
+        DIM,
+        None, None)
+
+    # getting optimal camera matrix and setting alpha to 0
+    alpha = 0.9
+    cam_mtx_l, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_l, dist_l, DIM, alpha)
+    cam_mtx_r, _ = cv2.getOptimalNewCameraMatrix(cam_mtx_r, dist_r, DIM, alpha)
+
+    # https://docs.opencv.org/3.1.0/d9/d0c/group__calib3d.html#ga246253dcc6de2e0376c599e7d692303a
+    img_left_corners_success, cam_mtx_l, dist_l, cam_mtx_r, dist_r, R, T, E, F = cv2.stereoCalibrate(
+        objpoints,
+        img_points_left,
+        img_points_right,
+        cam_mtx_l, dist_l, cam_mtx_r, dist_r,
+        DIM,
+        flags=cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
+    # cv2.CALIB_USE_INTRINSIC_GUESS
+
+    # stereo rectify
+    R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(cam_mtx_l,
+                                                                      dist_l,
+                                                                      cam_mtx_r,
+                                                                      dist_r,
+                                                                      DIM,
+                                                                      R, T, alpha=alpha)
+
+    return SrMap(cam_mtx_l, dist_l, R1, P1, cam_mtx_r, dist_r, R2, P2)
+
+
+def create_data_package_for_ui(controller, valid_frames, num_frames_scanned, num_frames_to_scan,
+                               sr_map_calculation_message, sr_map_phase_finished=False):
+    progress_percent = num_frames_scanned * 100.0 / num_frames_to_scan * 0.8
+    if sr_map_phase_finished:
+        progress_percent += 20.0
+
+    frames_processed_message = create_frames_read_text(num_frames_scanned, num_frames_to_scan, progress_percent)
+    valid_frames_found_message = VALID_FRAMES_FOUND_PREFIX + str(valid_frames)
+    controller.update_frame({
+        PROGRESS_SCREEN_PERCENT_DONE: progress_percent,
+        PROGRESS_SCREEN_MESSAGE_LIST: [
+            frames_processed_message,
+            valid_frames_found_message,
+            sr_map_calculation_message
+        ]
+    })
+
+
+def create_frames_read_text(frames_read, total_frames, progress_percent):
+    return FRAMES_READ_PREFIX + str(frames_read) + "/" + str(total_frames) + \
+           " (" + str(round(progress_percent, 2)) + "%)"
+
+
+# GUI METHODS END #
 
 
 def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
@@ -152,88 +317,6 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
         frame_num = frame_num + 1
 
 
-# For GUI class VideoScanScreen in sr_scan_progress_screen.py
-def get_list_of_valid_frames_for_sr_tkinter(controller):
-    sr_results = []
-
-    first_frame = controller.sr_scan_frame_range.first_frame
-    last_frame_inclusive = controller.sr_scan_frame_range.last_frame_inclusive
-    left_offset = controller.video_offsets.left_offset
-    right_offset = controller.video_offsets.right_offset
-    video_frame_loader = controller.video_frame_loader
-
-    first_frame_left, last_frame_left, first_frame_right, last_frame_right, num_frames_to_scan = \
-        calculate_video_scan_frame_information(
-            first_frame,
-            last_frame_inclusive,
-            left_offset,
-            right_offset,
-            video_frame_loader)
-
-    video_frame_loader.set_left_current_frame_num(first_frame_left)
-    video_frame_loader.set_right_current_frame_num(first_frame_right)
-
-    num_frames_scanned = 0
-
-    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
-
-    while True:
-        left_frame_num = video_frame_loader.get_left_current_frame_num()
-        right_frame_num = video_frame_loader.get_right_current_frame_num()
-
-        # If one of the videos reach their last frame to scan
-        if left_frame_num > last_frame_left or right_frame_num > last_frame_right:
-            break
-
-        l_success, left_img = video_frame_loader.get_next_left_frame()
-        r_success, right_img = video_frame_loader.get_next_right_frame()
-
-        # If one of the videos reach the end of video
-        if not l_success or not r_success:
-            break
-
-        if is_valid_sr_frame(left_img, right_img):
-            img_left_undistorted = convert_to_gray(undistort(left_img))
-            img_right_undistorted = convert_to_gray(undistort(right_img))
-            success, left_img_sr, right_img_sr, sr_map = generate_sr_map(img_left_undistorted, img_right_undistorted)
-            if success:
-                sr_results.append({LEFT: cv2_gray_image_to_tkinter_with_resize(left_img_sr,
-                                                                               VIDEO_SR_SELECT_PREVIEW_WIDTH,
-                                                                               VIDEO_SR_SELECT_PREVIEW_HEIGHT),
-                                   RIGHT: cv2_gray_image_to_tkinter_with_resize(right_img_sr,
-                                                                                VIDEO_SR_SELECT_PREVIEW_WIDTH,
-                                                                                VIDEO_SR_SELECT_PREVIEW_HEIGHT),
-                                   FRAME_NUM_LABEL: min([left_frame_num, right_frame_num]),
-                                   SR_MAP_LABEL: sr_map
-                                   })
-
-        num_frames_scanned += 1
-
-        if num_frames_scanned % 10 == 0:
-            create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
-
-    controller.sr_results = sr_results
-    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan)
-
-
-def create_data_package_for_ui(controller, valid_frames, num_frames_scanned, num_frames_to_scan):
-    progress_percent = num_frames_scanned * 100.0 / num_frames_to_scan
-    frames_processed_message = create_frames_read_text(num_frames_scanned, num_frames_to_scan, progress_percent)
-    valid_frames_found_message = VALID_FRAMES_FOUND_PREFIX + str(valid_frames)
-    controller.update_frame({
-        PROGRESS_SCREEN_PERCENT_DONE: progress_percent,
-        PROGRESS_SCREEN_MESSAGE_LIST: [
-            frames_processed_message,
-            valid_frames_found_message
-        ]
-    })
-
-
-def create_frames_read_text(frames_read, total_frames, progress_percent):
-    return FRAMES_READ_PREFIX + str(frames_read) + "/" + str(total_frames) + \
-           " (" + str(round(progress_percent, 2)) + "%)"
-
-
 def display_no_frames_left_message(frames):
     print("\nNo frames selected for SR map generation.")
     print("If this was a mistake, add --first_frame " + str(frames[0]) + " to the script arguments and start from "
@@ -291,8 +374,8 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
                 break
             elif key == get_keycode_from_key_code_entry(S_KEY):
                 print("\nA file named \"" + SR_MAP_FILENAME + "\" has been generated with the SR map.\nFor "
-                                                                        "future use, this file is recommended to be "
-                                                                        "copied somewhere and renamed.")
+                                                              "future use, this file is recommended to be "
+                                                              "copied somewhere and renamed.")
                 return current_frame
             elif key == get_keycode_from_key_code_entry(Q_KEY):
                 print("Exiting now.")
