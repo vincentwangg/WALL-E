@@ -59,7 +59,7 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
         img_right_undistorted = convert_to_gray(undistort(img_right))
 
         while True:
-            valid_sr_frame, img_left_sr, img_right_sr = \
+            valid_sr_frame, img_left_sr, img_right_sr, _ = \
                 generate_sr_map(img_left_undistorted, img_right_undistorted)
             show_sr_images(valid_sr_frame, img_left_sr, img_right_sr)
 

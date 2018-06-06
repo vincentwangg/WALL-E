@@ -55,7 +55,7 @@ if __name__ == '__main__':
         right_chessboard_video = args.right_cb_video
 
     find_and_generate_best_sr_map(left_chessboard_video, right_chessboard_video,
-                                  left_offset=left_offset, right_offset=right_offset, first_frame=83)
+                                  left_offset=left_offset, right_offset=right_offset, first_frame=0)
 
     # Applying Stereo Rectification to video
     print(
