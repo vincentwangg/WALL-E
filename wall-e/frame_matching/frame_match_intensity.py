@@ -204,12 +204,13 @@ def frame_match_gui_backend_logic(controller):
     r_offset = opt if opt > 0 else 0
 
     progress_dict[FOUND_OPTIMAL_OFFSET_KEY] = True
-    progress_dict[LEFT_OFFSET_KEY] = l_offset
-    progress_dict[RIGHT_OFFSET_KEY] = r_offset
+    progress_dict[LEFT_OFFSET_KEY] = r_offset
+    progress_dict[RIGHT_OFFSET_KEY] = l_offset
     update_ui(progress_dict, controller)
 
-    controller.video_offsets.left_offset = l_offset
-    controller.video_offsets.right_offset = r_offset
+    # The way the frame matching has been implemented is reversed so the offsets should be swapped
+    controller.video_offsets.left_offset = r_offset
+    controller.video_offsets.right_offset = l_offset
 
 
 def update_ui(progress_dict, controller):

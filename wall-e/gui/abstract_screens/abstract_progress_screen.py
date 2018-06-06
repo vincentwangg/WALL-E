@@ -92,7 +92,7 @@ class AbstractProgressScreen(GuiBaseFrame):
             self.master.after(THREAD_CHECK_ALIVE_INTERVAL_MS, self.check_thread)
         else:
             self.progress_bar.stop()
-            self.wait_text.configure(text="\nDone!\n\n")
+            self.wait_text.configure(text="\nDone!\nPress Next to continue.\n")
             self.next_button.configure(state=NORMAL)
 
     def on_next_button(self):

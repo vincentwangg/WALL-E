@@ -37,7 +37,8 @@ class VideoSelectionScreen(GuiBaseFrame):
         self.init_video_info()
 
         self.screen_title_label = Header1Label(self.content_wrapper, text="Video Selection")
-        self.instruction_label = PLabel(self.content_wrapper, text="Please choose your left and right video files\n"
+        self.instruction_label = PLabel(self.content_wrapper, text="Please choose your left and right video files. "
+                                                                   "Press Next when finished.\n"
                                                                    "(Files must be in MKV format).")
         self.left_video_filename_preview_label = PLabel(self.content_wrapper, text="No Video Selected")
         self.left_video_button = Button(self.content_wrapper, text="Choose Left Video",

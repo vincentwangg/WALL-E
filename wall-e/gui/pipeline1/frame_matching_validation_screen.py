@@ -23,6 +23,42 @@ RIGHT_FRAME_NUM_PREFIX = "Right Video Frame: "
 LEFT_OFFSET_PREFIX = "Left Offset: "
 RIGHT_OFFSET_PREFIX = "Right Offset: "
 
+SLOW_FORWARD_PREFIX = "> "
+NORMAL_FORWARD_PREFIX = ">> "
+FAST_FORWARD_PREFIX = ">>> "
+
+SLOW_BACK_PREFIX = "< "
+NORMAL_BACK_PREFIX = "<< "
+FAST_BACK_PREFIX = "<<< "
+
+FORWARD_1_FRAME_TEXT = SLOW_FORWARD_PREFIX + "1 (1/30 second)"
+FORWARD_5_FRAMES_TEXT = SLOW_FORWARD_PREFIX + "5 (1/6 second)"
+FORWARD_10_FRAMES_TEXT = SLOW_FORWARD_PREFIX + "10 (1/3 second)"
+FORWARD_30_FRAMES_TEXT = NORMAL_FORWARD_PREFIX + "30 (1 second)"
+FORWARD_150_FRAMES_TEXT = FAST_FORWARD_PREFIX + "150 (5 seconds)"
+FORWARD_300_FRAMES_TEXT = FAST_FORWARD_PREFIX + "300 (10 seconds)"
+
+BACK_1_FRAME_TEXT = SLOW_BACK_PREFIX + "1 (1/30 second)"
+BACK_5_FRAMEs_TEXT = SLOW_BACK_PREFIX + "5 (1/6 second)"
+BACK_10_FRAMEs_TEXT = SLOW_BACK_PREFIX + "10 (1/3 second)"
+BACK_30_FRAMEs_TEXT = NORMAL_BACK_PREFIX + "30 (1 second)"
+BACK_150_FRAMEs_TEXT = FAST_BACK_PREFIX + "150 (5 seconds)"
+BACK_300_FRAMEs_TEXT = FAST_BACK_PREFIX + "300 (10 seconds)"
+
+LEFT_VIDEO_FORWARD_1_FRAME_TEXT = FORWARD_1_FRAME_TEXT
+LEFT_VIDEO_FORWARD_5_FRAME_TEXT = FORWARD_5_FRAMES_TEXT
+LEFT_VIDEO_FORWARD_10_FRAME_TEXT = FORWARD_10_FRAMES_TEXT
+LEFT_VIDEO_FORWARD_30_FRAME_TEXT = FORWARD_30_FRAMES_TEXT
+LEFT_VIDEO_FORWARD_150_FRAME_TEXT = FORWARD_150_FRAMES_TEXT
+LEFT_VIDEO_FORWARD_300_FRAME_TEXT = FORWARD_300_FRAMES_TEXT
+
+RIGHT_VIDEO_FORWARD_1_FRAME_TEXT = FORWARD_1_FRAME_TEXT
+RIGHT_VIDEO_FORWARD_5_FRAME_TEXT = FORWARD_5_FRAMES_TEXT
+RIGHT_VIDEO_FORWARD_10_FRAME_TEXT = FORWARD_10_FRAMES_TEXT
+RIGHT_VIDEO_FORWARD_30_FRAME_TEXT = FORWARD_30_FRAMES_TEXT
+RIGHT_VIDEO_FORWARD_150_FRAME_TEXT = FORWARD_150_FRAMES_TEXT
+RIGHT_VIDEO_FORWARD_300_FRAME_TEXT = FORWARD_300_FRAMES_TEXT
+
 
 class FrameMatchingValidationScreen(GuiBaseFrame):
     def __init__(self, parent, controller, **kw):
@@ -39,7 +75,7 @@ class FrameMatchingValidationScreen(GuiBaseFrame):
 
         self.title_label = Header1Label(self.content_wrapper, text="Frame Offset Validation")
         self.subtitle_label = PLabel(self.content_wrapper,
-                                     text="Use the buttons below to ensure that the video frame offset is valid.")
+                                     text="Use the buttons below to ensure that the video frame offset is valid. Press Next when finished.")
 
         self.left_frame_num_label = PLabel(self.content_wrapper)
         self.right_frame_num_label = PLabel(self.content_wrapper)
@@ -69,35 +105,35 @@ class FrameMatchingValidationScreen(GuiBaseFrame):
                              self.left_offset_inc_1_button, self.right_offset_inc_1_button,
                              self.right_offset_inc_5_button, self.right_offset_inc_10_button])
 
-        self.video_navigation_label = PLabel(self.content_wrapper, text="Video navigation:")
+        self.video_navigation_label = PLabel(self.content_wrapper, text="Video frame navigation:")
 
-        self.left_video_frame_inc_10_button = Button(self.content_wrapper, text="-10",
+        self.left_video_frame_inc_10_button = Button(self.content_wrapper, text=BACK_10_FRAMEs_TEXT,
                                                      command=lambda: self.adjust_frame_num(-10))
-        self.left_video_frame_inc_5_button = Button(self.content_wrapper, text="-5",
+        self.left_video_frame_inc_5_button = Button(self.content_wrapper, text=BACK_5_FRAMEs_TEXT,
                                                     command=lambda: self.adjust_frame_num(-5))
-        self.left_video_frame_inc_1_button = Button(self.content_wrapper, text="-1",
+        self.left_video_frame_inc_1_button = Button(self.content_wrapper, text=BACK_1_FRAME_TEXT,
                                                     command=lambda: self.adjust_frame_num(-1))
-        self.right_video_frame_inc_1_button = Button(self.content_wrapper, text="+1",
+        self.right_video_frame_inc_1_button = Button(self.content_wrapper, text=FORWARD_1_FRAME_TEXT,
                                                      command=lambda: self.adjust_frame_num(1))
-        self.right_video_frame_inc_5_button = Button(self.content_wrapper, text="+5",
+        self.right_video_frame_inc_5_button = Button(self.content_wrapper, text=FORWARD_5_FRAMES_TEXT,
                                                      command=lambda: self.adjust_frame_num(5))
-        self.right_video_frame_inc_10_button = Button(self.content_wrapper, text="+10",
+        self.right_video_frame_inc_10_button = Button(self.content_wrapper, text=FORWARD_10_FRAMES_TEXT,
                                                       command=lambda: self.adjust_frame_num(10))
         self.buttons.extend([self.left_video_frame_inc_10_button, self.left_video_frame_inc_5_button,
                              self.left_video_frame_inc_1_button, self.right_video_frame_inc_1_button,
                              self.right_video_frame_inc_5_button, self.right_video_frame_inc_10_button])
 
-        self.left_video_frame_inc_300_button = Button(self.content_wrapper, text="-300",
+        self.left_video_frame_inc_300_button = Button(self.content_wrapper, text=BACK_300_FRAMEs_TEXT,
                                                       command=lambda: self.adjust_frame_num(-300))
-        self.left_video_frame_inc_150_button = Button(self.content_wrapper, text="-150",
+        self.left_video_frame_inc_150_button = Button(self.content_wrapper, text=BACK_150_FRAMEs_TEXT,
                                                       command=lambda: self.adjust_frame_num(-150))
-        self.left_video_frame_inc_30_button = Button(self.content_wrapper, text="-30",
+        self.left_video_frame_inc_30_button = Button(self.content_wrapper, text=BACK_30_FRAMEs_TEXT,
                                                      command=lambda: self.adjust_frame_num(-30))
-        self.right_video_frame_inc_30_button = Button(self.content_wrapper, text="+30",
+        self.right_video_frame_inc_30_button = Button(self.content_wrapper, text=FORWARD_30_FRAMES_TEXT,
                                                       command=lambda: self.adjust_frame_num(30))
-        self.right_video_frame_inc_150_button = Button(self.content_wrapper, text="+150",
+        self.right_video_frame_inc_150_button = Button(self.content_wrapper, text=FORWARD_150_FRAMES_TEXT,
                                                        command=lambda: self.adjust_frame_num(150))
-        self.right_video_frame_inc_300_button = Button(self.content_wrapper, text="+300",
+        self.right_video_frame_inc_300_button = Button(self.content_wrapper, text=FORWARD_300_FRAMES_TEXT,
                                                        command=lambda: self.adjust_frame_num(300))
         self.buttons.extend([self.left_video_frame_inc_300_button, self.left_video_frame_inc_150_button,
                              self.left_video_frame_inc_30_button, self.right_video_frame_inc_30_button,
@@ -131,19 +167,19 @@ class FrameMatchingValidationScreen(GuiBaseFrame):
 
         self.video_navigation_label.grid(row=VIDEO_NAVIGATION_ROW, column=0, columnspan=12)
 
-        self.left_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=3)
-        self.left_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=4)
-        self.left_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=5)
-        self.right_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=6)
-        self.right_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=7)
-        self.right_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=8)
+        self.left_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=0, columnspan=2)
+        self.left_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=2, columnspan=2)
+        self.left_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=4, columnspan=2)
+        self.right_video_frame_inc_1_button.grid(row=VIDEO_BUTTONS_ROW_1, column=6, columnspan=2)
+        self.right_video_frame_inc_5_button.grid(row=VIDEO_BUTTONS_ROW_1, column=8, columnspan=2)
+        self.right_video_frame_inc_10_button.grid(row=VIDEO_BUTTONS_ROW_1, column=10, columnspan=2)
 
-        self.left_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=3)
-        self.left_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=4)
-        self.left_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=5)
-        self.right_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=6)
-        self.right_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=7)
-        self.right_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=8)
+        self.left_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=0, columnspan=2)
+        self.left_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=2, columnspan=2)
+        self.left_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=4, columnspan=2)
+        self.right_video_frame_inc_30_button.grid(row=VIDEO_BUTTONS_ROW_2, column=6, columnspan=2)
+        self.right_video_frame_inc_150_button.grid(row=VIDEO_BUTTONS_ROW_2, column=8, columnspan=2)
+        self.right_video_frame_inc_300_button.grid(row=VIDEO_BUTTONS_ROW_2, column=10, columnspan=2)
 
         self.next_button.grid(row=NEXT_BUTTON_ROW, column=0, columnspan=12)
 

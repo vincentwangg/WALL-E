@@ -70,5 +70,5 @@ class VideoScanProgressScreen(GuiBaseFrame):
             self.master.after(50, self.check_thread)
         else:
             self.progress_bar.stop()
-            self.wait_text.configure(text="\nDone!\n\n")
+            self.wait_text.configure(text="\nDone!\nPress Next to continue.\n")
             self.next_button.configure(state=NORMAL)
