@@ -1,8 +1,13 @@
-import bpy
-import sys
+"""
+Contains functions that plots pulses to Blender to generate a 3D model.
+"""
+
 import argparse
-import os
 import math
+import os
+import sys
+
+import bpy
 
 fps_value = 30
 rotation_toward_pos_z = (0, math.radians(180), math.radians(270))
@@ -11,6 +16,11 @@ material_names = set()
 
 
 def map_points_on_blender(points_filename):
+    """
+    Given the filename of the frame pulse data, this function maps all the pulses in Blender.
+
+    :param points_filename: Path to the frame pulse data file.
+    """
     delete_all_objects()
     set_fps(fps_value)
 
@@ -49,10 +59,17 @@ def map_points_on_blender(points_filename):
 
 
 def set_fps(new_fps):
+    """Sets the FPS of the Blender model"""
     bpy.context.scene.render.fps = new_fps
 
 
 def plot_pulse(pulse_data, frame_num):
+    """
+    Plots the pulse in the specified frame number
+
+    :param pulse_data: A pulse data object containing location, radius, and brightness information
+    :param frame_num: Frame number where the pulse should be visible
+    """
     bpy.ops.mesh.primitive_uv_sphere_add(size=pulse_data.radius, location=pulse_data.xyz_coord)
     obj = bpy.context.active_object
 
@@ -77,19 +94,23 @@ def plot_pulse(pulse_data, frame_num):
 
 
 def select_all_objects():
+    """Blender command to select all objects"""
     bpy.ops.object.select_all(action='SELECT')
 
 
 def deselect_all_objects():
+    """Blender command to deselect all objects"""
     bpy.ops.object.select_all(action='DESELECT')
 
 
 def delete_all_objects():
+    """Blender command to delete all objects"""
     select_all_objects()
     bpy.ops.object.delete()
 
 
 def generate_material_colors():
+    """Generates the color for Blender materials according to their brightness value"""
     for name in material_names:
         material_dict = ast.literal_eval(name)
         brightness = material_dict[BRIGHTNESS_LABEL]

@@ -1,11 +1,11 @@
 from gui.abstract_screens.abstract_progress_screen import AbstractProgressScreen
 from gui.pipeline1.utilities.constants import SR_PROGRESS_SCREEN_TITLE
-from stereo_rectification.sr_map_gen import get_list_of_valid_frames_for_sr_tkinter
+from stereo_rectification.sr_map_gen import scan_video_and_build_sr_map_gui
 
 
 class SrScanProgressScreen(AbstractProgressScreen):
     def __init__(self, parent, controller, **kw):
-        AbstractProgressScreen.__init__(self, parent, controller, get_list_of_valid_frames_for_sr_tkinter, **kw)
+        AbstractProgressScreen.__init__(self, parent, controller, scan_video_and_build_sr_map_gui, **kw)
         self.set_title(SR_PROGRESS_SCREEN_TITLE)
 
     def on_next_button(self):

@@ -1,4 +1,13 @@
-# Code imported from https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
+"""
+Contains functions to generate a stereo rectification map.
+
+Some functions that generate an SR map may be similar to each other because there is a command line and
+GUI backend version of the same operation. However, the GUI backend version of the code is more updated
+and will most likely work better than the command line version.
+
+Stereo rectification code imported from the following link:
+https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
+"""
 
 import argparse
 
@@ -27,12 +36,22 @@ SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_FILENAME + "\" has been 
                                                                    "recommended to be copied somewhere and " \
                                                                    "renamed. "
 
-
 # GUI METHODS START #
 
 
 # For GUI class VideoScanScreen in sr_scan_progress_screen.py
-def get_list_of_valid_frames_for_sr_tkinter(controller):
+def scan_video_and_build_sr_map_gui(controller):
+    """
+    GUI backend function for collecting frames valid for SR and building an SR map.
+
+    The video is scanned through for frames that have a chessboard in view and uses
+    that information to build a final SR map for the stereo footage.
+
+    The GUI is updated regularly to show progress and the SR map is sent to the
+    controller once the map is generated.
+
+    :param controller: GUI controller
+    """
     sr_results = []
 
     first_frame = controller.sr_scan_frame_range.first_frame
@@ -57,8 +76,8 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
     img_points_left = []
     img_points_right = []
 
-    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
-                               SR_COLLECTING_SAMPLES)
+    update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                          SR_COLLECTING_SAMPLES)
 
     while True:
         left_frame_num = video_frame_loader.get_left_current_frame_num()
@@ -86,24 +105,39 @@ def get_list_of_valid_frames_for_sr_tkinter(controller):
         num_frames_scanned += 1
 
         if num_frames_scanned % 10 == 0:
-            create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
-                                       SR_COLLECTING_SAMPLES)
+            update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                                  SR_COLLECTING_SAMPLES)
 
-    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan, SR_CALCULATING_MAP)
+    update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan, SR_CALCULATING_MAP)
 
     if len(sr_results) > 0:
         controller.sr_map = generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_points_right)
     else:
-        create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
-                                   SR_FAILED, sr_map_phase_finished=True)
+        update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                              SR_FAILED, sr_map_phase_finished=True)
         return
 
     controller.sr_results = sr_results
-    create_data_package_for_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
-                               SR_FINISHED_CALCULATING, sr_map_phase_finished=True)
+    update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+                          SR_FINISHED_CALCULATING, sr_map_phase_finished=True)
 
 
 def add_obj_point(left_img, right_img, objpoints, img_points_left, img_points_right):
+    """
+    Helper function to the main GUI backend function, scan_video_and_build_sr_map_gui(). Adds object and image points
+    to their corresponding lists for SR map generation.
+
+    If the provided left and right images both contain a chessboard in the view of the frame, then the object
+    point and image points for that frame is added to their corresponding lists.
+
+    :param left_img: Left image frame
+    :param right_img: Right image frame
+    :param objpoints: List of object points
+    :param img_points_left: List of left image points
+    :param img_points_right: List of right image points
+    :return: Whether or not the object point and image points were successfully added to their lists
+    """
+
     img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords = \
         find_chessboard_corners(left_img, right_img)
 
@@ -131,6 +165,8 @@ def add_obj_point(left_img, right_img, objpoints, img_points_left, img_points_ri
 
 
 def generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_points_right):
+    """Generates an SR map from the list of object and image points."""
+
     reprojection_error_left, cam_mtx_l, dist_l, rotation_vec_left, translation_vec_left = cv2.calibrateCamera(
         objpoints,
         img_points_left,
@@ -168,8 +204,9 @@ def generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_poin
     return SrMap(cam_mtx_l, dist_l, R1, P1, cam_mtx_r, dist_r, R2, P2)
 
 
-def create_data_package_for_ui(controller, valid_frames, num_frames_scanned, num_frames_to_scan,
-                               sr_map_calculation_message, sr_map_phase_finished=False):
+def update_sr_progress_ui(controller, valid_frames, num_frames_scanned, num_frames_to_scan,
+                          sr_map_calculation_message, sr_map_phase_finished=False):
+    """Updates the stereo rectification map generation UI progress screen through the GUI controller."""
     progress_percent = num_frames_scanned * 100.0 / num_frames_to_scan * 0.8
     if sr_map_phase_finished:
         progress_percent += 20.0
@@ -187,6 +224,7 @@ def create_data_package_for_ui(controller, valid_frames, num_frames_scanned, num
 
 
 def create_frames_read_text(frames_read, total_frames, progress_percent):
+    """Helper function to create the message in the UI that shows how many frames have been read."""
     return FRAMES_READ_PREFIX + str(frames_read) + "/" + str(total_frames) + \
            " (" + str(round(progress_percent, 2)) + "%)"
 
@@ -197,6 +235,12 @@ def create_frames_read_text(frames_read, total_frames, progress_percent):
 def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
                                   left_offset=0, right_offset=0,
                                   first_frame=0, show_original_frame=False, show_undistorted_frame=False):
+    """
+    Walks the user through the process in command line for finding and generating the best SR map
+
+    It's preferred that the GUI version of this method is used as this function is not as updated and
+    prone to more errors. Basically, try to use the GUI whenever possible.
+    """
     print("Welcome to the Stereo Rectification (SR) Map Generator!")
     print("\nThere will be 2 steps to finding the best frame to use to get the best SR map:")
     print("\t1) Go through the video and accept frames that, in your opinion, will work well")
@@ -260,6 +304,8 @@ def find_and_generate_best_sr_map(left_video_filename, right_video_filename,
 
 def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original_frame, show_undistorted_frame,
                              video_frame_loader):
+    """Helper function for walking the user through the command line step where the user can choose
+    to use the currently displayed SR map."""
     frames = []
 
     while True:
@@ -318,6 +364,11 @@ def find_valid_frames_for_sr(frame_num, left_offset, right_offset, show_original
 
 
 def display_no_frames_left_message(frames):
+    """
+    Helper function for the command line process step where no frames were selected for SR map generation.
+
+    Prints out a bunch of messages saying that stereo rectification isn't possible and then stops the process.
+    """
     print("\nNo frames selected for SR map generation.")
     print("If this was a mistake, add --first_frame " + str(frames[0]) + " to the script arguments and start from "
                                                                          "there.")
@@ -327,6 +378,9 @@ def display_no_frames_left_message(frames):
 
 
 def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_offset, right_offset):
+    """Walks the user through the command line process step where the user has to select the final frame to use for SR
+    map generation."""
+
     frame_tracker = FrameTracker(frames)
 
     while True:
@@ -383,11 +437,24 @@ def select_final_frame_from_multiple_frames(frames, video_frame_loader, left_off
 
 
 def is_valid_sr_frame(left_img, right_img):
+    """
+    Returns True if the frame is valid for SR map generation and False if not
+
+    :param left_img: Left image frame
+    :param right_img: Right image frame
+    :return: Whether or not the frame is valid for stereo rectification
+    """
+
     img_left_corners_success, img_right_corners_success, _, _ = find_chessboard_corners(left_img, right_img)
     return img_left_corners_success and img_right_corners_success
 
 
 def generate_sr_map(left_img, right_img):
+    """
+    Generates an SR map based only on the given frame.
+
+    Try not to use this function. Stereo rectification should be based on as many frames as possible.
+    """
     img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords = \
         find_chessboard_corners(left_img, right_img)
 
@@ -474,6 +541,14 @@ def generate_sr_map(left_img, right_img):
 
 
 def find_chessboard_corners(left_img, right_img):
+    """
+    Finds and returns the chessboard corners based on the given images.
+
+    :param left_img: Left image frame
+    :param right_img: Right image frame
+    :return: True and the corner coordinates if the chessboard was found, False if not
+    """
+
     # For the 3rd argument, removing those parameters seems to have no effect
     img_left_corners_success, img_left_corner_coords = cv2.findChessboardCorners(left_img, CHECKERBOARD,
                                                                                  cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
@@ -483,6 +558,13 @@ def find_chessboard_corners(left_img, right_img):
 
 
 def show_sr_images(valid_sr_frame, img_left, img_right):
+    """
+    Shows the stereo rectified images.
+
+    :param valid_sr_frame: If the given images are stereo rectified
+    :param img_left: Stereo rectified left image frame
+    :param img_right: Stereo rectified right iamge frame
+    """
     if valid_sr_frame:
         left_window_title = "Left Image - Stereorectified"
         right_window_title = "Right Image - Stereorectified"
@@ -495,29 +577,46 @@ def show_sr_images(valid_sr_frame, img_left, img_right):
 
 
 def undistort(img):
+    """
+    Undistorted the given OpenCV image.
+
+    :param img: OpenCV image to be undistorted
+    :return: Undistorted OpenCV image
+    """
     undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
     return undistorted_img
 
 
 class FrameTracker:
+    """Tracks selected and removed stereo rectified frames for the command line process step where the user is
+    finding the best SR map to use from a list of stereo rectified frames."""
+
     def __init__(self, frames):
+        """Constructor"""
+
         self.frames = frames
         self.removed_frames = []
         self.current_index = 0
 
     def next_frame(self):
+        """Go to the next frame in the list if possible"""
+
         self.current_index = self.current_index + 1
         if self.current_index >= len(self.frames):
             self.current_index = len(self.frames) - 1
         return self.frames[self.current_index]
 
     def prev_frame(self):
+        """Go to the previous frame in the list if possible"""
+
         self.current_index = self.current_index - 1
         if self.current_index < 0:
             self.current_index = 0
         return self.frames[self.current_index]
 
     def remove_current_frame(self):
+        """Remove the current frame from the list"""
+
         if len(self.frames) == 1:
             display_no_frames_left_message(self.frames)
 
@@ -531,6 +630,8 @@ class FrameTracker:
             return self.frames[self.current_index]
 
     def undo_remove_frame(self):
+        """Undo the last frame removed from the list"""
+
         if len(self.removed_frames) == 0:
             print("No frames have been removed.")
             return self.frames[self.current_index]
@@ -542,6 +643,8 @@ class FrameTracker:
         return self.frames[self.current_index]
 
     def reset_frames(self):
+        """Add back all the frames that were removed from the list before"""
+
         current_frame = self.frames[self.current_index]
         while len(self.removed_frames) > 0:
             self.frames.append(self.removed_frames.pop())
@@ -550,6 +653,8 @@ class FrameTracker:
         return self.frames[self.current_index]
 
     def curr_frame(self):
+        """Returns the current frame the user is viewing"""
+
         return self.frames[self.current_index]
 
 

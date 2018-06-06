@@ -1,11 +1,22 @@
-import os
+"""Contains functions that create an undistorted video from the specified video."""
+
 import argparse
+import os
+
 import cv2
+
 from stereo_rectification.sr_map_gen import undistort
-from utilities.file_checker import *
+from utils_general.file_checker import check_if_file_exists
 
 
 def undistort_video(video_filename, new_file_ext, frame_cap=0):
+    """
+    Undistorts the given video.
+
+    :param video_filename: Path to video that needs to be undistorted
+    :param new_file_ext: Desired extension of the output video
+    :return: Filename of the new video
+    """
     new_filename = video_filename[:-4] + "_undistorted" + new_file_ext
     undistorted_video = None
     video = cv2.VideoCapture(video_filename)

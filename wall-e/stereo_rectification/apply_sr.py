@@ -1,5 +1,6 @@
-# Before running this, convert the videos to mkv using handbrake
-# Undistorts and stereo rectifies videos 2:53,
+"""
+This module provides methods that apply stereo rectification to stereo footage.
+"""
 
 import argparse
 import os
@@ -18,13 +19,38 @@ fourcc = cv2.VideoWriter_fourcc(*'FFV1')  # ffmpeg http://www.fourcc.org/codecs.
 
 
 # applies map to vc_obj with remap
-def apply_rectify_maps(image, map_0, map_1):
-    sr_image = cv2.remap(image, map_0, map_1, cv2.INTER_LANCZOS4)
+def apply_rectify_maps(image, map_1, map_2):
+    """
+    Applies the stereo rectification maps to the specified image.
+
+    Example:
+    To stereo rectify an image from the left footage, the following should be run:
+        stereo_rectified_left_image = apply_rectify_maps(left_image, left_map[0], left_map[1])
+
+    :param image: OpenCV image to stereo rectify
+    :param map_1: Index 0 of SR map
+    :param map_2: Index 1 of SR map
+    :return: Stereo rectified OpenCV image
+    """
+
+    sr_image = cv2.remap(image, map_1, map_2, cv2.INTER_LANCZOS4)
     return sr_image
 
 
 def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filename,
                                         left_offset=0, right_offset=0, show_lines=False):
+    """
+    Undistorts and stereo rectifies videos by filename and allows for a custom
+    YML SR map to be used for stereo rectification.
+
+    :param left_filename: File path of the left video
+    :param right_filename: File path of the right video
+    :param yml_filename: File path of the YML SR map to be used
+    :param left_offset: Frame offset of the left video
+    :param right_offset: Frame offset of the right video
+    :param show_lines: Whether or not the final video should have horizontal white lines to indicate SR results
+    """
+
     video_frame_loader = VideoFrameLoader(left_filename, right_filename)
 
     new_filename_l = left_filename[:-4] + "_stereo_rectified.mkv"
@@ -77,6 +103,16 @@ def undistort_and_stereo_rectify_videos(left_filename, right_filename, yml_filen
 
 # Logic behind Apply Sr GUI screen
 def apply_sr_gui_logic(controller):
+    """
+    Does the same thing as undistort_and_stereo_rectify_videos(),
+    except the functionality is suited for the GUI's backend logic.
+
+    Compared to the original function, this one doesn't output
+    to console and updates the GUI regularly through the controller.
+
+    :param controller: The GUI controller for pipeline 1
+    """
+
     first_frame = controller.apply_sr_frame_range.first_frame
     last_frame_inclusive = controller.apply_sr_frame_range.last_frame_inclusive
     left_offset = controller.video_offsets.left_offset
@@ -105,7 +141,7 @@ def apply_sr_gui_logic(controller):
 
     num_frames_processed = 0
 
-    create_data_package_for_ui(controller, num_frames_processed, num_frames_to_scan)
+    update_apply_sr_ui(controller, num_frames_processed, num_frames_to_scan)
 
     while True:
         left_frame_num = video_frame_loader.get_left_current_frame_num()
@@ -131,7 +167,7 @@ def apply_sr_gui_logic(controller):
         num_frames_processed += 1
 
         if num_frames_processed % 10 == 0:
-            create_data_package_for_ui(controller, num_frames_processed, num_frames_to_scan)
+            update_apply_sr_ui(controller, num_frames_processed, num_frames_to_scan)
 
     sr_left_video.release()
     sr_right_video.release()
@@ -140,10 +176,12 @@ def apply_sr_gui_logic(controller):
     controller.left_video_filename_sr = os.path.abspath(new_filename_l)
     controller.right_video_filename_sr = os.path.abspath(new_filename_r)
 
-    create_data_package_for_ui(controller, num_frames_processed, num_frames_to_scan)
+    update_apply_sr_ui(controller, num_frames_processed, num_frames_to_scan)
 
 
-def create_data_package_for_ui(controller, frames_processed, total_frames):
+def update_apply_sr_ui(controller, frames_processed, total_frames):
+    """Updates the UI progress screen"""
+
     progress_percent = frames_processed * 100.0 / total_frames
     frames_processed_message = create_frames_stereo_rectified_text(frames_processed, total_frames, progress_percent)
     controller.update_frame({
@@ -155,6 +193,15 @@ def create_data_package_for_ui(controller, frames_processed, total_frames):
 
 
 def create_frames_stereo_rectified_text(frames_processed, total_frames, progress_percent):
+    """
+    Creates a string that shows how many frames have been stereo rectified.
+
+    :param frames_processed: Number of frames that have been stereo rectified
+    :param total_frames: Total number of frames to process
+    :param progress_percent: Percentage of frames that have been processed
+    :return:
+    """
+
     return FRAMES_STEREO_RECTIFIED_PREFIX + str(frames_processed) + "/" + str(total_frames) + \
            " (" + str(round(progress_percent, 2)) + "%)"
 
