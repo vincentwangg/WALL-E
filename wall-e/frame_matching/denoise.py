@@ -5,6 +5,11 @@ import sys
 import cv2
 
 def denoise(file_name):
+  """Creates denoised video with "denoise_" added to video file name
+    
+  :param file_name: File name of video feed
+  :return: None
+  """
   feed = cv2.VideoCapture(file_name)
   num_frames = int(feed.get(cv2.CAP_PROP_FRAME_COUNT))
   moving_average = feed.read()[1]

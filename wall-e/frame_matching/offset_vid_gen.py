@@ -5,6 +5,13 @@ import sys
 import cv2
 
 def frame_correct(l_file_name, r_file_name, offset):
+  """Creates video of corrected and original video feeds displayed side by side
+    
+    :param l_file_name: File name of left video feed
+    :param r_file_name: File name of right video feed
+    :param offset: Offset of right feed 
+    :return: None
+    """
   l_feed = cv2.VideoCapture(l_file_name)
   r_feed = cv2.VideoCapture(r_file_name)
   fourcc = cv2.VideoWriter_fourcc(*'MJPG')

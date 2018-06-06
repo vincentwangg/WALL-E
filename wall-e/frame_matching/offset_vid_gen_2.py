@@ -6,6 +6,14 @@ import sys
 
 
 def generate_corrected(left_video_filename, right_video_filename, left_offset, right_offset):
+    """Generates frame synchronized video feeds given original feeds and offsets
+    
+    :param left_file_name: File name of left video feed
+    :param right_file_name: File name of right video feed
+    :param l_offset: Offset of left feed 
+    :param r_offset: Offset of right feed 
+    :return: None
+    """
     fourcc = cv2.VideoWriter_fourcc(*'FFV1')
     vfl = VideoFrameLoader(left_video_filename, right_video_filename)
 

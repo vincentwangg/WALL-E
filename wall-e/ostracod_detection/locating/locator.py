@@ -6,41 +6,58 @@ from ostracod import Ostracod
 
 
 def calculate_location(image, mask):
-    # calculate (x,y) location of the contour
-    # this means abstracting the contour to a single point
-    # by finding the centroid or something
+    """Calculate centroid of contour
+
+    :param image: Image of entire Frame (numpy array)
+    :param mask: Mask of location of pulse (numpy array)
+    :return: Centroid - (x,y) - of contour
+    """
     _, _, _, max_loc = cv2.minMaxLoc(image, mask=mask)
     return max_loc
 
 def calculate_area(contour):
-    # calculate area of a single contour
+    """Calculates area of a single contour
+
+    :param contour: Contour - Numpy array of (x,y) coordinates of boundary points of the object
+    :return: Area of contour
+    """
     return cv2.contourArea(contour)
 
 def calculate_brightness(image, mask):
-    # calculate the brightness of a single contour
+    """Brightness of pulse area
+
+    :param image: Image of entire Frame (numpy array)
+    :param mask: Mask of location of pulse (numpy array)
+    :return: Brightness
+    """
     brightness = cv2.mean(image, mask=mask)
     return brightness[0]
 
 def find_contours(threshold):
-    # returns a list of contours in the image
-    # in the future we may want to vet to eliminate the edge case where multiple ostracods count as 1 contour
+    """Finds contours in thresholded image
+
+    :param threshold: Image that has been thresholded (numpy array)
+    :return: List of contours, which are numpy arrays of (x,y) coordinates of boundary points of the object
+    """
     _, contours, _ = cv2.findContours(threshold, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
 def filter_image(image, threshold):
-    # filter image
-    # return filtered image
+    """Filters given image
+
+    :param image: Image to be thresholded (numpy array) 
+    :param threshold: Threshold brightness value
+    :return: Thresholded image (numpy array)
+    """
     retval, thresh = cv2.threshold(image, threshold, 255, cv2.THRESH_BINARY)
     return thresh
 
 def get_ostracods(image):
-    # filter image
-    # find contours
-    # compute area of each contour
-    # compute brightness of each contour
-    # compute x, y location of each contour
-    # return list of ostracods
-    # print "Ostracods: "
+    """Gets list of Ostracod objects found in a given image
+
+    :param image: Image to search for Ostracods
+    :return: List of Ostracod objects
+    """
     if image is None:
         sys.exit("unable to load image")
     if len(image[0][0]) == 3:
@@ -60,11 +77,6 @@ def get_ostracods(image):
             loc_list = [location[0], location[1], 0]
             ostracod = Ostracod(loc_list, area, brightness)
             ostracod_list.append(ostracod)
-
-
-    # print "Brightness", "\tArea", "\tLocation"
-    # for o in ostracod_list:
-    #     print round(o.brightness, 2), "\t\t", o.area, "\t", o.location
     return ostracod_list
 
 

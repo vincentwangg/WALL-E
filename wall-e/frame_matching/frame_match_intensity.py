@@ -1,3 +1,6 @@
+"""@package frame_match_intensity
+Used to find optimal offset and synchronize stereo video feeds.
+"""
 import argparse
 import sys
 
@@ -15,12 +18,28 @@ from matplotlib import pyplot as plt
 
 
 def get_gradient_diff(l_gradient, r_gradient, gradient_len, offset):
+    """Finds average gradient difference given two gradients, the gradient length, and the offset
+
+    :param l_gradient: Numpy array of intensity difference for each consecutive frame pair in left feed
+    :param r_gradient: Numpy array of intensity difference for each consecutive frame pair in right feed
+    :param gradient_len: Length of gradient array
+    :param offset: Number of frames to offset right feed by
+    :return: Average gradient difference with offset applied
+    """
+
     diff = abs(l_gradient - np.roll(r_gradient, offset))[max(0, offset):min(gradient_len, gradient_len + offset)]
     diff /= float(len(diff))
     return np.sum(diff)
 
 
 def get_optimal_offset(l_gradient, r_gradient, max_offset):
+    """Finds optimal offset for right feed
+
+    :param l_gradient: Numpy array of intensity difference for each consecutive frame pairs in left feed
+    :param r_gradient: Numpy array of intensity difference for each consecutive frame pairs in right feed
+    :param max_offset: Maximum number of frames to offset right feed by
+    :return: Optimal offset for right feed
+    """
     min_diff = sys.maxint
     gradient_len = len(l_gradient)
     if (len(r_gradient) > gradient_len):
@@ -38,6 +57,13 @@ def get_optimal_offset(l_gradient, r_gradient, max_offset):
 
 
 def calculate_gradient(file_name, start_frame, end_frame):
+    """Calculates gradient of a video feed
+    
+    :param file_name: File name of video feed
+    :param start_frame: Frame number of start of the clip
+    :param end_frame: Frame number of end of the clip
+    :return: Numpy array of intensity difference for each consecutive frame pairs in right feed
+    """ 
     feed = cv2.VideoCapture(file_name)
     feed.set(1, start_frame)
 
@@ -64,6 +90,12 @@ def calculate_gradient(file_name, start_frame, end_frame):
 
 
 def plot_intensity_curves(l_gradient, r_gradient):
+    """Plots intensity curves of left and right gradient, used to verify results of frame matching
+    
+    :param l_gradient: Numpy array of intensity difference for each consecutive frame pairs in left feed
+    :param r_gradient: Numpy array of intensity difference for each consecutive frame pairs in right feed
+    :return: None
+    """ 
     plt.plot(l_gradient, 'g')
     plt.plot(r_gradient, 'r')
     plt.ylabel('dI')
@@ -72,6 +104,15 @@ def plot_intensity_curves(l_gradient, r_gradient):
 
 
 def compare_feeds(l_file_name, r_file_name, l_gradient, l_offset, r_offset):
+    """Creates two images to compare frame synchronized video feeds together frame by frame
+    
+    :param l_file_name: File name of left video feed
+    :param r_file_name: File name of right video feed
+    :param l_gradient: Numpy array of intensity difference for each consecutive frame pairs in left feed
+    :param r_gradient: Numpy array of intensity difference for each consecutive frame pairs in right feed
+    :param r_offset: Offset of right feed 
+    :return: None
+    """ 
     frame_no = np.argmax(l_gradient)
     l_feed = cv2.VideoCapture(l_file_name)
     l_feed.set(1, frame_no - 3 + l_offset)
@@ -100,7 +141,15 @@ def compare_feeds(l_file_name, r_file_name, l_gradient, l_offset, r_offset):
     cv2.imwrite('r_feed_frames.jpg', r_five_image_seq);
 
 
-def frame_match(left_file_name, right_file_name, start_timestamp, end_timestamp):  # timestamps in seconds
+def frame_match(left_file_name, right_file_name, start_timestamp, end_timestamp):
+    """Finds optimal offset for frame synchronization
+    
+    :param left_file_name: File name of left video feed
+    :param right_file_name: File name of right video feed
+    :param start_timestamp: Timestamp (in seconds) of start of clip
+    :param end_timestamp: Timestamp (in seconds) of end of clip
+    :return: None
+    """
     start_frame = start_timestamp * 30 if start_timestamp else 0
     end_frame = end_timestamp * 30 if end_timestamp else -1
 

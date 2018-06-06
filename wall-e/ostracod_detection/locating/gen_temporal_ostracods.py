@@ -8,6 +8,11 @@ from utils_general.text_progress_bar import print_progress
 CENTROID_MAX_DIST = 15
 
 def gen_ostracods(feed_file_name):
+  """Generates a list of TemporalOstracod objects detected in the feed
+    
+  :param feed_file_name: File name of video feed
+  :return: list of TemporalOstracod objects
+  """
   temp_ostracods = {}  #dictionary to keep track of all the ostracods
   feed = cv2.VideoCapture(feed_file_name)
   success, frame = feed.read()
@@ -49,6 +54,11 @@ def gen_ostracods(feed_file_name):
   return prune_ostracod_list(temp_ostracods.values())
 
 def prune_ostracod_list(temp_ostracods):
+  """Removes TemporalOstracod objects that last less than 3 frames in duration
+    
+  :param temp_ostracods: List of TemporalOstracod objects
+  :return: List of TemporalOstracod objects
+  """
   pruned_list = []
   for o in temp_ostracods:
     if (o.num_frames > 3):
@@ -56,6 +66,13 @@ def prune_ostracod_list(temp_ostracods):
   return pruned_list
 
 def is_same_ostracod(ost1, ost2):
+  """Determines if two Ostracod objects are the same
+  (checks if centroid distance is less than a threshold value)
+    
+  :param ost1: Ostracod object 1
+  :param ost2: Ostracod object 2
+  :return: Boolean if they are the same ostracod
+  """
   return np.sqrt(np.power((ost1.location[0] - ost2.location[0]), 2) \
     + np.power((ost1.location[1] - ost2.location[1]), 2)) < CENTROID_MAX_DIST
 

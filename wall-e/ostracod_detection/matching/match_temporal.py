@@ -3,6 +3,12 @@ import sys
 import cv2
 
 def get_ostracod_matches(temp_ostracods_L, temp_ostracods_R):
+	"""Generates pairs of corresponding TemporalOstracods
+
+    :param temp_ostracods_L: List of TemporalOstracods generated from left feed
+    :param temp_ostracods_R: List of TemporalOstracods generated from right feed
+    :return: List of tuples, each tuple is a pair of corresponding TemporalOstracods 
+    """
 	# indicates if right ostracod is already paired off
 	is_used = [False] * len(temp_ostracods_R) 
 
@@ -38,4 +44,10 @@ def get_ostracod_matches(temp_ostracods_L, temp_ostracods_R):
 
 
 def calc_dist(ostracod_l, ostracod_r):
+	"""Calculates y distance between potential TemporalOstracods matches
+
+  :param ostracod_l: Candidate TemporalOstracod from left feed
+  :param ostracod_r: Candidate TemporalOstracod from right feed
+  :return: Y distance between the two TemporalOstracods  
+  """
 	return abs((ostracod_l.location[1]) - (ostracod_r.location[1]))
