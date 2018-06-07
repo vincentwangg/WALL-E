@@ -16,7 +16,7 @@
 
 import argparse
 from config.keycode_setup import *
-from utils_general.video_frame_loader import VideoFrameLoader
+from video_frame_loader import VideoFrameLoader
 
 frame_actions = {}
 left_offset_actions = {}

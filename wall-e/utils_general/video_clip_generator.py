@@ -1,7 +1,7 @@
 import cv2
 import argparse
-from utils_general.video_frame_loader import VideoFrameLoader
-from utils_general.file_checker import check_if_file_exists
+from video_frame_loader import VideoFrameLoader
+from file_checker import check_if_file_exists
 import sys
 
 
