@@ -8,7 +8,7 @@ Make sure you are working on your own branch.
 
 
 ## Processing footage for pulse matching and 3d mapping.
-See [[Wiki|https://github.com/vincentwangg/WALL-E/wiki]]
+See https://github.com/vincentwangg/WALL-E/wiki
 
 ## Required Dependencies
 - OpenCV
