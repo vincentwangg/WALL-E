@@ -444,9 +444,11 @@ def is_valid_sr_frame(left_img, right_img):
     :param right_img: Right image frame
     :return: Whether or not the frame is valid for stereo rectification
     """
+    # img_left_corners_success, img_right_corners_success, _, _ = 
 
-    img_left_corners_success, img_right_corners_success, _, _ = find_chessboard_corners(left_img, right_img)
-    return img_left_corners_success and img_right_corners_success
+    if (found_chessboard(left_img) and found_chessboard(right_img)):
+        return True
+    return False
 
 
 def generate_sr_map(left_img, right_img):
@@ -539,6 +541,10 @@ def generate_sr_map(left_img, right_img):
 
     return True, new_img_left, new_img_right, sr_map
 
+def found_chessboard(img):
+    img_success, _ = cv2.findChessboardCorners(img, CHECKERBOARD,
+                                                cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS + cv2.CALIB_CB_FAST_CHECK)
+    return img_success
 
 def find_chessboard_corners(left_img, right_img):
     """
