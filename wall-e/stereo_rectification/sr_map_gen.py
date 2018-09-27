@@ -35,9 +35,26 @@ SR_MAP_GENERATED_MESSAGE = "\nA file named \"" + SR_MAP_FILENAME + "\" has been 
                                                                    "map!\nFor future use, this file is " \
                                                                    "recommended to be copied somewhere and " \
                                                                    "renamed. "
+# DATA STRUCTURES #
+
+class sr_map_builder:
+    def __init__(self):
+        self.objpoints = []
+        self.img_points_left = []
+        self.img_points_right = []
+        self.checkerboard_frames = [] # list of checkerboard_Frame
+        self.sr_results = []
+        self.num_frames_to_scan = None
+        self.num_frames_scanned = None
+
+class checkerboard_frame:
+    def __init__(self):
+        self.left_image = None
+        self.right_image = None
+        self.left_image_num = None
+        self.right_image_num = None
 
 # GUI METHODS START #
-
 
 # For GUI class VideoScanScreen in sr_scan_progress_screen.py
 def scan_video_and_build_sr_map_gui(controller):
@@ -52,15 +69,25 @@ def scan_video_and_build_sr_map_gui(controller):
 
     :param controller: GUI controller
     """
-    sr_results = []
+    builder = sr_map_builder()
 
+    print " "
+    scan_video_for_checkerboard_frames(controller, builder)
+    print "Done scanning frames, moving on to selecting frames.\n"
+    select_frames_for_stereo_rectification(controller, builder)
+    print "Done selecting frames, moving on to building sr map.\n"
+    build_sr_map(controller, builder)
+    print "Sr map built! Done!\n"
+
+
+def scan_video_for_checkerboard_frames(controller, builder):
     first_frame = controller.sr_scan_frame_range.first_frame
     last_frame_inclusive = controller.sr_scan_frame_range.last_frame_inclusive
     left_offset = controller.video_offsets.left_offset
     right_offset = controller.video_offsets.right_offset
     video_frame_loader = controller.video_frame_loader
 
-    first_frame_left, last_frame_left, first_frame_right, last_frame_right, num_frames_to_scan = \
+    first_frame_left, last_frame_left, first_frame_right, last_frame_right, builder.num_frames_to_scan = \
         calculate_video_scan_frame_information(
             first_frame,
             last_frame_inclusive,
@@ -71,12 +98,9 @@ def scan_video_and_build_sr_map_gui(controller):
     video_frame_loader.set_left_current_frame_num(first_frame_left)
     video_frame_loader.set_right_current_frame_num(first_frame_right)
 
-    num_frames_scanned = 0
-    objpoints = []
-    img_points_left = []
-    img_points_right = []
+    builder.num_frames_scanned = 0
 
-    update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+    update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
                           SR_COLLECTING_SAMPLES)
 
     while True:
@@ -95,30 +119,39 @@ def scan_video_and_build_sr_map_gui(controller):
             break
 
         if is_valid_sr_frame(left_img, right_img):
-            img_left_undistorted = convert_to_gray(undistort(left_img))
-            img_right_undistorted = convert_to_gray(undistort(right_img))
-            success = add_obj_point(img_left_undistorted, img_right_undistorted,
-                                    objpoints, img_points_left, img_points_right)
-            if success:
-                sr_results.append({FRAME_NUM_LABEL: min([left_frame_num, right_frame_num])})
+            board_frame = checkerboard_frame()
+            board_frame.left_image = convert_to_gray(undistort(left_img))
+            board_frame.right_image = convert_to_gray(undistort(right_img))
+            board_frame.right_frame_num = right_frame_num
+            board_frame.left_frame_num = left_frame_num
+            builder.checkerboard_frames.append(board_frame)
 
-        num_frames_scanned += 1
+        builder.num_frames_scanned += 1
 
-        if num_frames_scanned % 10 == 0:
-            update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+        if builder.num_frames_scanned % 10 == 0:
+            update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
                                   SR_COLLECTING_SAMPLES)
 
-    update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan, SR_CALCULATING_MAP)
+def select_frames_for_stereo_rectification(controller, builder):
+    for frame in builder.checkerboard_frames: # TODO: remove this loop, and replace it with selected frames
+        success = add_obj_point(frame.left_image, frame.right_image,
+                                builder.objpoints, builder.img_points_left, builder.img_points_right)
+        if success:
+            builder.sr_results.append({FRAME_NUM_LABEL: min([frame.left_frame_num, frame.right_frame_num])})
 
-    if len(sr_results) > 0:
-        controller.sr_map = generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_points_right)
+
+def build_sr_map(controller, builder):
+    update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan, SR_CALCULATING_MAP)
+
+    if len(builder.sr_results) > 0:
+        controller.sr_map = generate_sr_map_from_obj_and_img_points(builder.objpoints, builder.img_points_left, builder.img_points_right)
     else:
-        update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+        update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
                               SR_FAILED, sr_map_phase_finished=True)
         return
 
-    controller.sr_results = sr_results
-    update_sr_progress_ui(controller, len(sr_results), num_frames_scanned, num_frames_to_scan,
+    controller.sr_results = builder.sr_results
+    update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
                           SR_FINISHED_CALCULATING, sr_map_phase_finished=True)
 
 
