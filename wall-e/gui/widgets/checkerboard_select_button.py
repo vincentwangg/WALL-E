@@ -14,4 +14,9 @@ class CheckerboardSelectButton(Button):
       if not self.chosen:
         self.controller.builder.chosen_checkerboard_frames.append(self.checkerboard)
         self.chosen = True
-        print "checkerboards chosen length: ", len(self.controller.builder.chosen_checkerboard_frames)
+        self.configure(text="Unselect")
+      else:
+        self.controller.builder.chosen_checkerboard_frames.remove(self.checkerboard)
+        self.chosen = False
+        self.configure(text="Select")
+      print "checkerboards chosen length: ", len(self.controller.builder.chosen_checkerboard_frames)
