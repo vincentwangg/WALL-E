@@ -42,7 +42,7 @@ class sr_map_builder:
         self.objpoints = []
         self.img_points_left = []
         self.img_points_right = []
-        self.checkerboard_frames = [] # list of checkerboard_Frame
+        self.checkerboard_frames = [] # list of checkerboard_frame
         self.chosen_checkerboard_frames = []
         self.sr_results = []
         self.num_frames_to_scan = None

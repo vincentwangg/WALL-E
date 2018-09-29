@@ -67,10 +67,6 @@ class SrCheckerBoardSelection(GuiBaseFrame):
                 for row in range(0, RESULTS_PER_PAGE):
 
                     result_num = page * RESULTS_PER_PAGE + row
-                    # print "left_num", self.controller.builder.checkerboard_frames[result_num].left_image_num
-                    # print "right_num", self.controller.builder.checkerboard_frames[result_num].right_image_num
-                    # print "right_image", self.controller.builder.checkerboard_frames[result_num].right_image
-                    # print "result num: ", result_num
                     if result_num < len(self.controller.builder.checkerboard_frames):
                         frame_num = self.controller.builder.checkerboard_frames[result_num].left_image_num
 
@@ -162,11 +158,8 @@ class SrCheckerBoardSelection(GuiBaseFrame):
 
     def on_next_button(self):
         if (len(self.controller.builder.chosen_checkerboard_frames) > 0):
-            print "length is greater than zero"
             select_frames_for_stereo_rectification(self.controller)
-            print "selecting frames"
             self.controller.show_next_frame()
-            print "showing next frame"
 
 
 
