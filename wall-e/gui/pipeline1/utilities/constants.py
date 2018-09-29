@@ -42,6 +42,9 @@ SR_MAP_LABEL = "sr_map"
 VALID_FRAMES_FOUND_PREFIX = "Valid frames found: "
 FRAMES_READ_PREFIX = "Number of frames scanned: "
 
+# SR Build Map Progress Screen
+SR_BUILD_MAP_PROGRESS_SCREEN_TITLE = "Building stereo rectification map for stereo rectification..."
+
 # Apply SR Screen
 APPLY_SR_SCREEN_TITLE = "Video Stereo Rectification"
 

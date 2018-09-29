@@ -10,7 +10,8 @@ from gui.pipeline1.frame_matching_progress_screen import FrameMatchingProgressSc
 from gui.pipeline1.frame_matching_time_end_screen import FrameMatchingTimeEndScreen
 from gui.pipeline1.frame_matching_time_start_screen import FrameMatchingTimeStartScreen
 from gui.pipeline1.frame_matching_validation_screen import FrameMatchingValidationScreen
-from gui.pipeline1.sr_frame_selection_screen import SrFrameSelection
+from gui.pipeline1.sr_checkerboard_selection_screen import SrCheckerBoardSelection
+from gui.pipeline1.sr_build_map_progress_screen import SrBuildMapProgressScreen
 from gui.pipeline1.sr_frame_selected_screen import SrFrameSelectedScreen
 from gui.pipeline1.sr_frame_suggestion_intro_screen import SrFrameSuggestionIntroScreen
 from gui.pipeline1.sr_frame_suggestion_time_end_screen import SrFrameSuggestionTimeEndScreen
@@ -23,6 +24,7 @@ from gui.pipeline1.video_selection_screen import VideoSelectionScreen
 from gui.pipeline1.welcome_screen import WelcomeScreen
 from gui.widgets.walle_header import WalleHeader
 from utils_general.video_frame_loader import VideoFrameLoader
+from stereo_rectification.sr_map_gen import sr_map_builder
 
 screen_classes_in_order = [
     WelcomeScreen,
@@ -36,8 +38,9 @@ screen_classes_in_order = [
     SrFrameSuggestionIntroScreen,
     SrFrameSuggestionTimeStartScreen,
     SrFrameSuggestionTimeEndScreen,
-    SrScanProgressScreen,
-    # SrFrameSelection,
+    SrScanProgressScreen, # scan through video get valid checkerboard frames
+    SrCheckerBoardSelection, # select checkerboard frames for sr
+    SrBuildMapProgressScreen, # build sr_map
     SrFrameSelectedScreen,
     ApplySrIntroScreen,
     ApplySrTimeStartScreen,
@@ -60,6 +63,7 @@ class Pipeline1GuiController(Tk):
         self.video_offsets = VideoOffsets()
         self.sr_results = None
         self.sr_map = None
+        self.builder = sr_map_builder()
 
         self.frame_matching_frame_range = FrameRange()
         self.sr_scan_frame_range = FrameRange()
@@ -89,6 +93,7 @@ class Pipeline1GuiController(Tk):
         self.center_in_computer_screen(self.winfo_width(), self.winfo_height())
 
         self.set_and_start_top_frame(first_screen)
+
 
     def prepare_screens(self, screen_frames):
         for frame_class in screen_frames:

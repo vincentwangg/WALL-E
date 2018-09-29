@@ -43,6 +43,7 @@ class sr_map_builder:
         self.img_points_left = []
         self.img_points_right = []
         self.checkerboard_frames = [] # list of checkerboard_Frame
+        self.chosen_checkerboard_frames = []
         self.sr_results = []
         self.num_frames_to_scan = None
         self.num_frames_scanned = None
@@ -69,25 +70,24 @@ def scan_video_and_build_sr_map_gui(controller):
 
     :param controller: GUI controller
     """
-    builder = sr_map_builder()
-
-    print " "
-    scan_video_for_checkerboard_frames(controller, builder)
-    print "Done scanning frames, moving on to selecting frames.\n"
-    select_frames_for_stereo_rectification(controller, builder)
-    print "Done selecting frames, moving on to building sr map.\n"
-    build_sr_map(controller, builder)
-    print "Sr map built! Done!\n"
+    # scan_video_for_checkerboard_frames(controller, builder)
+    # print "Done scanning frames, moving on to selecting frames.\n"
+    
+    # select_frames_for_stereo_rectification(controller, builder)
+    # print "Done selecting frames, moving on to building sr map.\n"
+    # build_sr_map(controller, builder)
+    # print "Sr map built! Done!\n"
 
 
-def scan_video_for_checkerboard_frames(controller, builder):
+def scan_video_for_checkerboard_frames(controller):
+    print "scanning through video"
     first_frame = controller.sr_scan_frame_range.first_frame
     last_frame_inclusive = controller.sr_scan_frame_range.last_frame_inclusive
     left_offset = controller.video_offsets.left_offset
     right_offset = controller.video_offsets.right_offset
     video_frame_loader = controller.video_frame_loader
 
-    first_frame_left, last_frame_left, first_frame_right, last_frame_right, builder.num_frames_to_scan = \
+    first_frame_left, last_frame_left, first_frame_right, last_frame_right, controller.builder.num_frames_to_scan = \
         calculate_video_scan_frame_information(
             first_frame,
             last_frame_inclusive,
@@ -98,9 +98,10 @@ def scan_video_for_checkerboard_frames(controller, builder):
     video_frame_loader.set_left_current_frame_num(first_frame_left)
     video_frame_loader.set_right_current_frame_num(first_frame_right)
 
-    builder.num_frames_scanned = 0
+    controller.builder.num_frames_scanned = 0
 
-    update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
+    update_sr_progress_ui(controller, len(controller.builder.sr_results), controller.builder.num_frames_scanned,
+                          controller.builder.num_frames_to_scan,
                           SR_COLLECTING_SAMPLES)
 
     while True:
@@ -118,41 +119,69 @@ def scan_video_for_checkerboard_frames(controller, builder):
         if not l_success or not r_success:
             break
 
-        if is_valid_sr_frame(left_img, right_img):
-            board_frame = checkerboard_frame()
-            board_frame.left_image = convert_to_gray(undistort(left_img))
-            board_frame.right_image = convert_to_gray(undistort(right_img))
-            board_frame.right_frame_num = right_frame_num
-            board_frame.left_frame_num = left_frame_num
-            builder.checkerboard_frames.append(board_frame)
+        left_image_undistorted = convert_to_gray(undistort(left_img))
+        right_image_undistorted = convert_to_gray(undistort(right_img))
 
-        builder.num_frames_scanned += 1
+        if is_valid_sr_frame(left_image_undistorted, right_image_undistorted):
+            board_frame = set_up_checkerboard_frame(left_image_undistorted, right_image_undistorted, left_frame_num, right_frame_num)
+            controller.builder.checkerboard_frames.append(board_frame)
 
-        if builder.num_frames_scanned % 10 == 0:
-            update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
+        controller.builder.num_frames_scanned += 1
+
+        if controller.builder.num_frames_scanned % 10 == 0:
+            update_sr_progress_ui(controller, len(controller.builder.checkerboard_frames), controller.builder.num_frames_scanned,
+                                  controller.builder.num_frames_to_scan,
                                   SR_COLLECTING_SAMPLES)
+    update_sr_progress_ui(controller, len(controller.builder.checkerboard_frames), controller.builder.num_frames_scanned,
+                        controller.builder.num_frames_to_scan, SR_CALCULATING_MAP)
+    print "scanned through video to find checkerboards"
 
-def select_frames_for_stereo_rectification(controller, builder):
-    for frame in builder.checkerboard_frames: # TODO: remove this loop, and replace it with selected frames
+
+def set_up_checkerboard_frame(left_image, right_image, left_frame_num, right_frame_num):
+    board_frame = checkerboard_frame()
+    draw_chessboard(left_image)
+    draw_chessboard(right_image)
+    board_frame.right_image_num = right_frame_num
+    board_frame.left_image_num = left_frame_num
+    board_frame.right_image = right_image
+    board_frame.left_image = left_image
+    return board_frame
+
+
+def draw_chessboard(image):
+    img_corners_success, img_corner_coords = cv2.findChessboardCorners(image, CHECKERBOARD,
+                                                                        cv2.CALIB_CB_ADAPTIVE_THRESH +
+                                                                        cv2.CALIB_CB_FILTER_QUADS)
+    cv2.drawChessboardCorners(image, CHECKERBOARD, img_corner_coords, img_corners_success)
+
+
+def select_frames_for_stereo_rectification(controller):
+    for frame in controller.builder.checkerboard_frames: # TODO: remove this loop, and replace it with selected frames
         success = add_obj_point(frame.left_image, frame.right_image,
-                                builder.objpoints, builder.img_points_left, builder.img_points_right)
+                                controller.builder.objpoints, 
+                                controller.builder.img_points_left, 
+                                controller.builder.img_points_right)
         if success:
-            builder.sr_results.append({FRAME_NUM_LABEL: min([frame.left_frame_num, frame.right_frame_num])})
+            controller.builder.sr_results.append({FRAME_NUM_LABEL: min([frame.left_frame_num, frame.right_frame_num])})
 
 
-def build_sr_map(controller, builder):
-    update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan, SR_CALCULATING_MAP)
+def build_sr_map(controller):
+    update_sr_progress_ui(controller, len(controller.builder.sr_results), controller.builder.num_frames_scanned,
+                        controller.builder.num_frames_to_scan, SR_CALCULATING_MAP)
 
-    if len(builder.sr_results) > 0:
-        controller.sr_map = generate_sr_map_from_obj_and_img_points(builder.objpoints, builder.img_points_left, builder.img_points_right)
+    if len(controller.builder.sr_results) > 0:
+        controller.sr_map = generate_sr_map_from_obj_and_img_points(controller.builder.objpoints, controller.builder.img_points_left,
+                                                                    controller.builder.img_points_right)
     else:
-        update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
+        update_sr_progress_ui(controller, len(controller.builder.sr_results), controller.builder.num_frames_scanned,
+                              controller.builder.num_frames_to_scan,
                               SR_FAILED, sr_map_phase_finished=True)
         return
 
-    controller.sr_results = builder.sr_results
-    update_sr_progress_ui(controller, len(builder.sr_results), builder.num_frames_scanned, builder.num_frames_to_scan,
+    controller.sr_results = controller.builder.sr_results
+    update_sr_progress_ui(controller, len(controller.builder.sr_results), controller.builder.num_frames_scanned, controller.builder.num_frames_to_scan,
                           SR_FINISHED_CALCULATING, sr_map_phase_finished=True)
+    print "built map.."
 
 
 def add_obj_point(left_img, right_img, objpoints, img_points_left, img_points_right):
@@ -240,9 +269,7 @@ def generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_poin
 def update_sr_progress_ui(controller, valid_frames, num_frames_scanned, num_frames_to_scan,
                           sr_map_calculation_message, sr_map_phase_finished=False):
     """Updates the stereo rectification map generation UI progress screen through the GUI controller."""
-    progress_percent = num_frames_scanned * 100.0 / num_frames_to_scan * 0.8
-    if sr_map_phase_finished:
-        progress_percent += 20.0
+    progress_percent = num_frames_scanned * 100.0 / num_frames_to_scan
 
     frames_processed_message = create_frames_read_text(num_frames_scanned, num_frames_to_scan, progress_percent)
     valid_frames_found_message = VALID_FRAMES_FOUND_PREFIX + str(valid_frames)
@@ -576,7 +603,7 @@ def generate_sr_map(left_img, right_img):
 
 def found_chessboard(img):
     img_success, _ = cv2.findChessboardCorners(img, CHECKERBOARD,
-                                                cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS + cv2.CALIB_CB_FAST_CHECK)
+                                                cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
     return img_success
 
 def find_chessboard_corners(left_img, right_img):

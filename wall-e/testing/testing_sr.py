@@ -77,6 +77,7 @@ def write_horizontal_lines(image):
 
 
 def args_are_correct(args):
+    # check_if_file_exits sys.exits if the file does not exist
     check_if_file_exists(args.left_video_file_name)
     check_if_file_exists (args.right_video_file_name)
     return True
