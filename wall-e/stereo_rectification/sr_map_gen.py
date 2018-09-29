@@ -156,13 +156,21 @@ def draw_chessboard(image):
 
 
 def select_frames_for_stereo_rectification(controller):
-    for frame in controller.builder.checkerboard_frames: # TODO: remove this loop, and replace it with selected frames
-        success = add_obj_point(frame.left_image, frame.right_image,
+    for frame in controller.builder.chosen_checkerboard_frames: # TODO: remove this loop, and replace it with selected frames
+        left_image_success, left_image = controller.video_frame_loader.get_left_frame(frame.left_image_num)
+        right_image_success, right_image = controller.video_frame_loader.get_right_frame(frame.right_image_num)
+
+        left_image_undistorted = convert_to_gray(undistort(left_image))
+        right_image_undistorted = convert_to_gray(undistort(right_image))
+
+        if not (left_image_success and right_image_success):
+            return
+        success = add_obj_point(left_image_undistorted, right_image_undistorted,
                                 controller.builder.objpoints, 
                                 controller.builder.img_points_left, 
                                 controller.builder.img_points_right)
         if success:
-            controller.builder.sr_results.append({FRAME_NUM_LABEL: min([frame.left_frame_num, frame.right_frame_num])})
+            controller.builder.sr_results.append({FRAME_NUM_LABEL: min([frame.left_image_num, frame.right_image_num])})
 
 
 def build_sr_map(controller):
@@ -170,9 +178,11 @@ def build_sr_map(controller):
                         controller.builder.num_frames_to_scan, SR_CALCULATING_MAP)
 
     if len(controller.builder.sr_results) > 0:
+        print "build_sr_map: controller.builder.sr_results is greater than zero"
         controller.sr_map = generate_sr_map_from_obj_and_img_points(controller.builder.objpoints, controller.builder.img_points_left,
                                                                     controller.builder.img_points_right)
     else:
+        print "build_sr_map: controller.builder.sr_results is NOT greater than zero"
         update_sr_progress_ui(controller, len(controller.builder.sr_results), controller.builder.num_frames_scanned,
                               controller.builder.num_frames_to_scan,
                               SR_FAILED, sr_map_phase_finished=True)
@@ -199,7 +209,6 @@ def add_obj_point(left_img, right_img, objpoints, img_points_left, img_points_ri
     :param img_points_right: List of right image points
     :return: Whether or not the object point and image points were successfully added to their lists
     """
-
     img_left_corners_success, img_right_corners_success, img_left_corner_coords, img_right_corner_coords = \
         find_chessboard_corners(left_img, right_img)
 

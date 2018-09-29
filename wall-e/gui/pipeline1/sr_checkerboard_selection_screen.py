@@ -12,6 +12,7 @@ from gui.widgets.p_label import PLabel
 from gui.widgets.checkerboard_select_button import CheckerboardSelectButton
 from utils_general.image_converter import cv2_gray_image_to_tkinter_with_resize
 from utilities.constants import VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT
+from stereo_rectification.sr_map_gen import select_frames_for_stereo_rectification
 
 RESULTS_PER_PAGE = 10
 
@@ -24,6 +25,8 @@ class SrCheckerBoardSelection(GuiBaseFrame):
         self.screen_title = Header1Label(self.content_wrapper, text=SR_FRAME_SELECTION_TITLE)
         self.screen_description = PLabel(self.content_wrapper, text="Please select frames that have a satisfactory "
                                                                     "checkerboard result.")
+        self.next_button = Button(self.content_wrapper, text="Next",
+                                  command=lambda: self.on_next_button())
 
     def add_widgets_to_frame(self):
         self.grid_rowconfigure(0, weight=1)
@@ -31,6 +34,7 @@ class SrCheckerBoardSelection(GuiBaseFrame):
         self.screen_title.grid(row=0, column=0, columnspan=3)
         self.screen_description.grid(row=1, columnspan=3)
         self.content_wrapper.place(relx=SCREENS_REL_X, rely=0.48, anchor=CENTER)
+        self.next_button.grid(row=4, column=1)
 
     def on_show_frame(self):
         self.canvas_wrappers = []
@@ -155,8 +159,14 @@ class SrCheckerBoardSelection(GuiBaseFrame):
 
     def convert_image(self, image):
         return cv2_gray_image_to_tkinter_with_resize(image, VIDEO_SR_SELECT_PREVIEW_WIDTH, VIDEO_PREVIEW_HEIGHT)
-        # return cv2_bgr_image_to_tkinter(image)
-        # return cv2_rgb_image_to_tkinter(image)
+
+    def on_next_button(self):
+        if (len(self.controller.builder.chosen_checkerboard_frames) > 0):
+            print "length is greater than zero"
+            select_frames_for_stereo_rectification(self.controller)
+            print "selecting frames"
+            self.controller.show_next_frame()
+            print "showing next frame"
 
 
 
