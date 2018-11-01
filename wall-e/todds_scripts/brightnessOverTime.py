@@ -64,6 +64,7 @@ cap = cv2.VideoCapture(video1)
 
 #Offsets by xframe, frame frames
 loffset = start #called offset because derived from viewing 2 videos which could be offset by x frames
+cap.set(1,loffset);
 
 frametext=0
 while(cap.isOpened()):
