@@ -70,6 +70,8 @@ frametext=0
 while(cap.isOpened()):
     frametext=frametext+1
     ret, frame = cap.read()
+    if not ret:
+	break
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
