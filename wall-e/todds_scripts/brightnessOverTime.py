@@ -101,7 +101,7 @@ while(cap.isOpened()):
     cv2.putText(adjusted,str(bright), (175,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
     cv2.putText(adjusted,str(rawbright), (375,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
 
-    f.write(str(frametext+loffset)+","+str(bright)+","+str(rawbright)+"\n")
+    f.write(str(frametext+loffset)+","+str(bright)+","+str(rawbright)+"," + str(contourcount) + "\n")
     if view == 1:
         #imgray2, contours, hierarchy = cv2.findContours(frame,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
     	cv2.imshow('frame',adjusted)
