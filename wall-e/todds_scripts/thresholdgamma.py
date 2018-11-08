@@ -21,8 +21,8 @@ ap.add_argument("-d", "--delay", required=False, default=0, type=float,
 	help="delay time between frames for slo-mo")
 ap.add_argument("-v", "--view", required=False, default=1, type=int,
 	help="choose whether to view video 1 or not 0")
-ap.add_argument("-o", "--out", required=True, default=1, type=str,
-	help="output file for brightness data")
+ap.add_argument("-o", "--outfile", required=False, default="out.mkv", type=str,
+	help="Output file default is out.mkv")
 args = vars(ap.parse_args())
 delay = args["delay"]
 gamma = args["gamma"]
@@ -32,10 +32,7 @@ start = args["start"]
 view = args["view"]
 dir_path = args["path"]
 video1 = args["file"]
-out = args["out"]
-
-
-f= open(out,"w+")
+outfile = args["outfile"]
 
 def adjust_clip(image, black=0, white=255):
 	# build a lookup table mapping the pixel values [0, 255] to
@@ -61,6 +58,13 @@ def adjust_gamma(image, gamma=1.0):
 
 
 cap = cv2.VideoCapture(video1)
+# Define the codec and create VideoWriter object
+#frame_width = int(cap.get(3))
+#frame_height = int(cap.get(4))
+fourcc = cv2.VideoWriter_fourcc(*'FFV1')
+out = cv2.VideoWriter(outfile,fourcc, 30, (640,478), False)
+
+
 
 #Offsets by xframe, frame frames
 loffset = start #called offset because derived from viewing 2 videos which could be offset by x frames
@@ -75,35 +79,18 @@ while(cap.isOpened()):
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-
     clipped = adjust_clip(gray, black=black, white=white)
     gamma = gamma if gamma > 0 else 0.1
     adjusted = adjust_gamma(clipped, gamma=gamma)
 
-    bright = format(adjusted.mean(), '.3f')
-    rawbright = format(gray.mean(), '.3f')
+#    _, denoised = cv2.threshold(gray, 100, 160, cv2.THRESH_BINARY)
+#    _, adjusted = cv2.threshold(gray, black, white, cv2.THRESH_BINARY)
 
-    _, contours, hierarchy = cv2.findContours(gray,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+#    adjusted = cv2.fastNlMeansDenoising(denoised,None,10,7,21)
 
-    contourcount = 0
-    cX = 0
-    cY = 0
-    minArea = 0
-    for c in contours:
-        if cv2.contourArea(c) > minArea:
-             contourcount = contourcount + 1
-             M = cv2.moments(c)
- 
+    out.write(adjusted)
 
-
-    cv2.putText(adjusted,str(contourcount), (35,35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
-    cv2.putText(adjusted,str(frametext+loffset), (35,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
-    cv2.putText(adjusted,str(bright), (175,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
-    cv2.putText(adjusted,str(rawbright), (375,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
-
-    f.write(str(frametext+loffset)+","+str(bright)+","+str(rawbright)+"\n")
     if view == 1:
-        #imgray2, contours, hierarchy = cv2.findContours(frame,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
     	cv2.imshow('frame',adjusted)
 
     time.sleep(delay)
@@ -112,5 +99,5 @@ while(cap.isOpened()):
         break
 
 cap.release()
+out.release()
 cv2.destroyAllWindows()
-f.close()
