@@ -8,7 +8,7 @@ import os
 
 import cv2
 
-from definitions import STEREO_RECTIFICATION_DIR
+from definitions import PROJECT_DIR
 
 CAM_MTX_L_LABEL = "cam_mtx_l"
 DIST_L_LABEL = "dist_l"
@@ -20,7 +20,7 @@ DIST_R_LABEL = "dist_r"
 R2_LABEL = "R2"
 P2_LABEL = "P2"
 
-SR_MAP_FILENAME = os.path.join(STEREO_RECTIFICATION_DIR, "sr_map.yml")
+SR_MAP_FILENAME = os.path.join(PROJECT_DIR, "sr_maps/sr_map.yml")
 
 
 class SrMap:
@@ -116,6 +116,7 @@ def save_to_yml(file, name, object, w=0):
     """
 
     # The first time you write to a file w needs to be 1
+    print("Writting to file:", file)
     if w:
         fs = cv2.FileStorage(file, flags=cv2.FILE_STORAGE_WRITE)
     else:
