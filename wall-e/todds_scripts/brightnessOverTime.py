@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import cv2
 import argparse
@@ -71,7 +73,7 @@ while(cap.isOpened()):
     frametext=frametext+1
     ret, frame = cap.read()
     if not ret:
-	break
+        break
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -83,20 +85,25 @@ while(cap.isOpened()):
     bright = format(adjusted.mean(), '.3f')
     rawbright = format(gray.mean(), '.3f')
 
-    _, contours, hierarchy = cv2.findContours(gray,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-
+#    _, contours, hierarchy = cv2.findContours(gray,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+#
     contourcount = 0
-    cX = 0
-    cY = 0
-    minArea = 0
-    for c in contours:
-        if cv2.contourArea(c) > minArea:
-             contourcount = contourcount + 1
-             M = cv2.moments(c)
- 
-
-
-    cv2.putText(adjusted,str(contourcount), (35,35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
+#    cX = 0
+#    cY = 0
+#    minArea = 0
+#    for c in contours:
+#        if cv2.contourArea(c) > minArea:
+#             contourcount = contourcount + 1
+#             M = cv2.moments(c)
+#             cX = int(M["m10"] / M["m00"])
+#             cY = int(M["m01"] / M["m00"])
+#             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+#             mask = np.zeros(gray.shape,np.uint8)
+#             cv2.drawContours(mask,[c],0,255,-1)
+#             mean_val = cv2.mean(frame,mask = mask)
+#             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(gray,mask = mask)
+#
+#    cv2.putText(adjusted,str(contourcount), (35,35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
     cv2.putText(adjusted,str(frametext+loffset), (35,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
     cv2.putText(adjusted,str(bright), (175,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
     cv2.putText(adjusted,str(rawbright), (375,450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,180,10))
