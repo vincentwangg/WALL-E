@@ -192,6 +192,7 @@ def build_sr_map(controller):
     update_sr_progress_ui(controller, len(controller.builder.sr_results), controller.builder.num_frames_scanned, controller.builder.num_frames_to_scan,
                           SR_FINISHED_CALCULATING, sr_map_phase_finished=True)
     print "built map.."
+    controller.sr_map.write_to_yml_file()
 
 
 def add_obj_point(left_img, right_img, objpoints, img_points_left, img_points_right):
