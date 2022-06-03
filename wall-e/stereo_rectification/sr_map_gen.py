@@ -262,7 +262,7 @@ def generate_sr_map_from_obj_and_img_points(objpoints, img_points_left, img_poin
         img_points_right,
         cam_mtx_l, dist_l, cam_mtx_r, dist_r,
         DIM,
-        flags=cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
+        cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
     # cv2.CALIB_USE_INTRINSIC_GUESS
 
     # stereo rectify
@@ -581,7 +581,7 @@ def generate_sr_map(left_img, right_img):
         img_points_right,
         cam_mtx_l, dist_l, cam_mtx_r, dist_r,
         right_img.shape[::-1],
-        flags=cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
+        cv2.CALIB_SAME_FOCAL_LENGTH + cv2.CALIB_FIX_FOCAL_LENGTH + cv2.CALIB_ZERO_TANGENT_DIST)
     # cv2.CALIB_USE_INTRINSIC_GUESS
 
     # stereo rectify
@@ -612,8 +612,7 @@ def generate_sr_map(left_img, right_img):
     return True, new_img_left, new_img_right, sr_map
 
 def found_chessboard(img):
-    img_success, _ = cv2.findChessboardCorners(img, CHECKERBOARD,
-                                                cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
+    img_success, _ = cv2.findChessboardCorners(img, CHECKERBOARD, cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FILTER_QUADS)
     return img_success
 
 def find_chessboard_corners(left_img, right_img):

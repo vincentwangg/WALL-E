@@ -90,11 +90,11 @@ def run_through_video(vid_capture_obj):
         ret, corners = cv2.findChessboardCorners(gray, CHECKERBOARD,
                                                  cv2.CALIB_CB_ADAPTIVE_THRESH +
                                                  cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE)
-
         # If found, add object points, image points (after refining them)
         if ret:
             objpoints.append(objp)
             cv2.cornerSubPix(gray, corners, (3, 3), (-1, -1), subpix_criteria)
+            cv2.imshow('frame', gray)
             imgpoints.append(corners)
             successes += 1
             print("Success: " + str(successes))
