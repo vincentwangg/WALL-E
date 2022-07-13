@@ -56,10 +56,10 @@ def main():
     write_frame_pulse_data_to_file(frame_pulse_data=fpd)
     write_time = time.time() - write_start
 
-    print "ostracod location time: ", ostracod_loc_time, "seconds"
-    print "match time: ", match_time, "seconds"
-    print "depth map time: ", depth_map_time, "seconds"
-    print "write time: ", write_time, "seconds"
+    print("ostracod location time: " + ostracod_loc_time + "seconds")
+    print("match time: " + match_time + "seconds")
+    print("depth map time: " + depth_map_time + "seconds")
+    print("write time: " + write_time + "seconds" )
 
 
 if __name__ == '__main__':
